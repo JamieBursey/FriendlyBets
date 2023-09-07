@@ -68,3 +68,15 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+### Commands
+npm install bootstrap@5.3.1 --save
+
+sudo su #entering admin level
+
+chmod -R 7777 . # Giving recursive permission to read/write
+
+npm install # read from package.json and install dependecies
+
+npm start # start the server and host the app locally
