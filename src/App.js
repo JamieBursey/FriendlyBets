@@ -1,15 +1,13 @@
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 
 
 function App() {
   return (
-    <div className="App">
+
+    <div className="App text-bg-success p-3">
       <header className="App-header">
-        <p>
-          Hello
-        </p>
         <div class="container text-center">
           <div class="row">
             <div class="col">
