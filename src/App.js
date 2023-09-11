@@ -1,5 +1,8 @@
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import logo from './header.jpeg'
+
 
 
 
@@ -8,6 +11,7 @@ function App() {
 
     <>
       <header className="App-header">
+        return <img src={logo} alt="logo" />
         <div class="text-center fs-1 text-success text-bg-dark p-3">Friendly Bets</div>
         <div className="App text-bg-success p-3 mb-3">
           <div class="container text-center">
