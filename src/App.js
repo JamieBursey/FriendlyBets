@@ -15,17 +15,7 @@ function App() {
         <div class="text-center fs-1 text-success text-bg-dark p-3">Friendly Bets</div>
         <div className="App text-bg-success p-3 mb-3">
           <div class="container text-center">
-            <div class="row">
-              <div class="col">
-                <button type="button" class="btn btn-danger">Fighting</button>
-              </div>
-              <div class="col">
-                <button type="button" class="btn btn-primary">Hockey</button>
-              </div>
-              <div class="col">
-                <button type="button" class="btn btn-warning">Basketball</button>
-              </div>
-            </div>
+            {buttons()}
           </div>
         </div>
         <div class="App text-bg-success p-3">
@@ -89,4 +79,23 @@ function App() {
   );
 }
 
+function buttons() {
+  return (
+    <div className="App text-bg-success p-3 mb-3">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-danger">Fighting</button>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-primary">Hockey</button>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-warning">Basketball</button>
+          </div>
+        </div>
+      </div>
+    </div>)
+}
 export default App;
+export { buttons }
