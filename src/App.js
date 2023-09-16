@@ -11,16 +11,11 @@ function App() {
 
     <div className='bg-dark'>
       <Home />
-      <div className="App-header">
-        <Banner />
-        <Buttons />
-      </div>
-      <div className='container'>
-        <div>
-          <Table />
-        </div>
-      </div>
+      <Banner />
+      <Buttons />
+      <Table />
     </div>
+
   );
 }
 export default App;

@@ -16,7 +16,8 @@ function addButtons() {
     const sportButtons = [
         { text: "Fighting", color: "btn-danger" },
         { text: "Hockey", color: "btn-light" },
-        { text: "Football", color: "btn-warning" }
+        { text: "Football", color: "btn-warning" },
+        { text: "MLB", color: "btn-primary" }
     ]
     const addRemovePlayer = [
         { text: "Add Player", color: "btn-primary" },

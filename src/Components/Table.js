@@ -1,5 +1,5 @@
 function Table() {
-    return <div className="p-3 mt-3"> <table className="table table-dark">
+    return <div className="p-3 mt-3 container"> <table className="table table-dark">
         <thead>
             <tr>
                 <th scope="col">Team</th>
