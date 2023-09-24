@@ -1,9 +1,8 @@
 import React from "react";
 import { renderFriends } from "../Data";
-import { SportsDiv } from "./divColors";
 function buttons(buttonsData) {
     return (
-        <div className="App p-3 mb-3">
+        <div className="App text-bg-success p-3 mb-3">
             <div className="container text-center">
                 <div className="row">
                     {buttonsData ? (
@@ -59,8 +58,7 @@ function AddButtons() {
 
     return (
         <>
-            <div className="App p-3 mb-3">
-
+            <div className="App text-bg-success p-3 mb-3">
                 <div className="container text-center">
                     {buttons(sportButtons)}
                 </div>
@@ -102,7 +100,7 @@ function AddButtons() {
                         </div>
                     </div>
 
-                    <div className=" mb-3 d-flex justify-content-center">{renderFriends()}</div>
+                    <div className="row mb-3">{renderFriends()}</div>
                 </div>
             </div>
         </>
