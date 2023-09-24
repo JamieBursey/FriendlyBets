@@ -1,4 +1,4 @@
-import logo from '../header.jpeg'
+
 
 const bannerStyles = {
     width: "100%",
@@ -8,7 +8,8 @@ const bannerStyles = {
 }
 
 function Banner() {
-    return <img className="" style={bannerStyles} src={logo} alt="logo" />
+    return <div style={bannerStyles} className="text-center fs-1 text-success text-bg-dark p-3">Friendly Bets</div>
+
 }
 
 export default Banner;

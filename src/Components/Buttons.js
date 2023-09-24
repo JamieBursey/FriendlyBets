@@ -58,13 +58,13 @@ function AddButtons() {
     // };
 
     return (
-        <><SportsDiv>
+        <>
             <div className="App p-3 mb-3">
 
                 <div className="container text-center">
                     {buttons(sportButtons)}
                 </div>
-            </div></SportsDiv>
+            </div>
             <div className="App p-3">
                 <div className="container text-center">
                     <div className="d-grid gap-2 col-3 mx-auto">
