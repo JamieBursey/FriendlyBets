@@ -3,9 +3,9 @@ function HockeyGrid() {
     { home: "Devils", vs: "VS", visitor: "Ottowa" },
     { home: "Toronto", vs: "VS", visitor: "Montreal" },
     { home: "Boston", vs: "VS", visitor: "Winnipeg" }]
-    const liveGames = Games.map((Item) => {
+    const liveGames = Games.map((Item, index) => {
         return (
-            <div className="container text-center bg-dark text-light">
+            <div key={index} className="container text-center bg-dark text-light">
                 <div className="row">
                     <div className="col mb-3">
                         {Item.visitor}

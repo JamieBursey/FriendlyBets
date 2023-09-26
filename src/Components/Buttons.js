@@ -2,7 +2,7 @@ import React from "react";
 import { renderFriends } from "../Data";
 function buttons(buttonsData) {
     return (
-        <div className="App text-bg-success p-3 mb-3">
+        <div className="App p-3 mb-3">
             <div className="container text-center">
                 <div className="row">
                     {buttonsData ? (
@@ -55,15 +55,18 @@ function AddButtons() {
     //         </div>
     //     ));
     // };
-
+    const ButtonsBackground = {
+        backgroundColor: "#0B1305",
+        borderRadius: "5px"
+    }
     return (
         <>
-            <div className="App text-bg-success p-3 mb-3">
+            <div style={ButtonsBackground} className="App p-3 mb-3">
                 <div className="container text-center">
                     {buttons(sportButtons)}
                 </div>
             </div>
-            <div className="App p-3">
+            <div style={ButtonsBackground} className="App p-3">
                 <div className="container text-center">
                     <div className="d-grid gap-2 col-3 mx-auto">
                         <div className="d-flex">
