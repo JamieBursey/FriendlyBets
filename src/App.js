@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-import { Banner, Buttons, HockeyGrid, LoginForm } from "./Components"
+import { Banner, Buttons, Matches, LoginForm } from "./Components"
 import { Home } from "./Pages";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
       <Home />
       <Banner />
       <Buttons />
-      <HockeyGrid />
+      <Matches />
       <LoginForm />
     </div>
   );

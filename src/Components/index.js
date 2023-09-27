@@ -2,7 +2,7 @@ import Banner from "./Banner";
 import Table from "./Table";
 
 import Buttons from "./Buttons";
-import HockeyGrid from "./HockeyGrid";
+import Matches from "./Matches";
 import { SportsDiv } from "./divColors";
 import { LoginForm } from "./login";
 
@@ -10,7 +10,7 @@ export {
     Banner,
     Table,
     Buttons,
-    HockeyGrid,
+    Matches,
     SportsDiv,
     LoginForm
 }
