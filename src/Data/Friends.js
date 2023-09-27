@@ -1,5 +1,6 @@
 
 const getAllFriends = () => {
+
     return [{ username: "Jamie", password: "" }, { username: "Kelly", password: "" },
     { username: "Paul", password: "" }, { username: "Danyelle", password: "" }, { username: "Dawson", password: "" }]
 }

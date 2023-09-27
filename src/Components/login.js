@@ -1,22 +1,29 @@
 function LoginForm() {
+    const InputStyle = {
+        width: "250px"
+    }
+    const loginBackground = {
+        backgroundColor: "#B0C4DE",
+        borderRadius: "5px"
+    }
     return (
 
-        <div class="wrapper">
-            <form class="form-signin">
-                <h2 class="form-signin-heading text-info">Please login</h2>
-                <input type="text" class="form-control" name="username" placeholder="Email Address" required="" autofocus="" />
-                <input type="password" class="form-control" name="password" placeholder="Password" required="" />
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+        <div style={loginBackground} className="d-flex mt-4 mx-auto">
+            <form className="form-signin mx-auto">
+                <h2 className="form-signin-heading text-primary">Please login</h2>
+                <input type="text" style={InputStyle} className="form-control" name="username" placeholder="Email Address" required="" />
+                <input type="password" style={InputStyle} className="form-control" name="password" placeholder="Password" required="" />
+                <button className="btn btn-lg btn-primary btn-block" type="submit">Login</button>
             </form>
 
 
 
-            <form class="form-signin">
-                <h2 class="form-signin-heading text-info">Register</h2>
-                <input type="text" class="form-control" name="username" placeholder="Email Address" required="" autofocus="" />
-                <input type="password" class="form-control" name="password" placeholder="Password" required="" />
+            <form className="form-signin mx-auto">
+                <h2 className="form-signin-heading text-primary">Register</h2>
+                <input type="text" style={InputStyle} className="form-control" name="username" placeholder="Email Address" required="" />
+                <input type="password" style={InputStyle} className="form-control" name="password" placeholder="Password" required="" />
 
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                <button className="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
             </form>
 
         </div>)
