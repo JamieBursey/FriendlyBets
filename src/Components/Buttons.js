@@ -75,7 +75,8 @@ function AddButtons() {
             <div style={ButtonsBackground} className="App p-3">
                 <div className="container text-center">
                     <div className="d-grid gap-2 col-3 mx-auto">
-                        <div className="d-flex">
+
+                        <div className="d-flex col-6 col-md-3">
                             <input
                                 className=""
                                 type="text"
@@ -87,12 +88,11 @@ function AddButtons() {
                                 style={ButtonsStyle}
                                 className="btn btn-primary"
                                 type="button"
-                            // onClick={addPlayer}
                             >
                                 Add Friend
                             </button>
                         </div>
-                        <div className="d-flex">
+                        <div className="d-flex col-6 col-md-3">
                             <input
                                 className=""
                                 type="text"
