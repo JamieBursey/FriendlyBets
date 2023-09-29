@@ -3,6 +3,7 @@ import Table from "./Table";
 
 import Buttons from "./Buttons";
 import Matches from "./Matches";
+import NavBar from "./NavBar";
 import { SportsDiv } from "./divColors";
 import { LoginForm } from "./login";
 
@@ -12,5 +13,6 @@ export {
     Buttons,
     Matches,
     SportsDiv,
-    LoginForm
+    LoginForm,
+    NavBar
 }

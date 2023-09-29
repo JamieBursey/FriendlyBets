@@ -59,6 +59,12 @@ function AddButtons() {
         backgroundColor: "#0B1305",
         borderRadius: "5px"
     }
+    const ButtonsStyle = {
+        width: "120px",
+        height: "35px",
+        fontSize: ".7em",
+        fontWeight: "bold"
+    }
     return (
         <>
             <div style={ButtonsBackground} className="App p-3 mb-3">
@@ -73,32 +79,34 @@ function AddButtons() {
                             <input
                                 className=""
                                 type="text"
-                                placeholder="Add Player"
+                                placeholder="Add Friend"
                             // value={playerName}
                             // onChange={(event) => setPlayerName(event.target.value)}
                             ></input>
                             <button
+                                style={ButtonsStyle}
                                 className="btn btn-primary"
                                 type="button"
                             // onClick={addPlayer}
                             >
-                                Add Player
+                                Add Friend
                             </button>
                         </div>
                         <div className="d-flex">
                             <input
                                 className=""
                                 type="text"
-                                placeholder="Remove Player"
+                                placeholder="Remove Friend"
                             // value={playerRemoved}
                             // onChange={(event) => setPlayerRemoved(event.target.value)}
                             ></input>
                             <button
+                                style={ButtonsStyle}
                                 className="btn btn-primary"
                                 type="button"
                             // onClick={deletePlayer}
                             >
-                                Remove Player
+                                Remove Friend
                             </button>
                         </div>
                     </div>

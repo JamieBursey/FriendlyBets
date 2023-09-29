@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-import { Banner, Buttons, Matches, LoginForm } from "./Components"
+import { Banner, Buttons, Matches, LoginForm, NavBar } from "./Components"
 import { Home } from "./Pages";
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
 
     <div className='bg-dark'>
       <Home />
+      <NavBar />
       <Banner />
       <Buttons />
       <Matches />
