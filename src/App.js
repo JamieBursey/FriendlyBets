@@ -1,12 +1,13 @@
 import React from "react";
 import "./App.css";
-import { Home } from "./Pages";
+// import { Home } from "./Pages";
+import {AboutPage} from "./Pages";
 
 function App() {
   return (
     <div className="bg-dark">
-      <Home />
-      {/* <About /> */}
+      {/* <Home /> */}
+      <AboutPage />
     </div>
   );
 }
