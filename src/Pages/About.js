@@ -1,7 +1,10 @@
 import React from "react"
+import { Banner } from "../Components";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function AboutPage(){
-    return(
+    return(<>
+
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
           <button
@@ -27,42 +30,15 @@ function AboutPage(){
                   About
                 </button>
               </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown
-                </a>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
-              </li>
             </ul>
           </div>
         </div>
       </nav>
-    )
+<Banner/>
+      <div className="container bg-dark">
+        <p className="text-danger fs-3">Hello, As a sports enthusiast I have always enjoyed making bets with friends about the outcomes of matches,who will score the first goal or if the fight ends via submission or tko. As we got older and life gets busy it became harder to bet with friends who we see once a week. This app is the solution to friendly betting amongst your small group.</p></div>
+        </>
+          ) 
 }
 
 export {AboutPage}

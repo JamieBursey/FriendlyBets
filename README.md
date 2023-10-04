@@ -69,9 +69,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-
 ### Commands
+
 npm install bootstrap@5.3.1 --save
+npm install react-router-dom --save
 
 sudo su #entering admin level
 
