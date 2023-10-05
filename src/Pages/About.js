@@ -1,6 +1,7 @@
 import React from "react"
 import { Banner } from "../Components";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Outlet, Link } from "react-router-dom";
 
 function AboutPage(){
     return(<>
@@ -21,7 +22,7 @@ function AboutPage(){
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <button className="nav-link active" aria-current="page" href="/">
+                <button className="nav-link active" aria-current="page" Link to="/">
                   Home
                 </button>
               </li>

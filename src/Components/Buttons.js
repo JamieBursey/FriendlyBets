@@ -60,10 +60,7 @@ function AddButtons() {
     borderRadius: "5px",
   };
   const ButtonsStyle = {
-    width: "120px",
-    height: "35px",
-    fontSize: ".7em",
-    fontWeight: "bold",
+marginRight:"5px"
   };
   return (
     <>
@@ -72,9 +69,10 @@ function AddButtons() {
       </div>
       <div style={ButtonsBackground} className="App p-3">
         <div className="container">
-        <div className="mx-auto col-sm-6 col-md-6 col-lg-5">
+        <div className="mx-auto col-6 col-md-9 col-lg-8">
+            
             <input type="text" placeholder="Add Friend"></input>
-            <button className="btn btn-primary btn-sm">Submit</button>
+            <button style={ButtonsStyle} className="btn btn-primary btn-sm">Submit</button>
             <input type="text" placeholder="Remove Friend"></input>
             <button className="btn btn-primary btn-sm">Submit</button>
         </div>
