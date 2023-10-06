@@ -1,14 +1,21 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Home } from "./Pages";
-// import {AboutPage} from "./Pages";
+import { Home, About, Contact } from "./Pages";
+import { NavBar } from "./Components";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <div className="bg-dark">
-      <Home />
-      {/* <AboutPage /> */}
+    <div>
+      <BrowserRouter>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

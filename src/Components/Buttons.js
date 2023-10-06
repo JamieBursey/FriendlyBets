@@ -60,7 +60,7 @@ function AddButtons() {
     borderRadius: "5px",
   };
   const ButtonsStyle = {
-marginRight:"5px"
+    marginRight: "5px",
   };
   return (
     <>
@@ -69,16 +69,31 @@ marginRight:"5px"
       </div>
       <div style={ButtonsBackground} className="App p-3">
         <div className="container">
-        <div className="mx-auto col-6 col-md-9 col-lg-8">
-            
-            <input type="text" placeholder="Add Friend"></input>
-            <button style={ButtonsStyle} className="btn btn-primary btn-sm">Submit</button>
-            <input type="text" placeholder="Remove Friend"></input>
-            <button className="btn btn-primary btn-sm">Submit</button>
+          <div className="row">
+            <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
+              <input
+                type="text"
+                placeholder="Add Friend"
+                className="w-100"
+              ></input>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
+              <button className="w-100 btn btn-primary btn-sm">Submit</button>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
+              <input
+                type="text"
+                placeholder="Remove Friend"
+                className="w-100"
+              ></input>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
+              <button className="w-100 btn btn-primary btn-sm">Submit</button>
+            </div>
+          </div>
         </div>
-        </div>
-          <div className="row mb-3">{renderFriends()}</div>
-        </div>
+        <div className="row mb-3">{renderFriends()}</div>
+      </div>
     </>
   );
 }

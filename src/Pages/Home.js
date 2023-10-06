@@ -1,9 +1,8 @@
-import { Banner, Buttons, Matches, LoginForm, NavBar } from "../Components";
+import { Banner, Buttons, Matches, LoginForm } from "../Components";
 
 function Home() {
   return (
     <div>
-      <NavBar />
       <Banner />
       <Buttons />
       <Matches />

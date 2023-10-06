@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function NavBar() {
   return (
@@ -18,64 +19,34 @@ function NavBar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <button className="nav-link active" aria-current="page" href="/">
+              <Link className="nav-link active" aria-current="page" to="/">
                 Home
-              </button>
+              </Link>
             </li>
             <li className="nav-item">
-              <button className="nav-link" href="/about">
+              <Link className="nav-link" to="/about">
                 About
-              </button>
+              </Link>
             </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
-              <ul className="dropdown-menu">
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
+            <li className="nav-item">
+              <Link className="nav-link" to="/contact">
+                Contact
+              </Link>
             </li>
           </ul>
-          <form class="d-flex justify-content-between">
+          <form className="d-flex justify-content-between">
             <input
-              class="form-control me-2"
+              className="form-control me-2"
               placeholder="User Name"
               aria-label="User Name"
             />
-             <input
-              class="form-control me-2"
+            <input
+              className="form-control me-2"
               placeholder="Password"
               aria-label="Password"
             />
-            <button class="btn btn-success">
-              Login
-            </button>
-            <button class="btn btn-outline-success">
-              Register
-            </button>
+            <button className="btn btn-success">Login</button>
+            <button className="btn btn-outline-success">Register</button>
           </form>
         </div>
       </div>
