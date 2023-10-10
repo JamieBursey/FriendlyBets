@@ -59,9 +59,6 @@ function AddButtons() {
     backgroundColor: "#0B1305",
     borderRadius: "5px",
   };
-  const ButtonsStyle = {
-    marginRight: "5px",
-  };
   return (
     <>
       <div style={ButtonsBackground} className="App p-3 mb-3">

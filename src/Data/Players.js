@@ -1,10 +1,8 @@
+const PlayerData = () => {
+  const Players = [
+    { Colorado: ["Cale Makar", "Nathan Mackinnon"] },
+    { "New Jersey": ["Dawson Mercer", "Jack Hughes"] },
+  ];
+};
 
-
-const PlayerData = (() => {
-    const Players = {
-        Colorado: ["Nathan Mackinnon", "Cale Makar", ""],
-        NewJersey: ["Dawson Mercer", "Jack Hughes"]
-    }
-})
-
-export { PlayerData }
+export { PlayerData };
