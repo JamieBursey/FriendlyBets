@@ -1,14 +1,22 @@
 import emailjs from "emailjs-com";
 emailjs.init("dX-avpAaeLmlw_1Jg");
 const sendEmail = () => {
-  emailjs.sendForm("Bets", "contact-form").then(
-    function () {
-      console.log("test");
-    },
-    function (error) {
-      console.log("error");
-    }
-  );
+  document
+    .getElementById("contact-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      // generate a five digit number for the contact_number variable
+      this.contact_number.value = (Math.random() * 100000) | 0;
+      // these IDs from the previous steps
+      emailjs.sendForm("Bets", "contact-form", this).then(
+        function () {
+          console.log("SUCCESS!");
+        },
+        function (error) {
+          console.log("FAILED...", error);
+        }
+      );
+    });
 };
 function Contact() {
   return (
