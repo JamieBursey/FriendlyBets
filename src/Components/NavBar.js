@@ -35,18 +35,9 @@ function NavBar() {
             </li>
           </ul>
           <form className="d-flex justify-content-between">
-            <input
-              className="form-control me-2"
-              placeholder="User Name"
-              aria-label="User Name"
-            />
-            <input
-              className="form-control me-2"
-              placeholder="Password"
-              aria-label="Password"
-            />
-            <button className="btn btn-success">Login</button>
-            <button className="btn btn-outline-success">Register</button>
+            <Link className="btn btn-success" to="/login">
+              Login/Register
+            </Link>
           </form>
         </div>
       </div>

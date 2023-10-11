@@ -1,4 +1,4 @@
-import { Banner, Buttons, Matches, LoginForm } from "../Components";
+import { Banner, Buttons, Matches } from "../Components";
 
 function Home() {
   return (
@@ -6,7 +6,6 @@ function Home() {
       <Banner />
       <Buttons />
       <Matches />
-      <LoginForm />
     </div>
   );
 }
