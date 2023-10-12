@@ -1,3 +1,11 @@
+import { RegisteredUser } from "../Data";
+const RegisterHandler = () => {
+  const UserName = document.getElementById("RegisterUserName").value;
+  const Password = document.getElementById("RegisterPassword").value;
+  const NewUser = { UserName, Password };
+  RegisteredUser.push(NewUser);
+  console.log(RegisteredUser);
+};
 function Login() {
   const InputStyle = {
     width: "250px",
@@ -15,7 +23,7 @@ function Login() {
           style={InputStyle}
           className="form-control"
           name="username"
-          placeholder="Email Address"
+          placeholder="User Name"
           required=""
         />
         <input
@@ -37,20 +45,24 @@ function Login() {
           type="text"
           style={InputStyle}
           className="form-control"
-          name="username"
-          placeholder="Email Address"
+          id="RegisterUserName"
+          placeholder="User Name"
           required=""
         />
         <input
           type="password"
           style={InputStyle}
           className="form-control"
-          name="password"
+          id="RegisterPassword"
           placeholder="Password"
           required=""
         />
 
-        <button className="btn btn-lg btn-primary btn-block" type="submit">
+        <button
+          className="btn btn-lg btn-primary btn-block"
+          type="button"
+          onClick={RegisterHandler}
+        >
           Submit
         </button>
       </form>
