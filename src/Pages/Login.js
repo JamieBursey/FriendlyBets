@@ -1,10 +1,16 @@
 import { RegisteredUser } from "../Data";
 const RegisterHandler = () => {
-  const UserName = document.getElementById("RegisterUserName").value;
-  const Password = document.getElementById("RegisterPassword").value;
-  const NewUser = { UserName, Password };
+  const UserName = document.getElementById("RegisterUserName");
+  const Password = document.getElementById("RegisterPassword");
+  const NewUser = {
+    UserName: UserName.value,
+    Password: Password.value,
+    Bets: [],
+  };
   RegisteredUser.push(NewUser);
   console.log(RegisteredUser);
+  UserName.value = "";
+  Password.value = "";
 };
 function Login() {
   const InputStyle = {
