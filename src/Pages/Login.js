@@ -12,6 +12,21 @@ const RegisterHandler = () => {
   UserName.value = "";
   Password.value = "";
 };
+const LoginHandler = () => {
+  const UserName = document.getElementById("LoginName");
+  const Password = document.getElementById("LoginPassword");
+  if (!UserName) {
+    console.log("user not found");
+  }
+  const EnteredUser = UserName.value;
+  const EnteredPassword = Password.value;
+  const ValidUser = RegisteredUser.some(
+    (user) => user.UserName === EnteredUser && user.Password === EnteredPassword
+  );
+  if (ValidUser) {
+    console.log("signin");
+  }
+};
 function Login() {
   const InputStyle = {
     width: "250px",
@@ -28,7 +43,7 @@ function Login() {
           type="text"
           style={InputStyle}
           className="form-control"
-          name="username"
+          id="LoginName"
           placeholder="User Name"
           required=""
         />
@@ -36,11 +51,15 @@ function Login() {
           type="password"
           style={InputStyle}
           className="form-control"
-          name="password"
+          id="LoginPassword"
           placeholder="Password"
           required=""
         />
-        <button className="btn btn-lg btn-primary btn-block" type="submit">
+        <button
+          className="btn btn-lg btn-primary btn-block"
+          type="button"
+          onClick={LoginHandler}
+        >
           Login
         </button>
       </form>
