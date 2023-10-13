@@ -2,27 +2,7 @@ import { loggedInUserKey, allUsersKey } from "../Data";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Login() {
-  const [username, setUserName] = useState(null);
-  const [password, setPassword] = useState(null);
-
-  const getAllUsers = () => {
-    const allUsersStr = localStorage.getItem(allUsersKey); // "[{"id": 11}, {"id": 22}]"
-    let allUsers = JSON.parse(allUsersStr);
-    if (allUsersStr == "" || allUsers == null) {
-      allUsers = [];
-    }
-    return allUsers;
-  };
-
-  const findUserInArray = () => {};
-
-  const loginHandler = () => {
-    //getAll Users
-    //find the user
-    //override loggedInUser
-    //use react router to navigate to homepage
-  };
+function Register() {
   return (
     <div className="bg-dark d-flex justify-content-center p-2 vh-100">
       <div className="card w-75 h-75">
@@ -34,7 +14,7 @@ function Login() {
             <input
               type="email"
               class="form-control"
-              id="userName"
+              id="RegisterUserName"
               placeholder="name@example.com"
             />
           </div>
@@ -43,7 +23,7 @@ function Login() {
             <input
               type="password"
               class="form-control"
-              id="password"
+              id="RegisterPassword"
               placeholder="Enter Password"
             />
           </div>
@@ -53,12 +33,12 @@ function Login() {
                 className="btn btn-lg btn-primary btn-block"
                 type="button"
               >
-                Login
+                Register
               </button>
             </div>
             <div className="col-md-12 p-2">
-              <Link className="btn btn-success" to="/register">
-                Register
+              <Link className="btn btn-success" to="/Login">
+                Login
               </Link>
             </div>
           </div>
@@ -68,4 +48,4 @@ function Login() {
   );
 }
 
-export { Login };
+export { Register };

@@ -2,13 +2,6 @@ import { loggedInUserKey, allUsersKey } from "../Data";
 import React, { useState } from "react";
 
 function Login() {
-  const InputStyle = {
-    width: "250px",
-  };
-  const loginBackground = {
-    backgroundColor: "#B0C4DE",
-    borderRadius: "5px",
-  };
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
 
