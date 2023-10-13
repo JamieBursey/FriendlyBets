@@ -1,3 +1,4 @@
-const RegisteredUser = [];
+const loggedInUserKey = "LOGGEDIN_USER";
+const allUsersKey = "ALL_USERS";
 
-export { RegisteredUser };
+export { loggedInUserKey, allUsersKey };

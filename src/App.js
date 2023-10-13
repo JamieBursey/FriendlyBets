@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <div>
+    <div className="bg-dark">
       <BrowserRouter>
         <NavBar />
         <Routes>
