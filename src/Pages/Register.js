@@ -3,28 +3,35 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Register() {
+  const [username, setUserName] = useState(null);
+  const [password, setPassword] = useState(null);
+  const registerUser = () => {
+    localStorage.setItem();
+  };
   return (
     <div className="bg-dark d-flex justify-content-center p-2 vh-100">
       <div className="card w-75 h-75">
         <div className="card-body">
           <h5 className="card-title">Card title</h5>
           <h6 className="card-subtitle mb-2">Card subtitle</h6>
-          <div class="mb-3">
-            <label class="form-label">Email address</label>
+          <div className="mb-3">
+            <label className="form-label">Email address</label>
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               id="RegisterUserName"
               placeholder="name@example.com"
+              onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <div class="mb-3 row">
-            <label class="form-label">Password</label>
+          <div className="mb-3 row">
+            <label className="form-label">Password</label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               id="RegisterPassword"
               placeholder="Enter Password"
+              onChange={(event) => setPassword(event.target.value)}
             />
           </div>
           <div className="row text-center">
