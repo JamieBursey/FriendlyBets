@@ -29,20 +29,20 @@ function Login() {
         <div className="card-body">
           <h5 className="card-title">Card title</h5>
           <h6 className="card-subtitle mb-2">Card subtitle</h6>
-          <div class="mb-3">
-            <label class="form-label">Email address</label>
+          <div className="mb-3">
+            <label className="form-label">Email address</label>
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               id="userName"
               placeholder="name@example.com"
             />
           </div>
-          <div class="mb-3 row">
-            <label class="form-label">Password</label>
+          <div className="mb-3 row">
+            <label className="form-label">Password</label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               id="password"
               placeholder="Enter Password"
             />

@@ -36,7 +36,7 @@ function NavBar() {
           </ul>
           <form className="d-flex justify-content-between">
             <Link className="btn btn-success" to="/login">
-              Login/Register
+              Login
             </Link>
           </form>
         </div>

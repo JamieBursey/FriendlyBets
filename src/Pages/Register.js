@@ -1,12 +1,25 @@
 import { loggedInUserKey, allUsersKey } from "../Data";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
   const registerUser = () => {
-    localStorage.setItem();
+    const existingUsers = JSON.parse(localStorage.getItem(allUsersKey)) || [];
+    const isUserExisting = existingUsers.some(
+      (user) => user.username === username
+    );
+    if (isUserExisting) {
+      alert("username already exist");
+    } else {
+      const newUser = { username, password };
+      existingUsers.push(newUser);
+      localStorage.setItem(allUsersKey, JSON.stringify(existingUsers));
+      console.log(allUsersKey);
+    }
+    navigate("/Login");
   };
   return (
     <div className="bg-dark d-flex justify-content-center p-2 vh-100">
@@ -21,7 +34,7 @@ function Register() {
               className="form-control"
               id="RegisterUserName"
               placeholder="name@example.com"
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => setUserName(event.target.value)}
             />
           </div>
           <div className="mb-3 row">
@@ -39,15 +52,12 @@ function Register() {
               <button
                 className="btn btn-lg btn-primary btn-block"
                 type="button"
+                onClick={registerUser}
               >
                 Register
               </button>
             </div>
-            <div className="col-md-12 p-2">
-              <Link className="btn btn-success" to="/Login">
-                Login
-              </Link>
-            </div>
+            <div className="col-md-12 p-2"></div>
           </div>
         </div>
       </div>

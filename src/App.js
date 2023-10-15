@@ -4,7 +4,7 @@ import "bootstrap/dist/js/bootstrap.js";
 import "./App.css";
 import { Home, About, Contact, Login, Register } from "./Pages";
 import { NavBar } from "./Components";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
