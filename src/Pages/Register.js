@@ -30,10 +30,10 @@ function Register() {
           <div className="mb-3">
             <label className="form-label">Email address</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="RegisterUserName"
-              placeholder="name@example.com"
+              placeholder="Username"
               onChange={(event) => setUserName(event.target.value)}
             />
           </div>

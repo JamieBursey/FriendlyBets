@@ -15,9 +15,23 @@ function Login() {
     return allUsers;
   };
 
-  const findUserInArray = (allUsers) => {};
+  const findUserInArray = () => {
+    const allUsers = getAllUsers();
+    return allUsers.find((user) => user.username === username);
+  };
 
   const loginHandler = () => {
+    const foundUser = findUserInArray();
+    let loggedUser = localStorage.getItem(loggedInUserKey);
+    if (loggedUser == "" || loggedUser == null) {
+      loggedUser = [];
+    }
+    if (foundUser) {
+      const signInUser = { username, password };
+      loggedUser.push(signInUser);
+      localStorage.setItem(loggedInUserKey, JSON.stringify(loggedUser));
+    }
+
     //getAll Users
     //find the user
     //override loggedInUser
@@ -32,10 +46,11 @@ function Login() {
           <div className="mb-3">
             <label className="form-label">Email address</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="userName"
-              placeholder="name@example.com"
+              placeholder="userName"
+              onChange={(event) => setUserName(event.target.value)}
             />
           </div>
           <div className="mb-3 row">
@@ -45,6 +60,7 @@ function Login() {
               className="form-control"
               id="password"
               placeholder="Enter Password"
+              onChange={(event) => setPassword(event.target.value)}
             />
           </div>
           <div className="row text-center">
@@ -52,6 +68,7 @@ function Login() {
               <button
                 className="btn btn-lg btn-primary btn-block"
                 type="button"
+                onClick={loginHandler}
               >
                 Login
               </button>
