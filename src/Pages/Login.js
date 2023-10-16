@@ -27,8 +27,7 @@ function Login() {
       loggedUser = [];
     }
     if (foundUser) {
-      const signInUser = { username, password };
-      loggedUser.push(signInUser);
+      loggedUser.push(foundUser);
       localStorage.setItem(loggedInUserKey, JSON.stringify(loggedUser));
     }
 
