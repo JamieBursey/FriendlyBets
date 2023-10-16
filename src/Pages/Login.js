@@ -15,7 +15,7 @@ function Login() {
     return allUsers;
   };
 
-  const findUserInArray = () => {};
+  const findUserInArray = (allUsers) => {};
 
   const loginHandler = () => {
     //getAll Users
