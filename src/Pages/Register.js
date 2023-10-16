@@ -14,7 +14,7 @@ function Register() {
     if (isUserExisting) {
       alert("username already exist");
     } else {
-      const newUser = { username, password };
+      const newUser = { username, password, bets: [], owed: [] };
       existingUsers.push(newUser);
       localStorage.setItem(allUsersKey, JSON.stringify(existingUsers));
       console.log(allUsersKey);
