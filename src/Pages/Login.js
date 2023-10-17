@@ -22,11 +22,14 @@ function Login() {
 
   const loginHandler = () => {
     const foundUser = findUserInArray();
-    let loggedUser = localStorage.getItem(loggedInUserKey);
+
+    let loggedUser = JSON.parse(localStorage.getItem(loggedInUserKey));
     if (loggedUser == "" || loggedUser == null) {
       loggedUser = [];
     }
+
     if (foundUser) {
+      loggedUser = [];
       loggedUser.push(foundUser);
       localStorage.setItem(loggedInUserKey, JSON.stringify(loggedUser));
     }
