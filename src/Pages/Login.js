@@ -28,7 +28,9 @@ function Login() {
       loggedUser = [];
     }
 
-    if (foundUser) {
+    if (!foundUser) {
+      alert("incorrect username or password");
+    } else {
       loggedUser = [];
       loggedUser.push(foundUser);
       localStorage.setItem(loggedInUserKey, JSON.stringify(loggedUser));
