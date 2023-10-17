@@ -1,8 +1,9 @@
 import { loggedInUserKey, allUsersKey } from "../Data";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
 
@@ -36,6 +37,7 @@ function Login() {
       localStorage.setItem(loggedInUserKey, JSON.stringify(loggedUser));
     }
 
+    navigate("/");
     //getAll Users
     //find the user
     //override loggedInUser

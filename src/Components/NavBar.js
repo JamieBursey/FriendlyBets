@@ -1,7 +1,9 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { loggedInUserKey } from "../Data";
 
 function NavBar() {
+  const loggeduser = JSON.parse(localStorage.getItem(loggedInUserKey));
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -34,11 +36,20 @@ function NavBar() {
               </Link>
             </li>
           </ul>
-          <form className="d-flex justify-content-between">
-            <Link className="btn btn-success" to="/login">
-              Login
-            </Link>
-          </form>
+          {loggeduser && (
+            <form className="d-flex justify-content-between">
+              <Link className="btn btn-success" to="/myAccount">
+                {loggeduser.username}
+              </Link>
+            </form>
+          )}
+          {!loggeduser && (
+            <form className="d-flex justify-content-between">
+              <Link className="btn btn-success" to="/login">
+                Login
+              </Link>
+            </form>
+          )}
         </div>
       </div>
     </nav>
