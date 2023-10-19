@@ -17,27 +17,30 @@ function Login() {
   };
 
   const findUserInArray = () => {
-    const allUsers = getAllUsers();
-    return allUsers.find((user) => user.username === username);
+    const allUsers = getAllUsers(); // [{id: "", ....} , {}]
+    console.log("findUserInArray -> allUsers", allUsers);
+    const loggedUser = allUsers.find(
+      (user) => user.username === username && user.password === password
+    );
+    console.log("loggeduser", loggedUser);
+    if (loggedUser == null) {
+      return null;
+    } else {
+      // if find matches, then single obj [{id: "", ....}] if not []
+      return loggedUser; // extract single found user obj {id: "", ....}
+    }
   };
 
   const loginHandler = () => {
     const foundUser = findUserInArray();
 
-    let loggedUser = JSON.parse(localStorage.getItem(loggedInUserKey));
-    if (loggedUser == "" || loggedUser == null) {
-      loggedUser = [];
-    }
-
     if (!foundUser) {
       alert("incorrect username or password");
     } else {
-      loggedUser = [];
-      loggedUser.push(foundUser);
-      localStorage.setItem(loggedInUserKey, JSON.stringify(loggedUser));
+      localStorage.setItem(loggedInUserKey, JSON.stringify(foundUser));
+      navigate("/");
     }
 
-    navigate("/");
     //getAll Users
     //find the user
     //override loggedInUser

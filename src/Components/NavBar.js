@@ -1,9 +1,15 @@
 import { React, useEffect, useState } from "react";
+import Avatar from "react-avatar";
 import { Link } from "react-router-dom";
 import { loggedInUserKey } from "../Data";
 
 function NavBar() {
-  const loggeduser = JSON.parse(localStorage.getItem(loggedInUserKey));
+  const logout = () => {
+    localStorage.setItem(loggedInUserKey, null);
+    //return to the login page navigate("/login")
+  };
+
+  const loggedUser = JSON.parse(localStorage.getItem(loggedInUserKey));
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -36,14 +42,16 @@ function NavBar() {
               </Link>
             </li>
           </ul>
-          {loggeduser && (
+          {loggedUser ? (
             <form className="d-flex justify-content-between">
-              <Link className="btn btn-success" to="/myAccount">
-                {loggeduser.username}
+              <Link className="" to="/myAccount">
+                <Avatar round={true} size="40" name={loggedUser.username} />
               </Link>
+              <button className="btn btn-success" onClick={logout}>
+                Logout
+              </button>
             </form>
-          )}
-          {!loggeduser && (
+          ) : (
             <form className="d-flex justify-content-between">
               <Link className="btn btn-success" to="/login">
                 Login
