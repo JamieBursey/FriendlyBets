@@ -1,11 +1,14 @@
 import { React, useEffect, useState } from "react";
 import Avatar from "react-avatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loggedInUserKey } from "../Data";
 
 function NavBar() {
+  const navigate = useNavigate();
   const logout = () => {
     localStorage.setItem(loggedInUserKey, null);
+    navigate("/Login");
+
     //return to the login page navigate("/login")
   };
 
@@ -43,14 +46,31 @@ function NavBar() {
             </li>
           </ul>
           {loggedUser ? (
-            <form className="d-flex justify-content-between">
-              <Link className="" to="/myAccount">
+            <div className="dropdown justify-content-between">
+              <a
+                className="dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
                 <Avatar round={true} size="40" name={loggedUser.username} />
-              </Link>
-              <button className="btn btn-success" onClick={logout}>
-                Logout
-              </button>
-            </form>
+              </a>
+              <ul className="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a className="dropdown-item" href="#"></a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Another action
+                  </a>
+                </li>
+                <li>
+                  <button className="dropdown-item" onClick={logout}>
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
           ) : (
             <form className="d-flex justify-content-between">
               <Link className="btn btn-success" to="/login">

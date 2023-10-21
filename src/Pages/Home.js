@@ -1,18 +1,22 @@
 import { Banner, Buttons, Matches } from "../Components";
+import { loggedInUserKey } from "../Data";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-  //   const checkIfLoggedInExists = localStorage.getItem() // Get LoggedIser
-  //   if(checkIfLoggedInExists != null && checkIfLoggedInExists == "" ){ // check if checkIfLoggedInExists doesn't exist
-  //     navigate("/login"); //redirect them to the home page
-  //   }
-
-  return (
-    <div>
-      <Banner />
-      <Buttons />
-      <Matches />
-    </div>
-  );
+  const checkIfLoggedInExists = localStorage.getItem(loggedInUserKey);
+  const navigate = useNavigate();
+  console.log("checkLogin", checkIfLoggedInExists);
+  if (checkIfLoggedInExists == null) {
+    navigate("/login");
+    console.log("nav", navigate);
+  } else
+    return (
+      <div>
+        <Banner />
+        <Buttons />
+        <Matches />
+      </div>
+    );
 }
 
 export default Home;

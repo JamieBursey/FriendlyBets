@@ -7,10 +7,15 @@ function Login() {
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
 
+  //   const checkIfLoggedInExists = localStorage.getItem() // Get LoggedIser
+  //   if(){ // check if checkIfLoggedInExists
+  //     navigate("/"); //redirect them to the home page
+  //   }
+
   const getAllUsers = () => {
     const allUsersStr = localStorage.getItem(allUsersKey); // "[{"id": 11}, {"id": 22}]"
     let allUsers = JSON.parse(allUsersStr);
-    if (allUsersStr == "" || allUsers == null) {
+    if (allUsersStr === "" || allUsers == null) {
       allUsers = [];
     }
     return allUsers;
@@ -18,11 +23,9 @@ function Login() {
 
   const findUserInArray = () => {
     const allUsers = getAllUsers(); // [{id: "", ....} , {}]
-    console.log("findUserInArray -> allUsers", allUsers);
     const loggedUser = allUsers.find(
       (user) => user.username === username && user.password === password
     );
-    console.log("loggeduser", loggedUser);
     if (loggedUser == null) {
       return null;
     } else {
@@ -40,11 +43,6 @@ function Login() {
       localStorage.setItem(loggedInUserKey, JSON.stringify(foundUser));
       navigate("/");
     }
-
-    //getAll Users
-    //find the user
-    //override loggedInUser
-    //use react router to navigate to homepage
   };
   return (
     <div className="bg-dark d-flex justify-content-center p-2 vh-100">
