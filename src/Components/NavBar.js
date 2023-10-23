@@ -60,9 +60,12 @@ function NavBar() {
                   <a className="dropdown-item" href="#"></a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
-                    Another action
-                  </a>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/myAccount")}
+                  >
+                    My Account
+                  </button>
                 </li>
                 <li>
                   <button className="dropdown-item" onClick={logout}>
