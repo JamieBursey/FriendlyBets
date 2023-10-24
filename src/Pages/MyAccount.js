@@ -1,6 +1,44 @@
 import React from "react";
+import { allUsersKey } from "../Data";
+import { useState } from "react";
 
-function myAccount() {
+function MyAccount() {
+  const [friendName, setFriendName] = useState(null);
+  const friendsData = () => {
+    return (
+      <>
+        <div className="text-center fs-1 text-danger">Friends</div>
+        <div className="App p-3 mb-3"></div>
+        <div className="App p-3">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
+                <input
+                  type="text"
+                  placeholder="Add Friend"
+                  className="w-100"
+                ></input>
+              </div>
+              <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
+                <button className="w-100 btn btn-primary btn-sm">Submit</button>
+              </div>
+              <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
+                <input
+                  type="text"
+                  placeholder="Remove Friend"
+                  className="w-100"
+                ></input>
+              </div>
+              <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
+                <button className="w-100 btn btn-primary btn-sm">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
   const bets = () => {
     return (
       <table className="table">
@@ -69,12 +107,11 @@ function myAccount() {
   };
   return (
     <div>
+      {friendsData()}
       {bets()}
       {owing()}
     </div>
   );
 }
 
-export default myAccount;
-
-export { myAccount };
+export { MyAccount };

@@ -3,6 +3,6 @@ import { About } from "./About";
 import { Contact } from "./Contact";
 import { Login } from "./Login";
 import { Register } from "./Register";
-import { myAccount } from "./MyAccount";
+import { MyAccount } from "./MyAccount";
 
-export { Home, About, Contact, Login, Register, myAccount };
+export { Home, About, Contact, Login, Register, MyAccount };
