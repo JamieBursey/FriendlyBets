@@ -1,10 +1,20 @@
 import React from "react";
 import { allUsersKey } from "../Data";
 import { useState } from "react";
+import { getAllFriends } from "../Data";
 
 function MyAccount() {
   const [friendName, setFriendName] = useState(null);
+
   const friendsData = () => {
+    const allUsers = JSON.parse(localStorage.getItem(allUsersKey));
+    const userToAdd = allUsers.find((user) => user.username === friendName);
+    if (userToAdd) {
+      getAllFriends.push(userToAdd);
+      console.log("test", getAllFriends);
+    }
+  };
+  const renderFriends = () => {
     return (
       <>
         <div className="text-center fs-1 text-danger">Friends</div>
@@ -17,10 +27,16 @@ function MyAccount() {
                   type="text"
                   placeholder="Add Friend"
                   className="w-100"
+                  onChange={(event) => setFriendName(event.target.value)}
                 ></input>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
-                <button className="w-100 btn btn-primary btn-sm">Submit</button>
+                <button
+                  className="w-100 btn btn-primary btn-sm"
+                  onClick={friendsData}
+                >
+                  Submit
+                </button>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
                 <input
@@ -107,7 +123,7 @@ function MyAccount() {
   };
   return (
     <div>
-      {friendsData()}
+      {renderFriends()}
       {bets()}
       {owing()}
     </div>
