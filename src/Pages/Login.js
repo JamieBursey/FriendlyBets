@@ -1,4 +1,4 @@
-import { loggedInUserKey, allUsersKey } from "../Data";
+import { loggedInUserKey, findUser, checkUserPassword } from "../Data";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -12,36 +12,22 @@ function Login() {
   //     navigate("/"); //redirect them to the home page
   //   }
 
-  const getAllUsers = () => {
-    const allUsersStr = localStorage.getItem(allUsersKey); // "[{"id": 11}, {"id": 22}]"
-    let allUsers = JSON.parse(allUsersStr);
-    if (allUsersStr === "" || allUsers == null) {
-      allUsers = [];
-    }
-    return allUsers;
-  };
-
-  const findUserInArray = () => {
-    const allUsers = getAllUsers(); // [{id: "", ....} , {}]
-    const loggedUser = allUsers.find(
-      (user) => user.username === username && user.password === password
-    );
-    if (loggedUser == null) {
-      return null;
-    } else {
-      // if find matches, then single obj [{id: "", ....}] if not []
-      return loggedUser; // extract single found user obj {id: "", ....}
-    }
-  };
-
   const loginHandler = () => {
-    const foundUser = findUserInArray();
-
-    if (!foundUser) {
-      alert("incorrect username or password");
-    } else {
+    const foundUser = findUser(username);
+    console.log("userIsFound", foundUser);
+    //check if found User is null to continue
+    const passwordMatches = checkUserPassword(foundUser.password, password);
+    console.log(
+      "passwordmatches",
+      passwordMatches,
+      foundUser.password,
+      password
+    );
+    if (foundUser != null && passwordMatches === true) {
       localStorage.setItem(loggedInUserKey, JSON.stringify(foundUser));
       navigate("/");
+    } else {
+      alert("incorrect username or password");
     }
   };
   return (

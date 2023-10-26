@@ -1,6 +1,6 @@
 import { loggedInUserKey, allUsersKey } from "../Data";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
@@ -14,12 +14,12 @@ function Register() {
     if (isUserExisting) {
       alert("username already exist");
     } else {
-      const newUser = { username, password, bets: [], owed: [] };
+      const newUser = { username, password, bets: [], owed: [], friends: [] };
       existingUsers.push(newUser);
       localStorage.setItem(allUsersKey, JSON.stringify(existingUsers));
-      console.log(allUsersKey);
+      localStorage.setItem(loggedInUserKey, JSON.stringify(newUser));
+      navigate("/");
     }
-    navigate("/Login");
   };
   return (
     <div className="bg-dark d-flex justify-content-center p-2 vh-100">

@@ -1,6 +1,13 @@
 import { getAllFriends, getFriend, setFriend, renderFriends } from "./Friends";
 import { PlayerData } from "./Players";
-import { loggedInUserKey, allUsersKey } from "./RegisteredUser";
+import {
+  loggedInUserKey,
+  allUsersKey,
+  getAllUsers,
+  findUser,
+  checkUserPassword,
+  addFriend,
+} from "./RegisteredUser";
 // import {} from "./Matches"
 
 export {
@@ -11,4 +18,8 @@ export {
   PlayerData,
   loggedInUserKey,
   allUsersKey,
+  getAllUsers,
+  findUser,
+  checkUserPassword,
+  addFriend,
 };
