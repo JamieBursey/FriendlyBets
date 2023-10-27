@@ -39,8 +39,9 @@ const editUser = (username, newUserObj) => {
   );
   // After removing the user temporarily from the array, we are going to append it again using allUsers.push(newUserObj)
   temporaryArrayUsers.push(newUserObj);
+  console.log("Updating user:", newUserObj);
   // Push the new array of users back to the local storage using localStorage.setItem(allUserKey, JSON.stringify(allUsers))
-  localStorage.setItem(allUsersKey, JSON.stringify(temporaryArrayUsers));
+  localStorage.setItem(loggedInUserKey, JSON.stringify(temporaryArrayUsers));
 };
 
 const addFriend = (friendUserObj, loggedInUserObj) => {
