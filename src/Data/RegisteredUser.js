@@ -73,4 +73,5 @@ export {
   checkUserPassword,
   findUser,
   addFriend,
+  editUser,
 };

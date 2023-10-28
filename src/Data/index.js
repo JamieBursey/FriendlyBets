@@ -7,6 +7,7 @@ import {
   findUser,
   checkUserPassword,
   addFriend,
+  editUser,
 } from "./RegisteredUser";
 // import {} from "./Matches"
 
@@ -22,4 +23,5 @@ export {
   findUser,
   checkUserPassword,
   addFriend,
+  editUser,
 };

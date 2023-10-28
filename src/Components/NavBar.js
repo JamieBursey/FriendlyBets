@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React } from "react";
 import Avatar from "react-avatar";
 import { Link, useNavigate } from "react-router-dom";
 import { loggedInUserKey } from "../Data";
@@ -65,6 +65,14 @@ function NavBar() {
                     onClick={() => navigate("/myAccount")}
                   >
                     My Account
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/addFriends")}
+                  >
+                    Add Friends
                   </button>
                 </li>
                 <li>
