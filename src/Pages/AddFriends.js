@@ -1,4 +1,3 @@
-import { render } from "@testing-library/react";
 import {
   findUser,
   addFriend,
@@ -7,20 +6,10 @@ import {
   editUser,
 } from "../Data";
 
-const addUsersFriend = (username) => {
-  console.log("Adding friend with id", username);
-  const friendUserObj = findUser(username);
-  const loggedInUserStr = localStorage.getItem(loggedInUserKey);
-  const loggedInUserObj = JSON.parse(loggedInUserStr);
-  console.log("Adding friend with properties", friendUserObj);
-  addFriend(friendUserObj, loggedInUserObj);
-};
-
 const AddFriends = () => {
+  const loggedInStr = localStorage.getItem(loggedInUserKey);
+  const loggedInUser = JSON.parse(loggedInStr);
   const addFriend = (friendUserObj, loggedInUserObj) => {
-    // friendUserObj.username => loggedInUserObj.friends
-    // loggedInUserObj => allUsers
-
     const currentFriendsUsernameList = loggedInUserObj.friends || [];
     let friendAlreadyExist = false;
     currentFriendsUsernameList.forEach((friendUsername) => {
@@ -38,7 +27,7 @@ const AddFriends = () => {
       editUser(loggedInUserObj.username, newLoggedInUserObj);
     }
   };
-  const renderFriends = () => {
+  const renderUsers = () => {
     let allUsers = getAllUsers();
 
     return allUsers.map((player) => (
@@ -46,7 +35,7 @@ const AddFriends = () => {
         <div className="row">
           <div className="col">{player["username"]}</div>
           <div className="col">
-            <button onClick={() => addUsersFriend(player["username"])}>
+            <button onClick={() => addFriend(player, loggedInUser)}>
               Add Friend
             </button>
           </div>
@@ -54,7 +43,7 @@ const AddFriends = () => {
       </div>
     ));
   };
-  return <div>{renderFriends()}</div>;
+  return <div>{renderUsers()}</div>;
 };
 
 export { AddFriends };

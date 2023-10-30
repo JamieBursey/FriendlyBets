@@ -52,6 +52,7 @@ function NavBar() {
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                href="#"
               >
                 <Avatar round={true} size="40" name={loggedUser.username} />
               </a>

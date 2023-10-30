@@ -29,19 +29,16 @@ const checkUserPassword = (userPassword, inputPassword) => {
 };
 
 const editUser = (username, newUserObj) => {
-  // Find current user from the array using the username
   let userFound = findUser(username);
   // Get All User Array
   const allUserArray = getAllUsers();
-  // If the user is found, you are going to use the allUsers.filter()
   let temporaryArrayUsers = allUserArray.filter(
     (user) => user.username !== userFound.username
   );
-  // After removing the user temporarily from the array, we are going to append it again using allUsers.push(newUserObj)
   temporaryArrayUsers.push(newUserObj);
   console.log("Updating user:", newUserObj);
   // Push the new array of users back to the local storage using localStorage.setItem(allUserKey, JSON.stringify(allUsers))
-  localStorage.setItem(loggedInUserKey, JSON.stringify(temporaryArrayUsers));
+  localStorage.setItem(allUsersKey, JSON.stringify(temporaryArrayUsers));
 };
 
 const addFriend = (friendUserObj, loggedInUserObj) => {
