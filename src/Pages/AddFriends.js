@@ -1,10 +1,4 @@
-import {
-  findUser,
-  addFriend,
-  loggedInUserKey,
-  getAllUsers,
-  editUser,
-} from "../Data";
+import { loggedInUserKey, getAllUsers, editUser } from "../Data";
 
 const AddFriends = () => {
   const loggedInStr = localStorage.getItem(loggedInUserKey);

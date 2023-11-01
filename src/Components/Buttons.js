@@ -104,7 +104,6 @@ function AddButtons() {
             </div>
           </div>
         </div>
-        <div className="row mb-3">{renderFriends()}</div>
       </div>
     </>
   );

@@ -14,7 +14,7 @@ function NavBar() {
 
   const loggedUser = JSON.parse(localStorage.getItem(loggedInUserKey));
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-sm bg-body-tertiary">
       <div className="container-fluid">
         <button
           className="navbar-toggler"
@@ -52,7 +52,6 @@ function NavBar() {
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                href="#"
               >
                 <Avatar round={true} size="40" name={loggedUser.username} />
               </a>
