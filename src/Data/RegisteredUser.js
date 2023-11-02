@@ -36,7 +36,6 @@ const editUser = (username, newUserObj) => {
     (user) => user.username !== userFound.username
   );
   temporaryArrayUsers.push(newUserObj);
-  console.log("Updating user:", newUserObj);
   // Push the new array of users back to the local storage using localStorage.setItem(allUserKey, JSON.stringify(allUsers))
   localStorage.setItem(allUsersKey, JSON.stringify(temporaryArrayUsers));
 };

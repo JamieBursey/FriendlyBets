@@ -36,11 +36,6 @@ function Matches() {
       style={backgroundColor}
       className="container text-center mt-4 text-light"
     >
-      <div className="row">
-        <div className="col mb-3">Visitor Team</div>
-        <div className="col ">VS</div>
-        <div className="col">Home Team</div>
-      </div>
       <div>
         <Calendar onChange={(date) => setValue(date)} value={value} />
       </div>

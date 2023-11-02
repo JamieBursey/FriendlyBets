@@ -42,34 +42,6 @@ function AddButtons() {
         "https://th.bing.com/th/id/R.fb35581771dd8c5b57796a08803b05c6?rik=ShSZHJ6HhQGQsQ&riu=http%3a%2f%2fthebeastbrief.com%2fwp-content%2fuploads%2fmlb-logo.jpg&ehk=uuqTVdWYUq2CEu96Ze6aIGgvSDTYJf9j32csiFd9yRQ%3d&risl=&pid=ImgRaw&r=0",
     },
   ];
-  // const [playerName, setPlayerName] = useState("");
-
-  // const [newPlayer, setNewPlayer] = useState([]);
-  // const [playerRemoved, setPlayerRemoved] = useState("");
-
-  // const addPlayer = () => {
-  //     if (playerName.trim() !== "") {
-  //         setNewPlayer([...newPlayer, playerName]);
-  //         setPlayerName("");
-  //         console.log(newPlayer);
-  //     }
-  // };
-
-  // const deletePlayer = () => {
-  //     const updatePlayers = newPlayer.filter(
-  //         (person) => person !== playerRemoved
-  //     );
-  //     setNewPlayer(updatePlayers);
-  //     setPlayerRemoved("");
-  // };
-
-  // const PlayerElement = () => {
-  //     return newPlayer.map((person) => (
-  //         <div key={person} className="col fs-4 text-danger">
-  //             {person}
-  //         </div>
-  //     ));
-  // };
   const ButtonsBackground = {
     backgroundColor: "#0B1305",
     borderRadius: "5px",
@@ -78,32 +50,6 @@ function AddButtons() {
     <>
       <div style={ButtonsBackground} className="App p-3 mb-3">
         <div className="container text-center">{buttons(sportButtons)}</div>
-      </div>
-      <div style={ButtonsBackground} className="App p-3">
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
-              <input
-                type="text"
-                placeholder="Add Friend"
-                className="w-100"
-              ></input>
-            </div>
-            <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
-              <button className="w-100 btn btn-primary btn-sm">Submit</button>
-            </div>
-            <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
-              <input
-                type="text"
-                placeholder="Remove Friend"
-                className="w-100"
-              ></input>
-            </div>
-            <div className="col-xs-12 col-sm-6 col-md-3 py-.2">
-              <button className="w-100 btn btn-primary btn-sm">Submit</button>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );

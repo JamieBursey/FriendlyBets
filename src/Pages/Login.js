@@ -14,15 +14,8 @@ function Login() {
 
   const loginHandler = () => {
     const foundUser = findUser(username);
-    console.log("userIsFound", foundUser);
     //check if found User is null to continue
     const passwordMatches = checkUserPassword(foundUser.password, password);
-    console.log(
-      "passwordmatches",
-      passwordMatches,
-      foundUser.password,
-      password
-    );
     if (foundUser != null && passwordMatches === true) {
       localStorage.setItem(loggedInUserKey, JSON.stringify(foundUser));
       navigate("/");

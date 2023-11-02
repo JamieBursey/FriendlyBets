@@ -1,4 +1,4 @@
-import { getAllFriends, getFriend, setFriend, renderFriends } from "./Friends";
+import { getFriend, setFriend, renderFriends } from "./Friends";
 import { PlayerData } from "./Players";
 import {
   loggedInUserKey,
@@ -12,7 +12,6 @@ import {
 // import {} from "./Matches"
 
 export {
-  getAllFriends,
   getFriend,
   setFriend,
   renderFriends,

@@ -1,12 +1,5 @@
 import { getAllUsers, loggedInUserKey } from "./RegisteredUser";
 import { findUser, addFriend } from "./RegisteredUser";
-const getAllFriends = [
-  { username: "Jamie", password: "" },
-  { username: "Kelly", password: "" },
-  { username: "Paul", password: "" },
-  { username: "Danyelle", password: "" },
-  { username: "Dawson", password: "" },
-];
 
 const getFriend = (username) => {
   return { username: "", password: "" };
@@ -17,11 +10,9 @@ const setFriend = (username, password) => {
 };
 
 const addUsersFriend = (username) => {
-  console.log("Adding friend with id", username);
   const friendUserObj = findUser(username);
   const loggedInUserStr = localStorage.getItem(loggedInUserKey);
   const loggedInUserObj = JSON.parse(loggedInUserStr);
-  console.log("Adding friend with properties", friendUserObj);
   addFriend(friendUserObj, loggedInUserObj);
 };
 const renderFriends = () => {
@@ -40,4 +31,4 @@ const renderFriends = () => {
     </div>
   ));
 };
-export { getAllFriends, getFriend, setFriend, renderFriends };
+export { getFriend, setFriend, renderFriends };

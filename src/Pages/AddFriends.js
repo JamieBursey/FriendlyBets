@@ -19,6 +19,7 @@ const AddFriends = () => {
       newLoggedInUserObj.friends = currentFriendsUsernameList;
 
       editUser(loggedInUserObj.username, newLoggedInUserObj);
+      localStorage.setItem(loggedInUserKey, JSON.stringify(newLoggedInUserObj));
     }
   };
   const renderUsers = () => {
