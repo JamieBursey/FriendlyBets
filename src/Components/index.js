@@ -5,5 +5,6 @@ import Buttons from "./Buttons";
 import Matches from "./Matches";
 import NavBar from "./NavBar";
 import { SportsDiv } from "./divColors";
+import { Games } from "./Matches";
 
-export { Banner, Table, Buttons, Matches, SportsDiv, NavBar };
+export { Banner, Table, Buttons, Matches, SportsDiv, NavBar, Games };

@@ -5,5 +5,15 @@ import { Login } from "./Login";
 import { Register } from "./Register";
 import { MyAccount } from "./MyAccount";
 import { AddFriends } from "./AddFriends";
+import { FetchFromAPI } from "./Tests/FetchFromAPI";
 
-export { Home, About, Contact, Login, Register, MyAccount, AddFriends };
+export {
+  Home,
+  About,
+  Contact,
+  Login,
+  Register,
+  MyAccount,
+  AddFriends,
+  FetchFromAPI,
+};

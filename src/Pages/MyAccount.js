@@ -1,11 +1,7 @@
 import React from "react";
-import { allUsersKey, loggedInUserKey } from "../Data";
-import { useState } from "react";
+import { loggedInUserKey } from "../Data";
 
 function MyAccount() {
-  const [friendName, setFriendName] = useState(null);
-  const [removeName, setRemoveName] = useState(null);
-
   const renderFriends = () => {
     return (
       <>

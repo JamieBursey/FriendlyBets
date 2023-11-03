@@ -1,7 +1,6 @@
 import React from "react";
 import { Banner } from "../Components";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Outlet, Link } from "react-router-dom";
 
 function About() {
   return (

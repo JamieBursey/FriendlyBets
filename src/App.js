@@ -10,6 +10,7 @@ import {
   Register,
   MyAccount,
   AddFriends,
+  FetchFromAPI,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -27,6 +28,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/myAccount" element={<MyAccount />} />
           <Route path="/addFriends" element={<AddFriends />} />
+          <Route path="/test/fetchFromAPI" element={<FetchFromAPI />} />
         </Routes>
       </BrowserRouter>
     </div>

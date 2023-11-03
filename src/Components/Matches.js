@@ -1,5 +1,11 @@
 import Calendar from "react-calendar";
 import { useState } from "react";
+const Games = [
+  { date: "2023-11-17", home: "Colorado", vs: "VS", visitor: "Vegas" },
+  { date: "2023-11-02", home: "Devils", vs: "VS", visitor: "Wild" },
+  { date: "2023-11-17", home: "Toronto", vs: "VS", visitor: "Montreal" },
+  { date: "2023-11-21", home: "Boston", vs: "VS", visitor: "Winnipeg" },
+];
 
 function Matches() {
   //changed render into function to have more visibility of the code when collaples
@@ -25,22 +31,16 @@ function Matches() {
     }
   }
 
-  const [value, setValue] = useState(new Date());
+  const [date, setDate] = useState(new Date());
 
   const backgroundColor = {
     backgroundColor: "#0B1305",
     borderRadius: "5px",
   };
 
-  const Games = [
-    { date: "2023-11-15", home: "Colorado", vs: "VS", visitor: "Vegas" },
-    { date: "2023-11-02", home: "Devils", vs: "VS", visitor: "Wild" },
-    { date: "2023-11-17", home: "Toronto", vs: "VS", visitor: "Montreal" },
-    { date: "2023-11-18", home: "Boston", vs: "VS", visitor: "Winnipeg" },
-  ];
   // compare Games Array to Calendar value
   const selectedDateGames = Games.filter(
-    (game) => new Date(game.date).toDateString() === value.toDateString()
+    (game) => new Date(game.date).toDateString() === date.toDateString()
   );
   // get game for date
   const gameDates = Games.map((game) => new Date(game.date).toDateString());
@@ -52,8 +52,8 @@ function Matches() {
     >
       <div>
         <Calendar
-          onChange={(date) => setValue(date)}
-          value={value}
+          onChange={(date) => setDate(date)}
+          value={date}
           tileContent={({ date, view }) =>
             //check if date has game
             view === "month" && gameDates.includes(date.toDateString()) ? (
@@ -78,3 +78,4 @@ function Matches() {
 }
 
 export default Matches;
+export { Games };
