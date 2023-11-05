@@ -77,6 +77,14 @@ function NavBar() {
                   </button>
                 </li>
                 <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/fullSchedule")}
+                  >
+                    Full Schedule
+                  </button>
+                </li>
+                <li>
                   <button className="dropdown-item" onClick={logout}>
                     Logout
                   </button>

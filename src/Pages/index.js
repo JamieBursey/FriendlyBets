@@ -6,6 +6,7 @@ import { Register } from "./Register";
 import { MyAccount } from "./MyAccount";
 import { AddFriends } from "./AddFriends";
 import { FetchFromAPI } from "./Tests/FetchFromAPI";
+import { FullSchedule } from "./FullSchedule";
 
 export {
   Home,
@@ -16,4 +17,5 @@ export {
   MyAccount,
   AddFriends,
   FetchFromAPI,
+  FullSchedule,
 };

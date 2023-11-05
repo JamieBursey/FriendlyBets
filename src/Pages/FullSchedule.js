@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function FetchFromAPI() {
+const FullSchedule = () => {
   const actionBtnOne = (gameId, gameTitle) => {
     console.log("actionBtnOne", gameId, gameTitle);
   };
@@ -12,13 +12,15 @@ function FetchFromAPI() {
     return (
       <div key={gameId} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
-          <h5 className="card-title">{gameTitle}</h5>
-          <p>
+          <h5 className="card-title text-center">{gameTitle}</h5>
+          <p className="text-center">
             {gameDay} at {new Date(gameTime).toLocaleTimeString()}
           </p>
-          <p className="card-text">
-            With supporting text below as a natural lead-in to additional
-            content.
+          <p className="card-text text-center">
+            <img
+              src="https://assets.dragoart.com/images/20841_501/how-to-draw-the-nhl-logo_5e4cd2e0524681.36940192_102529_5_4.png"
+              style={{ maxWidth: "40%" }}
+            ></img>
           </p>
           <a
             onClick={() => actionBtnOne(gameId, gameTitle)}
@@ -39,7 +41,7 @@ function FetchFromAPI() {
   const [arr, setArr] = useState([]);
   const fetchData = async () => {
     const response = await fetch(
-      "https://statsapi.web.nhl.com/api/v1/schedule"
+      "https://statsapi.web.nhl.com/api/v1/schedule?season=20232024"
     );
     const games = await response.json();
     let arrHTMLObj = [];
@@ -61,11 +63,11 @@ function FetchFromAPI() {
   }, []);
 
   return (
-    <div className="text-white">
-      <h1>Fetch From API</h1>
+    <div className="text-white text-center">
+      <h1>NHL Schedule</h1>
       <div className="row">{arr}</div>
     </div>
   );
-}
+};
 
-export { FetchFromAPI };
+export { FullSchedule };

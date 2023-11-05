@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-
-function FetchFromAPI() {
+const TodaysGames = () => {
   const actionBtnOne = (gameId, gameTitle) => {
     console.log("actionBtnOne", gameId, gameTitle);
   };
@@ -17,14 +15,16 @@ function FetchFromAPI() {
             {gameDay} at {new Date(gameTime).toLocaleTimeString()}
           </p>
           <p className="card-text">
-            With supporting text below as a natural lead-in to additional
-            content.
+            <img
+              src="https://assets.dragoart.com/images/20841_501/how-to-draw-the-nhl-logo_5e4cd2e0524681.36940192_102529_5_4.png"
+              style={{ maxWidth: "40%" }}
+            ></img>
           </p>
           <a
             onClick={() => actionBtnOne(gameId, gameTitle)}
             className="btn btn-primary"
           >
-            Go somewhere
+            Make Bet
           </a>
           <a
             onClick={() => actionBtnTwo(gameId, gameTitle)}
@@ -36,7 +36,7 @@ function FetchFromAPI() {
       </div>
     );
   };
-  const [arr, setArr] = useState([]);
+  const [todaysGameArr, setTodaysGameArr] = useState([]);
   const fetchData = async () => {
     const response = await fetch(
       "https://statsapi.web.nhl.com/api/v1/schedule"
@@ -53,7 +53,7 @@ function FetchFromAPI() {
       });
     });
     console.log("htmlAr", arrHTMLObj);
-    setArr(arrHTMLObj);
+    setTodaysGameArr(arrHTMLObj);
   };
   useEffect(() => {
     // Whenever the page loads, then this is executed
@@ -61,11 +61,11 @@ function FetchFromAPI() {
   }, []);
 
   return (
-    <div className="text-white">
-      <h1>Fetch From API</h1>
-      <div className="row">{arr}</div>
+    <div className="text-white text-center">
+      <h1>Todays Games</h1>
+      <div className="row justify-content-center">{todaysGameArr}</div>
     </div>
   );
-}
+};
 
-export { FetchFromAPI };
+export { TodaysGames };

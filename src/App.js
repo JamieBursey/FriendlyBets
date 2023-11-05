@@ -11,6 +11,7 @@ import {
   MyAccount,
   AddFriends,
   FetchFromAPI,
+  FullSchedule,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -29,6 +30,7 @@ function App() {
           <Route path="/myAccount" element={<MyAccount />} />
           <Route path="/addFriends" element={<AddFriends />} />
           <Route path="/test/fetchFromAPI" element={<FetchFromAPI />} />
+          <Route path="/fullSchedule" element={<FullSchedule />} />
         </Routes>
       </BrowserRouter>
     </div>

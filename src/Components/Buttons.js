@@ -1,5 +1,4 @@
 import React from "react";
-import { renderFriends } from "../Data";
 import Avatar from "react-avatar";
 function buttons(buttonsData) {
   return (

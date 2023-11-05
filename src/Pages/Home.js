@@ -8,7 +8,6 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("checkLogin", checkIfLoggedInExists);
     if (!checkIfLoggedInExists || checkIfLoggedInExists === "null") {
       navigate("/login");
     }

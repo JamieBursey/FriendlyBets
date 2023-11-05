@@ -4,11 +4,8 @@ const sendEmail = () => {
   document
     .getElementById("contact-form")
     .addEventListener("submit", function (event) {
-      console.log("test");
       emailjs.sendForm("Betting", "contact-form", this).then(
-        function () {
-          console.log("SUCCESS!");
-        },
+        function () {},
         function (error) {
           console.log("FAILED...", error);
         }
