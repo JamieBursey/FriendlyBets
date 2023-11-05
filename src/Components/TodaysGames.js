@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const TodaysGames = () => {
+  const navigate = useNavigate();
   const actionBtnOne = (gameId, gameTitle) => {
     console.log("actionBtnOne", gameId, gameTitle);
+    navigate("/betPage");
   };
   const actionBtnTwo = (gameId, gameTitle) => {
     alert("actionBtnOTwo" + gameId + gameTitle);
