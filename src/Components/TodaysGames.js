@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom";
 
 const TodaysGames = () => {
   const navigate = useNavigate();
-  const actionBtnOne = (gameId, gameTitle) => {
-    console.log("actionBtnOne", gameId, gameTitle);
+  const actionBtnOne = (gamePK, gameTitle, gameID) => {
+    console.log("actionBtnOne", gamePK, gameTitle);
     navigate("/betPage");
   };
-  const actionBtnTwo = (gameId, gameTitle) => {
-    alert("actionBtnOTwo" + gameId + gameTitle);
+  const actionBtnTwo = (gamePK, gameTitle) => {
+    alert("actionBtnOTwo" + gamePK + gameTitle);
   };
-  const createGameCard = (gameId, gameTitle, gameTime, gameDay) => {
+  const createGameCard = (gamePK, gameTitle, gameTime, gameDay) => {
     return (
-      <div key={gameId} className="col-3 card m-1" style={{ width: "18rem" }}>
+      <div key={gamePK} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
           <h5 className="card-title">{gameTitle}</h5>
           <p>
@@ -25,13 +25,13 @@ const TodaysGames = () => {
             ></img>
           </p>
           <a
-            onClick={() => actionBtnOne(gameId, gameTitle)}
+            onClick={() => actionBtnOne(gamePK, gameTitle)}
             className="btn btn-primary"
           >
             Make Bet
           </a>
           <a
-            onClick={() => actionBtnTwo(gameId, gameTitle)}
+            onClick={() => actionBtnTwo(gamePK, gameTitle)}
             className="btn btn-primary"
           >
             Go somewhere 2
@@ -49,11 +49,13 @@ const TodaysGames = () => {
     let arrHTMLObj = [];
     games.dates.forEach((date) => {
       date.games.forEach((game) => {
-        const gameID = game.gamePk;
+        const awayTeamID = game.teams.away.team.id;
+        const homeTeamID = game.teams.away.team.id;
+        const gamePK = game.gamePk;
         const gameTitle = `${game.teams.away.team.name} vs ${game.teams.home.team.name}`;
         const gameTime = game.gameDate;
         const gameDay = date.date;
-        arrHTMLObj.push(createGameCard(gameID, gameTitle, gameTime, gameDay));
+        arrHTMLObj.push(createGameCard(gamePK, gameTitle, gameTime, gameDay));
       });
     });
     console.log("htmlAr", arrHTMLObj);
