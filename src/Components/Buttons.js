@@ -27,8 +27,7 @@ function AddButtons() {
     },
     {
       text: "Hockey",
-      imageURL:
-        "https://assets.dragoart.com/images/20841_501/how-to-draw-the-nhl-logo_5e4cd2e0524681.36940192_102529_5_4.png",
+      imageURL: "",
     },
     {
       text: "Football",
