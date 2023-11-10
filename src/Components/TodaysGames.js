@@ -107,10 +107,15 @@ const TodaysGames = () => {
     // Whenever the page loads, then this is executed
     fetchData();
   }, []);
-
+  //   const proxyServer = () => {
+  //     window.location.href = "https://cors-anywhere.herokuapp.com/corsdemo";
+  //   };
   return (
     <div className="text-white text-center">
       <h1>Todays Games</h1>
+      {/* <button type="button" className="btn btn-dark" onClick={proxyServer()}>
+        Go here to activate Games
+      </button> */}
       <div className="row justify-content-center">{todaysGameArr}</div>
     </div>
   );
