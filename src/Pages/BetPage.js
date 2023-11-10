@@ -8,6 +8,7 @@ const BetPage = () => {
   const [selectedFriends, setSelectedFriends] = useState({});
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [betPick, setBetPick] = useState([]);
+  const [Wager, setWager] = useState([]);
   //   const fetchTest = async () => {
   //     const fetchGame = await fetch(
   //       "https://statsapi.web.nhl.com/api/v1/schedule"
@@ -48,20 +49,29 @@ const BetPage = () => {
           <div key={index}>
             <input
               type="checkbox"
-              id={`friend_${index}`}
+              id={`friend${index}`}
               checked={!!selectedFriends[friend]}
               onChange={() => handleFriendSelection(friend)}
             />
-            <label htmlFor={`friend_${index}`}>{friend}</label>
+
+            <label className="fs-3 text-success ms-2">{friend}</label>
           </div>
         ))}
+        <input
+          type="text"
+          placeholder="Set Wager"
+          onChange={(event) => setWager(event.target.value)}
+        ></input>
         <button
           className="btn btn-primary mx-1"
           onClick={() => console.log(selectedFriends)}
         >
           Place Bet
         </button>
-        <button className="btn btn-primary" onClick={() => navigate("/")}>
+        <button
+          className="btn btn-primary"
+          onClick={() => console.log(setWager)}
+        >
           Go Back
         </button>
       </div>

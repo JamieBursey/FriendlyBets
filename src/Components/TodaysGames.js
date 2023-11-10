@@ -3,14 +3,27 @@ import { useNavigate } from "react-router-dom";
 
 const TodaysGames = () => {
   const navigate = useNavigate();
-  const actionBtnOne = (gamePK, gameTitle, gameID) => {
-    console.log("actionBtnOne", gamePK, gameTitle);
+  const actionBtnOne = (gamePK, gameTitle, gameTime, gameDay) => {
+    const gameDetails = {
+      gamePK,
+      gameTitle,
+      gameTime,
+      gameDay,
+    };
+    localStorage.setItem("selectedGame", JSON.stringify(gameDetails));
     navigate("/betPage");
   };
-  const actionBtnTwo = (gamePK, gameTitle) => {
-    alert("actionBtnOTwo" + gamePK + gameTitle);
+  const actionBtnTwo = () => {
+    navigate("/fullSchedule");
   };
-  const createGameCard = (gamePK, gameTitle, gameTime, gameDay) => {
+  const createGameCard = (
+    gamePK,
+    gameTitle,
+    gameTime,
+    gameDay,
+    homeLogo,
+    awayLogo
+  ) => {
     return (
       <div key={gamePK} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -19,46 +32,76 @@ const TodaysGames = () => {
             {gameDay} at {new Date(gameTime).toLocaleTimeString()}
           </p>
 
-          <a
-            onClick={() => actionBtnOne(gamePK, gameTitle)}
-            className="btn btn-primary mx-1"
-          >
-            Make Bet
-          </a>
-          <a
-            onClick={() => actionBtnTwo(gamePK, gameTitle)}
-            className="btn btn-primary"
-          >
-            Go somewhere 2
-          </a>
+          <div className="row">
+            <div className="col">
+              <a
+                onClick={() => actionBtnOne(gamePK, gameTitle)}
+                className="btn btn-primary w-100"
+              >
+                Bet Friends
+              </a>
+            </div>
+            <div className="col">
+              <a
+                onClick={() => actionBtnTwo(gamePK, gameTitle)}
+                className="btn btn-primary w-100"
+              >
+                Full Schedule
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     );
   };
+
   const [todaysGameArr, setTodaysGameArr] = useState([]);
   const fetchData = async () => {
     const apiUrl = `https://api-web.nhle.com/v1/schedule/now`;
     const corsProxuUrl = `https://cors-anywhere.herokuapp.com/`;
-    const finalUrl = corsProxuUrl + apiUrl;
-    const response = await fetch(finalUrl);
+    // const finalUrl = corsProxuUrl + apiUrl;
+    const finalUrl = apiUrl;
+    // const config = Config();
+    try {
+      // if(config.ENABLE_DUMMY_RESPONSE){
 
-    const games = await response.json();
+      // }else{
 
-    console.log(games);
-    let arrHTMLObj = [];
-    games.gameWeek.forEach((week) => {
-      week.games.forEach((game) => {
+      // }
+      const response = await fetch(finalUrl, {});
+
+      const games = await response.json();
+      console.log(games);
+      let gamesHTMLObj = [];
+      const today = new Date().toISOString().slice(0, 10);
+      const todaysGames = games.gameWeek.find((day) => day.date === today);
+
+      todaysGames.games.forEach((game) => {
         const awayTeamID = game.awayTeam.abbrev;
         const homeTeamID = game.homeTeam.abbrev;
+        const homeLogo = game.homeTeam.logo;
+        const awayLogo = game.awayTeam.logo;
         const gamePK = game.gamePk;
         const gameTitle = `${awayTeamID} vs ${homeTeamID}`;
         const gameTime = game.startTimeUTC;
-        const gameDay = week.date;
-        arrHTMLObj.push(createGameCard(gamePK, gameTitle, gameTime, gameDay));
+        const gameDay = game.date;
+        gamesHTMLObj.push(
+          createGameCard(
+            gamePK,
+            gameTitle,
+            gameTime,
+            gameDay,
+            homeLogo,
+            awayLogo
+          )
+        );
       });
-    });
-    console.log("htmlAr", arrHTMLObj);
-    setTodaysGameArr(arrHTMLObj);
+
+      console.log("htmlAr", gamesHTMLObj);
+      setTodaysGameArr(gamesHTMLObj);
+    } catch (error) {
+      console.log("Fetch Data Error", error);
+    }
   };
   useEffect(() => {
     // Whenever the page loads, then this is executed
