@@ -1,33 +1,20 @@
 import { useEffect, useState } from "react";
 import { BettingOptions } from "../Data";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { loggedInUserKey } from "../Data";
 
 const BetPage = () => {
+  const gameInfo = localStorage.getItem("selectedGame");
+  const selectedGame = JSON.parse(gameInfo);
+  console.log("carddetails", selectedGame);
   const navigate = useNavigate();
   const [selectedFriends, setSelectedFriends] = useState({});
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [betPick, setBetPick] = useState([]);
   const [Wager, setWager] = useState([]);
-  //   const fetchTest = async () => {
-  //     const fetchGame = await fetch(
-  //       "https://statsapi.web.nhl.com/api/v1/schedule"
-  //     );
-  //     const gameData = await fetchGame.json();
-  //     const homeID = gameData.dates[0].games.map(
-  //       (game) => game.teams.home.team.id
-  //     );
-  //     for (let id of homeID) {
-  //       const teamFetch = await fetch(
-  //         `https://statsapi.web.nhl.com/api/v1/teams/${id}/roster`
-  //       );
-  //       const teamRoster = await teamFetch.json();
-  //       console.log(`Roster`, teamRoster);
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     fetchTest();
-  //   });
+  const fetchPlayByPlay = async () => {
+    const response = fetch();
+  };
   useEffect(() => {
     const loggedInUserData = localStorage.getItem(loggedInUserKey);
     const loggedInUsr = loggedInUserData ? JSON.parse(loggedInUserData) : null;
@@ -42,9 +29,21 @@ const BetPage = () => {
   };
 
   return (
-    <div className="card mt-3" style={{ width: "90%" }}>
+    <div className="card mt-3" style={{ width: "90%", margin: "auto" }}>
       <div className="card-body">
-        <h5 className="card-title">Team vs Team</h5>
+        <h5 className="card-title text-center">{selectedGame.gameTitle}</h5>
+        <p className="text-center">
+          {new Date(selectedGame.gameTime).toLocaleTimeString()}
+        </p>
+        <div className="row">
+          <div className="col">
+            <img src={selectedGame.awayLogo}></img>
+          </div>
+          <div className="col">
+            <img src={selectedGame.homeLogo} />
+          </div>
+        </div>
+
         {usersFriendList.map((friend, index) => (
           <div key={index}>
             <input
