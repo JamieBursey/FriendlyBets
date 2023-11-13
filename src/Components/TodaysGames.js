@@ -107,7 +107,7 @@ const TodaysGames = () => {
         const homeTeamID = game.homeTeam.abbrev;
         const homeLogo = game.homeTeam.logo;
         const awayLogo = game.awayTeam.logo;
-        const game_ID = game.gamePk;
+        const game_ID = game.id;
         const gameTitle = `${awayTeamID} vs ${homeTeamID}`;
         const gameTime = game.startTimeUTC;
         const gameDay = game.date;

@@ -6,15 +6,12 @@ import { loggedInUserKey } from "../Data";
 const BetPage = () => {
   const gameInfo = localStorage.getItem("selectedGame");
   const selectedGame = JSON.parse(gameInfo);
-  console.log("carddetails", selectedGame);
   const navigate = useNavigate();
   const [selectedFriends, setSelectedFriends] = useState({});
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [betPick, setBetPick] = useState([]);
   const [Wager, setWager] = useState([]);
-  const fetchPlayByPlay = async () => {
-    const response = fetch();
-  };
+
   useEffect(() => {
     const loggedInUserData = localStorage.getItem(loggedInUserKey);
     const loggedInUsr = loggedInUserData ? JSON.parse(loggedInUserData) : null;
@@ -61,6 +58,9 @@ const BetPage = () => {
           placeholder="Set Wager"
           onChange={(event) => setWager(event.target.value)}
         ></input>
+        <>
+          <BettingOptions game_ID={selectedGame} />
+        </>
         <button
           className="btn btn-primary mx-1"
           onClick={() => console.log(selectedFriends)}
