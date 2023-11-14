@@ -81,7 +81,7 @@ function NavBar() {
                     className="dropdown-item"
                     onClick={() => navigate("/fullSchedule")}
                   >
-                    Full Schedule
+                    Weekly Schedule
                   </button>
                 </li>
                 <li>

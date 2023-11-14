@@ -8,7 +8,14 @@ const FullSchedule = () => {
   const actionBtnTwo = (gameId, gameTitle) => {
     alert("actionBtnOTwo" + gameId + gameTitle);
   };
-  const createGameCard = (gameId, gameTitle, gameTime, gameDay) => {
+  const createGameCard = (
+    gameId,
+    gameTitle,
+    gameTime,
+    gameDay,
+    awayLogo,
+    homeLogo
+  ) => {
     return (
       <div key={gameId} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -16,42 +23,44 @@ const FullSchedule = () => {
           <p className="text-center">
             {gameDay} at {new Date(gameTime).toLocaleTimeString()}
           </p>
-          <p className="card-text text-center">
-            <img
-              src="https://assets.dragoart.com/images/20841_501/how-to-draw-the-nhl-logo_5e4cd2e0524681.36940192_102529_5_4.png"
-              style={{ maxWidth: "40%" }}
-            ></img>
-          </p>
-          <a
-            onClick={() => actionBtnOne(gameId, gameTitle)}
-            className="btn btn-primary"
-          >
-            Go somewhere
-          </a>
-          <a
-            onClick={() => actionBtnTwo(gameId, gameTitle)}
-            className="btn btn-primary"
-          >
-            Go somewhere 2
-          </a>
+          <div className="card-text text-center">
+            <div className="row">
+              <div className="col mx-2">
+                <img src={awayLogo}></img>
+              </div>
+              <div className="col mx-2">
+                <img src={homeLogo} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
   };
   const [arr, setArr] = useState([]);
   const fetchData = async () => {
-    const response = await fetch(
-      "https://statsapi.web.nhl.com/api/v1/schedule?season=20232024"
-    );
-    const games = await response.json();
+    const response = await fetch("https://api-web.nhle.com/v1/schedule/now");
+    const allGames = await response.json();
+    console.log("weekly", allGames);
     let arrHTMLObj = [];
-    games.dates.forEach((date) => {
-      date.games.forEach((game) => {
-        const gameID = game.gamePk;
-        const gameTitle = `${game.teams.away.team.name} vs ${game.teams.home.team.name}`;
-        const gameTime = game.gameDate;
-        const gameDay = date.date;
-        arrHTMLObj.push(createGameCard(gameID, gameTitle, gameTime, gameDay));
+    allGames.gameWeek.forEach((week) => {
+      week.games.forEach((game) => {
+        const gameID = game.id;
+        const homeLogo = game.homeTeam.logo;
+        const awayLogo = game.awayTeam.logo;
+        const gameTitle = `${game.awayTeam.placeName.default} vs ${game.homeTeam.placeName.default}`;
+        const gameTime = game.startTimeUTC;
+        const gameDay = game.date;
+        arrHTMLObj.push(
+          createGameCard(
+            gameID,
+            gameTitle,
+            gameTime,
+            gameDay,
+            awayLogo,
+            homeLogo
+          )
+        );
       });
     });
     console.log("htmlAr", arrHTMLObj);
