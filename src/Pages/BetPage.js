@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { loggedInUserKey } from "../Data";
 
 const BetPage = () => {
+  const pendingBets = [];
   const gameInfo = localStorage.getItem("selectedGame");
   const selectedGame = JSON.parse(gameInfo);
   const navigate = useNavigate();
   const [selectedFriends, setSelectedFriends] = useState({});
   const [usersFriendList, setUsersFriendList] = useState([]);
-  const [betPick, setBetPick] = useState([]);
-  const [Wager, setWager] = useState([]);
+  const [selectedBets, setSelectedBets] = useState({});
+  const [Wager, setWager] = useState("");
 
   useEffect(() => {
     const loggedInUserData = localStorage.getItem(loggedInUserKey);
@@ -25,6 +26,30 @@ const BetPage = () => {
     }));
   };
 
+  const updateCheckedBets = (betOption) => {
+    setSelectedBets((prevSelectedBets) => ({
+      ...prevSelectedBets,
+      [betOption]: !prevSelectedBets[betOption],
+    }));
+  };
+  const placeBet = () => {
+    let pendingBets = JSON.parse(localStorage.getItem("PendingBets")) || [];
+    const newBet = {
+      gameId: selectedGame.id,
+      gameTitle: selectedGame.gameTitle,
+      wager: Wager,
+      friends: Object.keys(selectedFriends).filter(
+        (friend) => selectedFriends[friend]
+      ),
+      betStatus: "pending",
+    };
+
+    pendingBets = JSON.parse(localStorage.getItem("PendingBets")) || [];
+    pendingBets.push(newBet);
+    localStorage.setItem("PendingBets", JSON.stringify(pendingBets));
+
+    console.log("Bet Placed:", newBet);
+  };
   return (
     <div className="card mt-3" style={{ width: "90%", margin: "auto" }}>
       <div className="card-body">
@@ -59,19 +84,20 @@ const BetPage = () => {
           onChange={(event) => setWager(event.target.value)}
         ></input>
         <>
-          <BettingOptions game_ID={selectedGame} />
+          <BettingOptions
+            game_ID={selectedGame}
+            updateCheckedBets={updateCheckedBets}
+            selectedBets={selectedBets}
+          />
         </>
-        <button
-          className="btn btn-primary mx-1"
-          onClick={() => console.log(selectedFriends)}
-        >
+        <button className="btn btn-primary mx-1" onClick={placeBet}>
           Place Bet
         </button>
         <button
           className="btn btn-primary"
           onClick={() => console.log(setWager)}
         >
-          Go Back
+          Check Bets
         </button>
       </div>
     </div>
@@ -79,3 +105,85 @@ const BetPage = () => {
 };
 
 export { BetPage };
+
+// const structor=[
+//   {
+//     "id": 2023020228,
+//     "season": 20232024,
+//     "gameType": 2,
+//     "gameDate": "2023-11-13",
+//     "venue": {
+//       "default": "Climate Pledge Arena"
+//     },
+//     "startTimeUTC": "2023-11-14T03:00:00Z",
+//     "easternUTCOffset": "-05:00",
+//     "venueUTCOffset": "-08:00",
+//     "tvBroadcasts": [
+//       {
+//         "id": 2,
+//         "market": "A",
+//         "countryCode": "US",
+//         "network": "ALT"
+//       }
+//       // ... more broadcasts
+//     ],
+//     "gameState": "LIVE",
+//     "gameScheduleState": "OK",
+//     "period": 1,
+//     "periodDescriptor": {
+//       "number": 1,
+//       "periodType": "REG"
+//     },
+//     "awayTeam": {
+//       "id": 21,
+//       "name": {
+//         "default": "Avalanche"
+//       },
+//       "abbrev": "COL",
+//       "score": 0,
+//       "sog": 1,
+//       "logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+//       "onIce": [
+//         {
+//           "playerId": 8471677
+//         }
+//         // ... more players
+//       ],
+//       "radioLink": "https://d2igy0yla8zi0u.cloudfront.net/col/20232024/col-radio.m3u8"
+//     },
+//     "homeTeam": {
+//       // ... similar structure to awayTeam
+//     },
+//     "clock": {
+//       "timeRemaining": "09:16",
+//       "secondsRemaining": 556,
+//       "running": true,
+//       "inIntermission": false
+//     },
+//     "rosterSpots": [
+//       {
+//         "teamId": 21,
+//         "playerId": 8471677,
+//         "firstName": {
+//           "default": "Jack"
+//         },
+//         "lastName": {
+//           "default": "Johnson"
+//         },
+//         "sweaterNumber": 3,
+//         "positionCode": "D",
+//         "headshot": "https://assets.nhle.com/mugs/nhl/20232024/COL/8471677.png"
+//       }
+//       // ... more roster spots
+//     ],
+//     "displayPeriod": 1,
+//     "plays": [
+//       {
+//         "eventId": 102,
+//         "period": 1,
+//         // ... more details about the play
+//       }
+//       // ... more plays
+//     ]
+//   }
+// ]

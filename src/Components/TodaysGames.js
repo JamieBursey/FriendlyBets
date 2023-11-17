@@ -97,13 +97,17 @@ const TodaysGames = () => {
       const response = await fetch(finalUrl, {});
 
       const games = await response.json();
+      console.log(games);
       let gamesHTMLObj = [];
-      const today = new Date().toISOString().slice(0, 10);
-      const todaysGames = games.gameWeek.find((day) => day.date === today);
+      const today = new Date();
+      today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+      const todayStr = today.toISOString().slice(0, 10);
+
+      const todaysGames = games.gameWeek.find((day) => day.date === todayStr);
 
       todaysGames.games.forEach((game) => {
-        const awayTeamID = game.awayTeam.placeName.default;
-        const homeTeamID = game.homeTeam.placeName.default;
+        const awayTeamID = game.awayTeam.abbrev;
+        const homeTeamID = game.homeTeam.abbrev;
         const homeLogo = game.homeTeam.logo;
         const awayLogo = game.awayTeam.logo;
         const game_ID = game.id;
@@ -122,6 +126,7 @@ const TodaysGames = () => {
         );
       });
 
+      console.log("htmlAr", gamesHTMLObj);
       setTodaysGameArr(gamesHTMLObj);
     } catch (error) {
       console.log("Fetch Data Error", error);
