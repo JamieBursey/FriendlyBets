@@ -2,6 +2,7 @@ import { React } from "react";
 import Avatar from "react-avatar";
 import { Link, useNavigate } from "react-router-dom";
 import { loggedInUserKey } from "../Data";
+import { NAVIGATION } from "../Config";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -30,7 +31,11 @@ function NavBar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/">
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to={NAVIGATION.HOME}
+              >
                 Home
               </Link>
             </li>
@@ -44,6 +49,28 @@ function NavBar() {
                 Contact
               </Link>
             </li>
+
+            {loggedUser ? (
+              <>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-success"
+                    to={NAVIGATION.MYBETS}
+                  >
+                    MyBets
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-success"
+                    to={NAVIGATION.ADDFRIENDS}
+                  >
+                    Add-Friends
+                  </Link>
+                </li>
+              </>
+            ) : null}
           </ul>
           {loggedUser ? (
             <div className="dropdown justify-content-between">
@@ -66,14 +93,6 @@ function NavBar() {
                     onClick={() => navigate("/myAccount")}
                   >
                     My Account
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => navigate("/addFriends")}
-                  >
-                    Add Friends
                   </button>
                 </li>
                 <li>

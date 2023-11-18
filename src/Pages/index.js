@@ -8,6 +8,7 @@ import { AddFriends } from "./AddFriends";
 import { FetchFromAPI } from "./Tests/FetchFromAPI";
 import { FullSchedule } from "./FullSchedule";
 import { BetPage } from "./BetPage";
+import { MyBets } from "./MyBets";
 
 export {
   Home,
@@ -20,4 +21,5 @@ export {
   FetchFromAPI,
   FullSchedule,
   BetPage,
+  MyBets,
 };

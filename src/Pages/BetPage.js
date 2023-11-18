@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { BettingOptions } from "../Data";
 import { useNavigate } from "react-router-dom";
 import { loggedInUserKey } from "../Data";
+import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 const BetPage = () => {
-  const pendingBets = [];
+  const bets = [];
   const gameInfo = localStorage.getItem("selectedGame");
   const selectedGame = JSON.parse(gameInfo);
   const navigate = useNavigate();
@@ -33,9 +34,9 @@ const BetPage = () => {
     }));
   };
   const placeBet = () => {
-    let pendingBets = JSON.parse(localStorage.getItem("PendingBets")) || [];
+    let bets = JSON.parse(localStorage.getItem(LOCALSTORAGE.BETS)) || [];
     const newBet = {
-      gameId: selectedGame.id,
+      gameId: selectedGame.game_ID,
       gameTitle: selectedGame.gameTitle,
       wager: Wager,
       friends: Object.keys(selectedFriends).filter(
@@ -44,11 +45,12 @@ const BetPage = () => {
       betStatus: "pending",
     };
 
-    pendingBets = JSON.parse(localStorage.getItem("PendingBets")) || [];
-    pendingBets.push(newBet);
-    localStorage.setItem("PendingBets", JSON.stringify(pendingBets));
+    bets = JSON.parse(localStorage.getItem(LOCALSTORAGE.BETS)) || [];
+    bets.push(newBet);
+    localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(bets));
 
     console.log("Bet Placed:", newBet);
+    navigate(NAVIGATION.MYBETS);
   };
   return (
     <div className="card mt-3" style={{ width: "90%", margin: "auto" }}>
@@ -187,3 +189,16 @@ export { BetPage };
 //     ]
 //   }
 // ]
+
+/*
+HW
+- Update localstorage get/set to use configuration page
+- Update navigation to use configuration page
+- Update MyBets Cards to show game info and bet status
+- Move navbar options from dropdown to navbar
+Bonus
+- Add a refresh btn, pull the game info, check if it istill pending or not
+- If not pending, remove the object from the array, and push it again with the coreect status
+- save the array again to the local storage
+- Refresh the page: navigate(mybets) or another option is to change the value of the arrayBets using the state function setArrBets
+*/

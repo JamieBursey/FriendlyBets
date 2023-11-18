@@ -97,7 +97,6 @@ const TodaysGames = () => {
       const response = await fetch(finalUrl, {});
 
       const games = await response.json();
-      console.log(games);
       let gamesHTMLObj = [];
       const today = new Date();
       today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
@@ -126,7 +125,7 @@ const TodaysGames = () => {
         );
       });
 
-      console.log("htmlAr", gamesHTMLObj);
+      //   console.log("htmlAr", gamesHTMLObj);
       setTodaysGameArr(gamesHTMLObj);
     } catch (error) {
       console.log("Fetch Data Error", error);
@@ -136,15 +135,9 @@ const TodaysGames = () => {
     // Whenever the page loads, then this is executed
     fetchData();
   }, []);
-  const proxyServer = () => {
-    window.location.href = "https://cors-anywhere.herokuapp.com/corsdemo";
-  };
   return (
     <div className="text-white text-center">
       <h1>Todays Games</h1>
-      <button type="button" className="btn btn-dark" onClick={proxyServer}>
-        Go here to activate Games
-      </button>
       <div className="row justify-content-center">{todaysGameArr}</div>
     </div>
   );
