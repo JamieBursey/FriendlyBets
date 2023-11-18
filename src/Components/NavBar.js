@@ -40,12 +40,12 @@ function NavBar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/about">
+              <Link className="nav-link" to={NAVIGATION.ABOUT}>
                 About
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/contact">
+              <Link className="nav-link" to={NAVIGATION.CONTACT}>
                 Contact
               </Link>
             </li>
@@ -112,7 +112,7 @@ function NavBar() {
             </div>
           ) : (
             <form className="d-flex justify-content-between">
-              <Link className="btn btn-success" to="/login">
+              <Link className="btn btn-success" to={NAVIGATION.LOGIN}>
                 Login
               </Link>
             </form>

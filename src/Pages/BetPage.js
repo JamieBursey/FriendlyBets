@@ -38,6 +38,8 @@ const BetPage = () => {
     const newBet = {
       gameId: selectedGame.game_ID,
       gameTitle: selectedGame.gameTitle,
+      homeLogo: selectedGame.homeLogo,
+      awayLogo: selectedGame.awayLogo,
       wager: Wager,
       friends: Object.keys(selectedFriends).filter(
         (friend) => selectedFriends[friend]

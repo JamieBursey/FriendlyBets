@@ -8,14 +8,7 @@ const MyBets = () => {
   const navigate = useNavigate();
 
   //create Game Cards
-  const creatBetCard = (
-    game_ID,
-    gameTitle,
-    gameTime,
-    gameDay,
-    homeLogo,
-    awayLogo
-  ) => {
+  const creatBetCard = (game_ID, gameTitle, friends, homeLogo, awayLogo) => {
     return (
       <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -28,10 +21,7 @@ const MyBets = () => {
               <img src={homeLogo} />
             </div>
           </div>
-          <p>
-            {gameDay} at {new Date(gameTime).toLocaleTimeString()}
-          </p>
-
+          <p>{friends}</p>
           <div className="row">
             <div className="col">
               <a
@@ -50,15 +40,16 @@ const MyBets = () => {
   const [betsArr, setBetsArr] = useState(null);
   const fetchData = () => {
     let betsArrString = localStorage.getItem(LOCALSTORAGE.BETS);
-    console.log("betsString", betsArrString);
-    let betsArr =
-      betsArrString == "" || betsArrString == null
-        ? []
-        : JSON.parse(betsArrString);
+    let betsArr = betsArrString ? JSON.parse(betsArrString) : [];
     console.log("betsArr", betsArr);
-    let betCardArr = betsArr.map((b) =>
-      creatBetCard(null, null, null, null, null, null)
-    );
+    let betCardArr = betsArr.map((b) => {
+      const gameTitle = b.gameTitle;
+      const game_ID = b.game_ID;
+      const friends = b.friends;
+      const homeLogo = b.homeLogo;
+      const awayLogo = b.awayLogo;
+      return creatBetCard(game_ID, gameTitle, friends, awayLogo, homeLogo);
+    });
     setBetsArr(betCardArr);
   };
   useEffect(() => {
