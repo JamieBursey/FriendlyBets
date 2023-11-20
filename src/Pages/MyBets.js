@@ -8,7 +8,14 @@ const MyBets = () => {
   const navigate = useNavigate();
 
   //create Game Cards
-  const creatBetCard = (game_ID, gameTitle, friends, homeLogo, awayLogo) => {
+  const creatBetCard = (
+    game_ID,
+    gameTitle,
+    friends,
+    homeLogo,
+    awayLogo,
+    wager
+  ) => {
     return (
       <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -22,6 +29,7 @@ const MyBets = () => {
             </div>
           </div>
           <p>{friends}</p>
+          <p>prize:{wager}</p>
           <div className="row">
             <div className="col">
               <a
@@ -48,7 +56,15 @@ const MyBets = () => {
       const friends = b.friends;
       const homeLogo = b.homeLogo;
       const awayLogo = b.awayLogo;
-      return creatBetCard(game_ID, gameTitle, friends, awayLogo, homeLogo);
+      const wager = b.wager;
+      return creatBetCard(
+        game_ID,
+        gameTitle,
+        friends,
+        awayLogo,
+        homeLogo,
+        wager
+      );
     });
     setBetsArr(betCardArr);
   };

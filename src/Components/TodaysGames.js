@@ -112,7 +112,8 @@ const TodaysGames = () => {
         const game_ID = game.id;
         const gameTitle = `${awayTeamID} vs ${homeTeamID}`;
         const gameTime = game.startTimeUTC;
-        const gameDay = game.date;
+        const gameDay = todaysGames.dayAbbrev;
+        console.log("gameDay", todaysGames);
         gamesHTMLObj.push(
           createGameCard(
             game_ID,

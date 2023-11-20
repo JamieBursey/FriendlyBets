@@ -37,6 +37,7 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
       const gameID = localStorage.getItem("selectedGame");
       const gameIDData = JSON.parse(gameID);
       const gameNumber = gameIDData.game_ID;
+
       console.log("selectedGame", gameIDData);
       try {
         const response = await fetch(

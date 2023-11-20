@@ -44,13 +44,14 @@ const FullSchedule = () => {
     console.log("weekly", allGames);
     let arrHTMLObj = [];
     allGames.gameWeek.forEach((week) => {
+      const gameDay = week.dayAbbrev;
       week.games.forEach((game) => {
         const gameID = game.id;
         const homeLogo = game.homeTeam.logo;
         const awayLogo = game.awayTeam.logo;
         const gameTitle = `${game.awayTeam.placeName.default} vs ${game.homeTeam.placeName.default}`;
         const gameTime = game.startTimeUTC;
-        const gameDay = game.date;
+
         arrHTMLObj.push(
           createGameCard(
             gameID,
