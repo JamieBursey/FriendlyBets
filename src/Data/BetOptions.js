@@ -38,13 +38,11 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
       const gameIDData = JSON.parse(gameID);
       const gameNumber = gameIDData.game_ID;
 
-      console.log("selectedGame", gameIDData);
       try {
         const response = await fetch(
           `https://api-web.nhle.com/v1/gamecenter/${gameNumber}/play-by-play`
         );
         const liveGameData = await response.json();
-        console.log("liveData", liveGameData);
 
         const roster = [
           ...(Array.isArray(liveGameData.rosterSpots) &&

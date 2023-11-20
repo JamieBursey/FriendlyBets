@@ -113,7 +113,6 @@ const TodaysGames = () => {
         const gameTitle = `${awayTeamID} vs ${homeTeamID}`;
         const gameTime = game.startTimeUTC;
         const gameDay = todaysGames.dayAbbrev;
-        console.log("gameDay", todaysGames);
         gamesHTMLObj.push(
           createGameCard(
             game_ID,
@@ -126,7 +125,6 @@ const TodaysGames = () => {
         );
       });
 
-      //   console.log("htmlAr", gamesHTMLObj);
       setTodaysGameArr(gamesHTMLObj);
     } catch (error) {
       console.log("Fetch Data Error", error);

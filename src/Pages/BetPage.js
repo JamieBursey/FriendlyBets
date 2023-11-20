@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BettingOptions } from "../Data";
 import { useNavigate } from "react-router-dom";
-import { loggedInUserKey } from "../Data";
+import { loggedInUserKey, getAllUsers, allUsersKey } from "../Data";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 const BetPage = () => {
@@ -34,24 +34,39 @@ const BetPage = () => {
     }));
   };
   const placeBet = () => {
-    let bets = JSON.parse(localStorage.getItem(LOCALSTORAGE.BETS)) || [];
+    let allUsers = getAllUsers();
+    let currentUser = JSON.parse(localStorage.getItem(loggedInUserKey));
     const newBet = {
       gameId: selectedGame.game_ID,
       gameTitle: selectedGame.gameTitle,
       homeLogo: selectedGame.homeLogo,
       awayLogo: selectedGame.awayLogo,
+      betDescripston: selectedBets,
       wager: Wager,
       friends: Object.keys(selectedFriends).filter(
         (friend) => selectedFriends[friend]
       ),
       betStatus: "pending",
     };
-
-    bets = JSON.parse(localStorage.getItem(LOCALSTORAGE.BETS)) || [];
-    bets.push(newBet);
-    localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(bets));
-
-    console.log("Bet Placed:", newBet);
+    currentUser.bets.push(newBet);
+    allUsers = allUsers.map((user) =>
+      user.username === currentUser.username ? currentUser : user
+    );
+    Object.keys(selectedFriends).forEach((friendUsername) => {
+      if (selectedFriends[friendUsername]) {
+        let friend = allUsers.find((user) => user.username === friendUsername);
+        if (friend) {
+          if (!friend.bets) friend.bets = []; // Initialize bets array if not present
+          friend.bets.push({ ...newBet, betStatus: "pending" });
+        }
+      }
+    });
+    allUsers = allUsers.map((user) =>
+      user.username === currentUser.username ? currentUser : user
+    );
+    localStorage.setItem(allUsersKey, JSON.stringify(allUsers));
+    localStorage.setItem(loggedInUserKey, JSON.stringify(currentUser));
+    console.log("test", allUsers);
     navigate(NAVIGATION.MYBETS);
   };
   return (

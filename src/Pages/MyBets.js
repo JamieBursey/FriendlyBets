@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
-
+import { loggedInUserKey } from "../Data";
 const Loader = () => <div> Loading .... </div>;
 
 const MyBets = () => {
   const navigate = useNavigate();
-
+  const [betsArr, setBetsArr] = useState([]);
   //create Game Cards
   const creatBetCard = (
     game_ID,
@@ -14,8 +14,12 @@ const MyBets = () => {
     friends,
     homeLogo,
     awayLogo,
-    wager
+    wager,
+    betDes
   ) => {
+    const betDescriptions = Object.keys(betDes).filter(
+      (key) => betDes[key] === true
+    );
     return (
       <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -29,6 +33,9 @@ const MyBets = () => {
             </div>
           </div>
           <p>{friends}</p>
+          {betDescriptions.map((desc, index) => (
+            <p key={index}>{desc}</p>
+          ))}
           <p>prize:{wager}</p>
           <div className="row">
             <div className="col">
@@ -45,10 +52,10 @@ const MyBets = () => {
     );
   };
 
-  const [betsArr, setBetsArr] = useState(null);
   const fetchData = () => {
-    let betsArrString = localStorage.getItem(LOCALSTORAGE.BETS);
-    let betsArr = betsArrString ? JSON.parse(betsArrString) : [];
+    let betsArrString = localStorage.getItem(loggedInUserKey);
+    let userBets = betsArrString ? JSON.parse(betsArrString) : [];
+    let betsArr = userBets.bets;
     console.log("betsArr", betsArr);
     let betCardArr = betsArr.map((b) => {
       const gameTitle = b.gameTitle;
@@ -57,13 +64,15 @@ const MyBets = () => {
       const homeLogo = b.homeLogo;
       const awayLogo = b.awayLogo;
       const wager = b.wager;
+      const betDes = b.betDescripston;
       return creatBetCard(
         game_ID,
         gameTitle,
         friends,
         awayLogo,
         homeLogo,
-        wager
+        wager,
+        betDes
       );
     });
     setBetsArr(betCardArr);
