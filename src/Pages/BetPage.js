@@ -13,10 +13,9 @@ const BetPage = () => {
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [selectedBets, setSelectedBets] = useState({});
   const [Wager, setWager] = useState("");
-
+  const loggedInUserData = localStorage.getItem(loggedInUserKey);
+  const loggedInUsr = loggedInUserData ? JSON.parse(loggedInUserData) : null;
   useEffect(() => {
-    const loggedInUserData = localStorage.getItem(loggedInUserKey);
-    const loggedInUsr = loggedInUserData ? JSON.parse(loggedInUserData) : null;
     setUsersFriendList(loggedInUsr.friends);
   }, []);
 
@@ -36,12 +35,16 @@ const BetPage = () => {
   const placeBet = () => {
     let allUsers = getAllUsers();
     let currentUser = JSON.parse(localStorage.getItem(loggedInUserKey));
+    const selectedFriendUsernames = Object.keys(selectedFriends).filter(
+      (friend) => selectedFriends[friend]
+    );
     const newBet = {
       gameId: selectedGame.game_ID,
       gameTitle: selectedGame.gameTitle,
       homeLogo: selectedGame.homeLogo,
       awayLogo: selectedGame.awayLogo,
       betDescripston: selectedBets,
+      friendReq: loggedInUsr.username,
       wager: Wager,
       friends: Object.keys(selectedFriends).filter(
         (friend) => selectedFriends[friend]
@@ -56,7 +59,7 @@ const BetPage = () => {
       if (selectedFriends[friendUsername]) {
         let friend = allUsers.find((user) => user.username === friendUsername);
         if (friend) {
-          if (!friend.bets) friend.bets = []; // Initialize bets array if not present
+          if (!friend.bets) friend.bets = [];
           friend.bets.push({ ...newBet, betStatus: "pending" });
         }
       }

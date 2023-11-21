@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
-import { loggedInUserKey } from "../Data";
+import { loggedInUserKey, all } from "../Data";
 const Loader = () => <div> Loading .... </div>;
 
 const MyBets = () => {
   const navigate = useNavigate();
   const [betsArr, setBetsArr] = useState([]);
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem(loggedInUserKey))
+  );
   //create Game Cards
   const creatBetCard = (
     game_ID,
@@ -15,7 +18,8 @@ const MyBets = () => {
     homeLogo,
     awayLogo,
     wager,
-    betDes
+    betDes,
+    friendReq
   ) => {
     const betDescriptions = Object.keys(betDes).filter(
       (key) => betDes[key] === true
@@ -36,7 +40,9 @@ const MyBets = () => {
           {betDescriptions.map((desc, index) => (
             <p key={index}>{desc}</p>
           ))}
-          <p>prize:{wager}</p>
+          <p>
+            {friendReq} bets {wager}
+          </p>
           <div className="row">
             <div className="col">
               <a
@@ -65,6 +71,7 @@ const MyBets = () => {
       const awayLogo = b.awayLogo;
       const wager = b.wager;
       const betDes = b.betDescripston;
+      const friendReq = b.friendReq;
       return creatBetCard(
         game_ID,
         gameTitle,
@@ -72,7 +79,8 @@ const MyBets = () => {
         awayLogo,
         homeLogo,
         wager,
-        betDes
+        betDes,
+        friendReq
       );
     });
     setBetsArr(betCardArr);
