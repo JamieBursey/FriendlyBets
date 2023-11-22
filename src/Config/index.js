@@ -8,7 +8,8 @@ module.exports = {
     ADDFRIENDS: "/addFriends",
   },
   LOCALSTORAGE: {
-    USERS: "",
+    USERS: "ALL_USERS",
     BETS: "Bets",
+    LOGGEDINUSER: "LOGGEDIN_USER",
   },
 };

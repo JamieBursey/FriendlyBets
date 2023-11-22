@@ -38,7 +38,12 @@ const BetPage = () => {
     const selectedFriendUsernames = Object.keys(selectedFriends).filter(
       (friend) => selectedFriends[friend]
     );
+    const generateBetId = () => {
+      const randomId = new Date().getTime();
+      return randomId;
+    };
     const newBet = {
+      betId: generateBetId(),
       gameId: selectedGame.game_ID,
       gameTitle: selectedGame.gameTitle,
       homeLogo: selectedGame.homeLogo,
@@ -51,16 +56,12 @@ const BetPage = () => {
       ),
       betStatus: "pending",
     };
-    currentUser.bets.push(newBet);
-    allUsers = allUsers.map((user) =>
-      user.username === currentUser.username ? currentUser : user
-    );
     Object.keys(selectedFriends).forEach((friendUsername) => {
       if (selectedFriends[friendUsername]) {
         let friend = allUsers.find((user) => user.username === friendUsername);
         if (friend) {
           if (!friend.bets) friend.bets = [];
-          friend.bets.push({ ...newBet, betStatus: "pending" });
+          friend.bets.push({ ...newBet });
         }
       }
     });

@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 import { loggedInUserKey, all } from "../Data";
+import { acceptBets } from "../Components";
 const Loader = () => <div> Loading .... </div>;
 
 const MyBets = () => {
   const navigate = useNavigate();
   const [betsArr, setBetsArr] = useState([]);
+  const [activeBetArr, setActiveBetArr] = useState([]);
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(localStorage.getItem(loggedInUserKey))
   );
+
   //create Game Cards
   const creatBetCard = (
+    betId,
     game_ID,
     gameTitle,
     friends,
@@ -19,11 +23,12 @@ const MyBets = () => {
     awayLogo,
     wager,
     betDes,
-    friendReq
+    friendReq,
+    betStatus
   ) => {
-    const betDescriptions = Object.keys(betDes).filter(
-      (key) => betDes[key] === true
-    );
+    const betDescriptions = Object.entries(betDes)
+      .filter(([key, value]) => value)
+      .map(([key, value]) => key);
     return (
       <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -44,14 +49,28 @@ const MyBets = () => {
             {friendReq} bets {wager}
           </p>
           <div className="row">
-            <div className="col">
-              <a
+            {betStatus === "pending" ? (
+              <>
+                <div className="col">
+                  <button
+                    className="btn btn-primary w-100 mb-1"
+                    onClick={acceptBets(betId, friendReq)}
+                  >
+                    Accept
+                  </button>
+                </div>
+                <div className="col">
+                  <button className="btn btn-secondary w-100">Decline</button>
+                </div>
+              </>
+            ) : (
+              <button
                 onClick={() => console.log("Action btn clicked.")}
                 className="btn btn-primary w-100"
               >
-                Bet Friends
-              </a>
-            </div>
+                Refresh Bet
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -63,7 +82,12 @@ const MyBets = () => {
     let userBets = betsArrString ? JSON.parse(betsArrString) : [];
     let betsArr = userBets.bets;
     console.log("betsArr", betsArr);
-    let betCardArr = betsArr.map((b) => {
+
+    let pendingBets = betsArr.filter((bet) => bet.betStatus === "pending");
+    let activeBets = betsArr.filter((bet) => bet.betStatus === "active");
+    console.log("active bets", activeBetArr);
+    let pendingBetsCard = pendingBets.map((b) => {
+      const betId = b.betId;
       const gameTitle = b.gameTitle;
       const game_ID = b.game_ID;
       const friends = b.friends;
@@ -72,7 +96,9 @@ const MyBets = () => {
       const wager = b.wager;
       const betDes = b.betDescripston;
       const friendReq = b.friendReq;
+      const betStatus = b.betStatus;
       return creatBetCard(
+        betId,
         game_ID,
         gameTitle,
         friends,
@@ -80,10 +106,36 @@ const MyBets = () => {
         homeLogo,
         wager,
         betDes,
-        friendReq
+        friendReq,
+        betStatus
       );
     });
-    setBetsArr(betCardArr);
+    let activeBetsCard = activeBets.map((b) => {
+      const betId = b.betId;
+      const gameTitle = b.gameTitle;
+      const game_ID = b.game_ID;
+      const friends = b.friends;
+      const homeLogo = b.homeLogo;
+      const awayLogo = b.awayLogo;
+      const wager = b.wager;
+      const betDes = b.betDescripston;
+      const friendReq = b.friendReq;
+      const betStatus = b.betStatus;
+      return creatBetCard(
+        betId,
+        game_ID,
+        gameTitle,
+        friends,
+        awayLogo,
+        homeLogo,
+        wager,
+        betDes,
+        friendReq,
+        betStatus
+      );
+    });
+    setBetsArr(pendingBetsCard);
+    setActiveBetArr(activeBetsCard);
   };
   useEffect(() => {
     // Whenever the page loads, then this is executed
@@ -94,8 +146,18 @@ const MyBets = () => {
     <div className="text-white text-center">
       <h1> My Bets </h1>
 
-      <div className="row justify-content-center">
-        {betsArr == null ? <Loader /> : betsArr}
+      <div>
+        <h2>Pending Bets</h2>
+        <div className="row justify-content-center">
+          {betsArr.length === 0 ? <Loader /> : betsArr}
+        </div>
+      </div>
+
+      <div>
+        <h2>Active Bets</h2>
+        <div className="row justify-content-center">
+          {activeBetArr.length === 0 ? <Loader /> : activeBetArr}
+        </div>
       </div>
     </div>
   );
