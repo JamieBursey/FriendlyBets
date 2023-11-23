@@ -54,7 +54,7 @@ const MyBets = () => {
                 <div className="col">
                   <button
                     className="btn btn-primary w-100 mb-1"
-                    onClick={acceptBets(betId, friendReq)}
+                    onClick={() => acceptBets(betId, friendReq)}
                   >
                     Accept
                   </button>
