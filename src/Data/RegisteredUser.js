@@ -1,8 +1,8 @@
-const loggedInUserKey = "LOGGEDIN_USER";
+const loggedInUserKey = "LOGGEDIN_USER"; // TODO: DON"T NEED THESE ANYMORE, USE LOCALSTORAGE.LOGGEDINUSER
 const allUsersKey = "ALL_USERS";
 
 const getAllUsers = () => {
-  const allUsersStr = localStorage.getItem(allUsersKey); // "[{"id": 11}, {"id": 22}]"
+  const allUsersStr = localStorage.getItem(allUsersKey); // TODO : USE LOCALSTORAGE.LOGGEDINUSER // "[{"id": 11}, {"id": 22}]"
   let allUsers = JSON.parse(allUsersStr);
   if (allUsersStr === "" || allUsers == null) {
     allUsers = [];

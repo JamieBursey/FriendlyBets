@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LOCALSTORAGE } from "../Config";
-import { loggedInUserKey, all } from "../Data";
+import { LOCALSTORAGE, NAVIGATION } from "../Config";
+import { loggedInUserKey, all, getAllBets } from "../Data";
 import { CheckBetResults, acceptBets } from "../Components";
 const Loader = () => <div> Loading .... </div>;
 
@@ -23,13 +23,15 @@ const MyBets = () => {
     awayLogo,
     wager,
     betDes,
-    friendReq,
+    friendReq, // TODO: change to betCreator
+    loggedInUserUsername,
     betStatus,
     result
   ) => {
     const betDescriptions = Object.entries(betDes)
       .filter(([key, value]) => value)
       .map(([key, value]) => key);
+    console.log("Rendering card: ", friendReq, loggedInUserUsername);
     return (
       <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -51,7 +53,10 @@ const MyBets = () => {
           </p>
           <p>result:{result}</p>
           <div className="row">
-            {betStatus === "pending" ? (
+            {friendReq == loggedInUserUsername ? (
+              <p>Awaiting {friends} Confirmation</p>
+            ) : null}
+            {betStatus === "pending" && friendReq != loggedInUserUsername ? (
               <>
                 <div className="col">
                   <button
@@ -83,12 +88,32 @@ const MyBets = () => {
 
   const fetchData = () => {
     let betsArrString = localStorage.getItem(loggedInUserKey);
+    let allBets = getAllBets();
     let userBets = betsArrString ? JSON.parse(betsArrString) : [];
     let betsArr = userBets.bets;
-    console.log("betsArr", betsArr);
+    let currentUser = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+    );
 
-    let pendingBets = betsArr.filter((bet) => bet.betStatus === "pending");
-    let activeBets = betsArr.filter((bet) => bet.betStatus === "active");
+    console.log("All Bets", allBets);
+
+    let pendingBets = allBets.filter(
+      (bet) =>
+        (bet.betCreator === currentUser.username ||
+          bet.friends.includes(currentUser.username)) &&
+        bet.betStatus === "pending"
+    );
+    let activeBets = allBets.filter(
+      (bet) =>
+        (bet.betCreator === currentUser.username ||
+          bet.friends.includes(currentUser.username)) &&
+        bet.betStatus === "active"
+    );
+
+    console.log("pending", pendingBets, "active", activeBets);
+
+    // let pendingBets = betsArr.filter((bet) => bet.betStatus === "pending");
+    // let activeBets = betsArr.filter((bet) => bet.betStatus === "active");
     console.log("active bets", activeBetArr);
     let pendingBetsCard = pendingBets.map((b) => {
       const betId = b.betId;
@@ -99,9 +124,7 @@ const MyBets = () => {
       const awayLogo = b.awayLogo;
       const wager = b.wager;
       const betDes = b.betDescripston;
-      const friendReq = b.friendReq;
       const betStatus = b.betStatus;
-      const result = b.result;
       return creatBetCard(
         betId,
         game_ID,
@@ -111,9 +134,10 @@ const MyBets = () => {
         homeLogo,
         wager,
         betDes,
-        friendReq,
+        b.betCreator,
+        currentUser.username,
         betStatus,
-        result
+        b.result
       );
     });
     let activeBetsCard = activeBets.map((b) => {
@@ -125,9 +149,7 @@ const MyBets = () => {
       const awayLogo = b.awayLogo;
       const wager = b.wager;
       const betDes = b.betDescripston;
-      const friendReq = b.friendReq;
       const betStatus = b.betStatus;
-      const result = b.result;
       return creatBetCard(
         betId,
         game_ID,
@@ -137,9 +159,10 @@ const MyBets = () => {
         homeLogo,
         wager,
         betDes,
-        friendReq,
+        b.betCreator,
+        currentUser.username,
         betStatus,
-        result
+        b.result
       );
     });
     setBetsArr(pendingBetsCard);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BettingOptions } from "../Data";
 import { useNavigate } from "react-router-dom";
-import { loggedInUserKey, getAllUsers, allUsersKey } from "../Data";
+import { loggedInUserKey, getAllUsers, allUsersKey, getAllBets } from "../Data";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 const BetPage = () => {
@@ -20,6 +20,8 @@ const BetPage = () => {
   }, []);
 
   const handleFriendSelection = (friend) => {
+    // TODO: Bug where if username is unchecked, does it deletes it?
+
     setSelectedFriends((prevSelectedFriends) => ({
       ...prevSelectedFriends,
       [friend]: !prevSelectedFriends[friend],
@@ -27,6 +29,7 @@ const BetPage = () => {
   };
 
   const updateCheckedBets = (betOption) => {
+    // TODO: Bug where if bet options is unchecked, does it deletes it?
     setSelectedBets((prevSelectedBets) => ({
       ...prevSelectedBets,
       [betOption]: !prevSelectedBets[betOption],
@@ -34,10 +37,13 @@ const BetPage = () => {
   };
   const placeBet = () => {
     let allUsers = getAllUsers();
-    let currentUser = JSON.parse(localStorage.getItem(loggedInUserKey));
-    const selectedFriendUsernames = Object.keys(selectedFriends).filter(
-      (friend) => selectedFriends[friend]
+    let allBets = getAllBets();
+    let currentUser = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
     );
+    // const selectedFriendUsernames = Object.keys(selectedFriends).filter(
+    //   (friend) => selectedFriends[friend]
+    // );
     const generateBetId = () => {
       const randomId = new Date().getTime();
       return randomId;
@@ -49,28 +55,32 @@ const BetPage = () => {
       homeLogo: selectedGame.homeLogo,
       awayLogo: selectedGame.awayLogo,
       betDescripston: selectedBets,
-      friendReq: loggedInUsr.username,
+      betCreator: currentUser.username, // TODO: change it to maybe creator? owner?
       wager: Wager,
       result: "Waiting",
       friends: Object.keys(selectedFriends).filter(
+        // TODO: do a 1 to 1, not an array of friends, select one user from the dropdown
+        // TODO: change it to maybe friendsAgainst?
         (friend) => selectedFriends[friend]
       ),
       betStatus: "pending",
     };
-    Object.keys(selectedFriends).forEach((friendUsername) => {
-      if (selectedFriends[friendUsername]) {
-        let friend = allUsers.find((user) => user.username === friendUsername);
-        if (friend) {
-          if (!friend.bets) friend.bets = [];
-          friend.bets.push({ ...newBet });
-        }
-      }
-    });
-    allUsers = allUsers.map((user) =>
-      user.username === currentUser.username ? currentUser : user
-    );
-    localStorage.setItem(allUsersKey, JSON.stringify(allUsers));
-    localStorage.setItem(loggedInUserKey, JSON.stringify(currentUser));
+    // Object.keys(selectedFriends).forEach((friendUsername) => {
+    //   if (selectedFriends[friendUsername]) {
+    //     let friend = allUsers.find((user) => user.username === friendUsername);
+    //     if (friend) {
+    //       if (!friend.bets) friend.bets = [];
+    //       friend.bets.push({ ...newBet });
+    //     }
+    //   }
+    // });
+    // allUsers = allUsers.map((user) =>
+    //   user.username === currentUser.username ? currentUser : user
+    // );
+    // localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(allUsers));
+    // localStorage.setItem(LOGGEDIN_USER.LOGGEDIN_USER, JSON.stringify(currentUser));
+    allBets.push(newBet);
+    localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));
     console.log("test", allUsers);
     navigate(NAVIGATION.MYBETS);
   };
@@ -95,7 +105,7 @@ const BetPage = () => {
             <input
               type="checkbox"
               id={`friend${index}`}
-              checked={!!selectedFriends[friend]}
+              checked={!!selectedFriends[friend]} // TODO: Double exclamation mark not needed, e.g., !true => false, !!true => true
               onChange={() => handleFriendSelection(friend)}
             />
 

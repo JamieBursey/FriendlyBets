@@ -1,5 +1,5 @@
 import { getAllUsers } from "../Data";
-import { LOCALSTORAGE } from "../Config";
+import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 const CheckBetResults = async (betId) => {
   let allUsers = getAllUsers();
@@ -32,11 +32,16 @@ const CheckBetResults = async (betId) => {
       );
 
       if (player && player.firstName.default === firstName) {
-        currentUser.bets[betIndex].result = "Won";
-        console.log("won");
+        bet.result = "Won";
+        localStorage.setItem(
+          LOCALSTORAGE.LOGGEDINUSER,
+          JSON.stringify(currentUser)
+        );
+        Window.location.reload();
       }
     } else {
-      return;
+      bet.result = "Loss";
+      console.log("loss");
     }
   } catch (error) {
     console.log("error", error);

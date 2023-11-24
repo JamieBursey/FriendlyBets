@@ -10,6 +10,7 @@ import {
   editUser,
 } from "./RegisteredUser";
 import { BettingOptions } from "./BetOptions";
+import { getAllBets } from "./Bets";
 // import {} from "./Matches"
 
 export {
@@ -25,4 +26,5 @@ export {
   addFriend,
   editUser,
   BettingOptions,
+  getAllBets,
 };

@@ -9,7 +9,7 @@ module.exports = {
   },
   LOCALSTORAGE: {
     USERS: "ALL_USERS",
-    BETS: "Bets",
+    BETS: "Bets", // TODO: Change to BETS
     LOGGEDINUSER: "LOGGEDIN_USER",
   },
 };
