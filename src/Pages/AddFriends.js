@@ -1,5 +1,5 @@
 import { LOCALSTORAGE } from "../Config";
-import { loggedInUserKey, getAllUsers, editUser } from "../Data";
+import { editUser, getAllUsers } from "../Data";
 
 const AddFriends = () => {
   const loggedInStr = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);

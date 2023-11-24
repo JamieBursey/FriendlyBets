@@ -1,13 +1,16 @@
-import { getAllUsers } from "../Data";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 const CheckBetResults = async (betId) => {
-  let allUsers = getAllUsers();
-  let currentUser = JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER));
-  const betIndex = currentUser.bets.findIndex((bet) => bet.betId === betId);
-  const bet = currentUser.bets[betIndex];
+  let allBets = JSON.parse(localStorage.getItem(LOCALSTORAGE.BETS));
+  let bet = allBets.find((bet) => bet.betId === betId);
+  if (!bet) {
+    console.error("Bet not found");
+    return;
+  }
   console.log("bet", bet);
   const gameNumber = bet.gameId;
+
+  const betIndex = allBets.findIndex((b) => b.betId === betId);
 
   try {
     const response = await fetch(
@@ -15,11 +18,12 @@ const CheckBetResults = async (betId) => {
     );
     const resultsData = await response.json();
     console.log(resultsData);
+
     let firstGoalEvent = resultsData.plays.find(
       (play) => play.typeDescKey === "goal"
     );
-
     console.log("first", firstGoalEvent);
+
     if (firstGoalEvent) {
       const betDescriptionEntries = Object.entries(bet.betDescripston);
       const [betDescriptionKey] = betDescriptionEntries[0];
@@ -33,18 +37,21 @@ const CheckBetResults = async (betId) => {
 
       if (player && player.firstName.default === firstName) {
         bet.result = "Won";
-        localStorage.setItem(
-          LOCALSTORAGE.LOGGEDINUSER,
-          JSON.stringify(currentUser)
-        );
-        Window.location.reload();
+      } else {
+        bet.result = "Loss";
       }
+      allBets[betIndex] = bet;
+      localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));
+
+      //   window.location.reload();
     } else {
       bet.result = "Loss";
+      allBets[betIndex] = bet;
+      localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));
       console.log("loss");
     }
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 };
 

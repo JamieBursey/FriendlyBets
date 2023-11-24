@@ -1,6 +1,5 @@
 import { LOCALSTORAGE } from "../Config";
-import { getAllUsers, loggedInUserKey } from "./RegisteredUser";
-import { findUser, addFriend } from "./RegisteredUser";
+import { findUser, addFriend, getAllUsers } from "./RegisteredUser";
 
 const getFriend = (username) => {
   return { username: "", password: "" };
