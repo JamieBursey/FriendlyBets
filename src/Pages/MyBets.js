@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
-import { loggedInUserKey, all, getAllBets } from "../Data";
+import { getAllBets } from "../Data";
 import { CheckBetResults, acceptBets } from "../Components";
 const Loader = () => <div> Loading .... </div>;
 
@@ -10,7 +10,7 @@ const MyBets = () => {
   const [betsArr, setBetsArr] = useState([]);
   const [activeBetArr, setActiveBetArr] = useState([]);
   const [currentUser, setCurrentUser] = useState(
-    JSON.parse(localStorage.getItem(loggedInUserKey))
+    JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER))
   );
 
   //create Game Cards
@@ -87,7 +87,7 @@ const MyBets = () => {
   };
 
   const fetchData = () => {
-    let betsArrString = localStorage.getItem(loggedInUserKey);
+    let betsArrString = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
     let allBets = getAllBets();
     let userBets = betsArrString ? JSON.parse(betsArrString) : [];
     let betsArr = userBets.bets;

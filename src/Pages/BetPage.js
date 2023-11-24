@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BettingOptions } from "../Data";
 import { useNavigate } from "react-router-dom";
-import { loggedInUserKey, getAllUsers, allUsersKey, getAllBets } from "../Data";
+import { getAllUsers, getAllBets } from "../Data";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 const BetPage = () => {
@@ -13,7 +13,7 @@ const BetPage = () => {
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [selectedBets, setSelectedBets] = useState({});
   const [Wager, setWager] = useState("");
-  const loggedInUserData = localStorage.getItem(loggedInUserKey);
+  const loggedInUserData = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const loggedInUsr = loggedInUserData ? JSON.parse(loggedInUserData) : null;
   useEffect(() => {
     setUsersFriendList(loggedInUsr.friends);

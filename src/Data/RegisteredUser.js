@@ -1,8 +1,7 @@
-const loggedInUserKey = "LOGGEDIN_USER"; // TODO: DON"T NEED THESE ANYMORE, USE LOCALSTORAGE.LOGGEDINUSER
-const allUsersKey = "ALL_USERS";
+import { LOCALSTORAGE } from "../Config";
 
 const getAllUsers = () => {
-  const allUsersStr = localStorage.getItem(allUsersKey); // TODO : USE LOCALSTORAGE.LOGGEDINUSER // "[{"id": 11}, {"id": 22}]"
+  const allUsersStr = localStorage.getItem(LOCALSTORAGE.USERS);
   let allUsers = JSON.parse(allUsersStr);
   if (allUsersStr === "" || allUsers == null) {
     allUsers = [];
@@ -15,8 +14,7 @@ const findUser = (username) => {
   if (foundUser == null) {
     return null;
   } else {
-    // if find matches, then single obj [{id: "", ....}] if not []
-    return foundUser; // extract single found user obj {id: "", ....}
+    return foundUser;
   }
 };
 
@@ -37,13 +35,10 @@ const editUser = (username, newUserObj) => {
   );
   temporaryArrayUsers.push(newUserObj);
   // Push the new array of users back to the local storage using localStorage.setItem(allUserKey, JSON.stringify(allUsers))
-  localStorage.setItem(allUsersKey, JSON.stringify(temporaryArrayUsers));
+  localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(temporaryArrayUsers));
 };
 
 const addFriend = (friendUserObj, loggedInUserObj) => {
-  // friendUserObj.username => loggedInUserObj.friends
-  // loggedInUserObj => allUsers
-
   const currentFriendsUsernameList = loggedInUserObj.friends || [];
   let friendAlreadyExist = false;
   currentFriendsUsernameList.forEach((friendUsername) => {
@@ -62,12 +57,4 @@ const addFriend = (friendUserObj, loggedInUserObj) => {
   }
 };
 
-export {
-  loggedInUserKey,
-  allUsersKey,
-  getAllUsers,
-  checkUserPassword,
-  findUser,
-  addFriend,
-  editUser,
-};
+export { getAllUsers, checkUserPassword, findUser, addFriend, editUser };

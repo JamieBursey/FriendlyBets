@@ -1,3 +1,4 @@
+import { LOCALSTORAGE } from "../Config";
 import { getAllUsers, loggedInUserKey } from "./RegisteredUser";
 import { findUser, addFriend } from "./RegisteredUser";
 
@@ -11,7 +12,7 @@ const setFriend = (username, password) => {
 
 const addUsersFriend = (username) => {
   const friendUserObj = findUser(username);
-  const loggedInUserStr = localStorage.getItem(loggedInUserKey);
+  const loggedInUserStr = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const loggedInUserObj = JSON.parse(loggedInUserStr);
   addFriend(friendUserObj, loggedInUserObj);
 };

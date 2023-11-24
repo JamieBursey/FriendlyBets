@@ -1,7 +1,8 @@
+import { LOCALSTORAGE } from "../Config";
 import { loggedInUserKey, getAllUsers, editUser } from "../Data";
 
 const AddFriends = () => {
-  const loggedInStr = localStorage.getItem(loggedInUserKey);
+  const loggedInStr = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const loggedInUser = JSON.parse(loggedInStr);
   const addFriend = (friendUserObj, loggedInUserObj) => {
     const currentFriendsUsernameList = loggedInUserObj.friends || [];
@@ -19,7 +20,10 @@ const AddFriends = () => {
       newLoggedInUserObj.friends = currentFriendsUsernameList;
 
       editUser(loggedInUserObj.username, newLoggedInUserObj);
-      localStorage.setItem(loggedInUserKey, JSON.stringify(newLoggedInUserObj));
+      localStorage.setItem(
+        LOCALSTORAGE.LOGGEDINUSER,
+        JSON.stringify(newLoggedInUserObj)
+      );
     }
   };
   const renderUsers = () => {

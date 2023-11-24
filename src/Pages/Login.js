@@ -1,26 +1,30 @@
-import { loggedInUserKey, findUser, checkUserPassword } from "../Data";
+import { findUser, checkUserPassword } from "../Data";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { LOCALSTORAGE } from "../Config";
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
 
-  //   const checkIfLoggedInExists = localStorage.getItem() // Get LoggedIser
-  //   if(){ // check if checkIfLoggedInExists
-  //     navigate("/"); //redirect them to the home page
-  //   }
-
   const loginHandler = () => {
     const foundUser = findUser(username);
-    //check if found User is null to continue
-    const passwordMatches = checkUserPassword(foundUser.password, password);
-    if (foundUser != null && passwordMatches === true) {
-      localStorage.setItem(loggedInUserKey, JSON.stringify(foundUser));
-      navigate("/");
+
+    // Check if foundUser is not null before trying to access its properties
+    if (foundUser != null) {
+      const passwordMatches = checkUserPassword(foundUser.password, password);
+      if (passwordMatches) {
+        localStorage.setItem(
+          LOCALSTORAGE.LOGGEDINUSER,
+          JSON.stringify(foundUser)
+        );
+        navigate("/");
+      } else {
+        alert("Incorrect password");
+      }
     } else {
-      alert("incorrect username or password");
+      alert("Username does not exist");
     }
   };
   return (

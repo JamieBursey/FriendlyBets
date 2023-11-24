@@ -1,13 +1,14 @@
-import { loggedInUserKey, allUsersKey } from "../Data";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LOCALSTORAGE } from "../Config";
 
 function Register() {
   const navigate = useNavigate();
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
   const registerUser = () => {
-    const existingUsers = JSON.parse(localStorage.getItem(allUsersKey)) || [];
+    const existingUsers =
+      JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
     const isUserExisting = existingUsers.some(
       (user) => user.username === username
     );
@@ -16,8 +17,8 @@ function Register() {
     } else {
       const newUser = { username, password, bets: [], owed: [], friends: [] };
       existingUsers.push(newUser);
-      localStorage.setItem(allUsersKey, JSON.stringify(existingUsers));
-      localStorage.setItem(loggedInUserKey, JSON.stringify(newUser));
+      localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(existingUsers));
+      localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newUser));
       navigate("/");
     }
   };

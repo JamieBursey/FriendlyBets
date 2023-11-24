@@ -1,5 +1,5 @@
 import React from "react";
-import { loggedInUserKey } from "../Data";
+import { LOCALSTORAGE } from "../Config";
 
 function MyAccount() {
   const renderFriends = () => {
@@ -7,7 +7,9 @@ function MyAccount() {
       <>
         <div className="text-center fs-1 text-danger">Friends</div>
         <div className="App p-3 mb-3"></div>
-        <div className="App p-3">{console.log(loggedInUserKey.friends)}</div>
+        <div className="App p-3">
+          {console.log(LOCALSTORAGE.LOGGEDINUSER.friends)}
+        </div>
       </>
     );
   };
