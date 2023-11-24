@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 import { loggedInUserKey, all } from "../Data";
-import { acceptBets } from "../Components";
+import { CheckBetResults, acceptBets } from "../Components";
 const Loader = () => <div> Loading .... </div>;
 
 const MyBets = () => {
@@ -24,7 +24,8 @@ const MyBets = () => {
     wager,
     betDes,
     friendReq,
-    betStatus
+    betStatus,
+    result
   ) => {
     const betDescriptions = Object.entries(betDes)
       .filter(([key, value]) => value)
@@ -48,6 +49,7 @@ const MyBets = () => {
           <p>
             {friendReq} bets {wager}
           </p>
+          <p>result:{result}</p>
           <div className="row">
             {betStatus === "pending" ? (
               <>
@@ -65,7 +67,9 @@ const MyBets = () => {
               </>
             ) : (
               <button
-                onClick={() => console.log("Action btn clicked.")}
+                onClick={() => {
+                  CheckBetResults(betId);
+                }}
                 className="btn btn-primary w-100"
               >
                 Refresh Bet
@@ -97,6 +101,7 @@ const MyBets = () => {
       const betDes = b.betDescripston;
       const friendReq = b.friendReq;
       const betStatus = b.betStatus;
+      const result = b.result;
       return creatBetCard(
         betId,
         game_ID,
@@ -107,7 +112,8 @@ const MyBets = () => {
         wager,
         betDes,
         friendReq,
-        betStatus
+        betStatus,
+        result
       );
     });
     let activeBetsCard = activeBets.map((b) => {
@@ -121,6 +127,7 @@ const MyBets = () => {
       const betDes = b.betDescripston;
       const friendReq = b.friendReq;
       const betStatus = b.betStatus;
+      const result = b.result;
       return creatBetCard(
         betId,
         game_ID,
@@ -131,7 +138,8 @@ const MyBets = () => {
         wager,
         betDes,
         friendReq,
-        betStatus
+        betStatus,
+        result
       );
     });
     setBetsArr(pendingBetsCard);

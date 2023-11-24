@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import { acceptBets } from "./HandleBets";
 import { SportsDiv } from "./divColors";
 import { TodaysGames } from "./TodaysGames";
+import { CheckBetResults } from "./CheckBets";
 
 export {
   Banner,
@@ -17,4 +18,5 @@ export {
   NavBar,
   TodaysGames,
   acceptBets,
+  CheckBetResults,
 };

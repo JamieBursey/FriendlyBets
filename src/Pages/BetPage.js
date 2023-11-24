@@ -51,6 +51,7 @@ const BetPage = () => {
       betDescripston: selectedBets,
       friendReq: loggedInUsr.username,
       wager: Wager,
+      result: "Waiting",
       friends: Object.keys(selectedFriends).filter(
         (friend) => selectedFriends[friend]
       ),
