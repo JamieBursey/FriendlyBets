@@ -104,7 +104,7 @@ const BetPage = () => {
 
         <div className="mb-3">
           <select
-            className="form-select text-danger"
+            className="form-select"
             value={selectedFriends}
             onChange={(e) => setSelectedFriends(e.target.value)} //need to check what happens if i change the friend selected.
           >
