@@ -9,7 +9,7 @@ const BetPage = () => {
   const gameInfo = localStorage.getItem("selectedGame");
   const selectedGame = JSON.parse(gameInfo);
   const navigate = useNavigate();
-  const [selectedFriends, setSelectedFriends] = useState({});
+  const [selectedFriends, setSelectedFriends] = useState("");
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [selectedBets, setSelectedBets] = useState({});
   const [Wager, setWager] = useState("");
@@ -36,6 +36,10 @@ const BetPage = () => {
     }));
   };
   const placeBet = () => {
+    if (!selectedFriends || selectedFriends === "") {
+      alert("Please select a friend to bet with.");
+      return;
+    }
     let allUsers = getAllUsers();
     let allBets = getAllBets();
     let currentUser = JSON.parse(
@@ -58,11 +62,9 @@ const BetPage = () => {
       betCreator: currentUser.username, // TODO: change it to maybe creator? owner?
       wager: Wager,
       result: "Waiting",
-      friends: Object.keys(selectedFriends).filter(
-        // TODO: do a 1 to 1, not an array of friends, select one user from the dropdown
-        // TODO: change it to maybe friendsAgainst?
-        (friend) => selectedFriends[friend]
-      ),
+      friends: [selectedFriends],
+      // TODO: do a 1 to 1, not an array of friends, select one user from the dropdown
+      // TODO: change it to maybe friendsAgainst?
       betStatus: "pending",
     };
     // Object.keys(selectedFriends).forEach((friendUsername) => {
@@ -100,18 +102,20 @@ const BetPage = () => {
           </div>
         </div>
 
-        {usersFriendList.map((friend, index) => (
-          <div key={index}>
-            <input
-              type="checkbox"
-              id={`friend${index}`}
-              checked={!!selectedFriends[friend]} // TODO: Double exclamation mark not needed, e.g., !true => false, !!true => true
-              onChange={() => handleFriendSelection(friend)}
-            />
-
-            <label className="fs-3 text-success ms-2">{friend}</label>
-          </div>
-        ))}
+        <div className="mb-3">
+          <select
+            className="form-select text-danger"
+            value={selectedFriends}
+            onChange={(e) => setSelectedFriends(e.target.value)} //need to check what happens if i change the friend selected.
+          >
+            <option selected>Select a Friend</option>
+            {usersFriendList.map((friend, index) => (
+              <option key={index} value={friend}>
+                {friend}
+              </option>
+            ))}
+          </select>
+        </div>
         <input
           type="text"
           placeholder="Set Wager"
