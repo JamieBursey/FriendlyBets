@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
   const [betOptions, setBetOptions] = useState([]);
+  const [selectedBet, setSelectedBet] = useState("");
 
   const findPlayerID = (roster) => {
     const randomIndex = Math.floor(Math.random() * roster.length);
@@ -66,22 +67,22 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
     updateCheckedBets(option);
   };
   return (
-    <div className="bg-success">
-      <h3>Betting Options:</h3>
-      <ul>
+    <div className="mb-3">
+      <select
+        className="form-select"
+        value={selectedBet}
+        onChange={(e) => {
+          setSelectedBet(e.target.value);
+          handleCheckedBet(e.target.value);
+        }}
+      >
+        <option selected>Select a Bet</option>
         {betOptions.map((option, index) => (
-          <li key={index}>
-            <label>
-              <input
-                type="checkbox"
-                onChange={() => handleCheckedBet(option)}
-                checked={selectedBets[option]}
-              />
-              {option}
-            </label>
-          </li>
+          <option key={index} value={option}>
+            {option}
+          </option>
         ))}
-      </ul>
+      </select>
     </div>
   );
 };

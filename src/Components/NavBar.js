@@ -1,19 +1,20 @@
 import { React } from "react";
 import Avatar from "react-avatar";
 import { Link, useNavigate } from "react-router-dom";
-import { loggedInUserKey } from "../Data";
-import { NAVIGATION } from "../Config";
+import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 function NavBar() {
   const navigate = useNavigate();
   const logout = () => {
-    localStorage.setItem(loggedInUserKey, null);
+    localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, null);
     navigate("/Login");
 
     //return to the login page navigate("/login")
   };
 
-  const loggedUser = JSON.parse(localStorage.getItem(loggedInUserKey));
+  const loggedUser = JSON.parse(
+    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+  );
   return (
     <nav className="navbar navbar-expand-sm bg-body-tertiary">
       <div className="container-fluid">

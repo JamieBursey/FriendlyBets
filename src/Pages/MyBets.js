@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
-import { loggedInUserKey, all, getAllBets } from "../Data";
+import { getAllBets } from "../Data";
 import { CheckBetResults, acceptBets } from "../Components";
 const Loader = () => <div> Loading .... </div>;
 
@@ -9,9 +9,6 @@ const MyBets = () => {
   const navigate = useNavigate();
   const [betsArr, setBetsArr] = useState([]);
   const [activeBetArr, setActiveBetArr] = useState([]);
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(localStorage.getItem(loggedInUserKey))
-  );
 
   //create Game Cards
   const creatBetCard = (
@@ -23,7 +20,7 @@ const MyBets = () => {
     awayLogo,
     wager,
     betDes,
-    friendReq, // TODO: change to betCreator
+    betCreator, // TODO: change to betCreator
     loggedInUserUsername,
     betStatus,
     result
@@ -31,7 +28,7 @@ const MyBets = () => {
     const betDescriptions = Object.entries(betDes)
       .filter(([key, value]) => value)
       .map(([key, value]) => key);
-    console.log("Rendering card: ", friendReq, loggedInUserUsername);
+    console.log("Rendering card: ", betCreator, loggedInUserUsername);
     return (
       <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -49,19 +46,19 @@ const MyBets = () => {
             <p key={index}>{desc}</p>
           ))}
           <p>
-            {friendReq} bets {wager}
+            {betCreator} bets {wager}
           </p>
           <p>result:{result}</p>
           <div className="row">
-            {friendReq == loggedInUserUsername ? (
+            {betStatus === "pending" && betCreator == loggedInUserUsername ? (
               <p>Awaiting {friends} Confirmation</p>
             ) : null}
-            {betStatus === "pending" && friendReq != loggedInUserUsername ? (
+            {betStatus === "pending" && betCreator != loggedInUserUsername ? (
               <>
                 <div className="col">
                   <button
                     className="btn btn-primary w-100 mb-1"
-                    onClick={() => acceptBets(betId, friendReq)}
+                    onClick={() => acceptBets(betId, betCreator)}
                   >
                     Accept
                   </button>
@@ -87,7 +84,7 @@ const MyBets = () => {
   };
 
   const fetchData = () => {
-    let betsArrString = localStorage.getItem(loggedInUserKey);
+    let betsArrString = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
     let allBets = getAllBets();
     let userBets = betsArrString ? JSON.parse(betsArrString) : [];
     let betsArr = userBets.bets;
