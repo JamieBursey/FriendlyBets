@@ -127,7 +127,7 @@ const TodaysGames = () => {
 
       setTodaysGameArr(gamesHTMLObj);
     } catch (error) {
-      console.log("Fetch Data Error", error);
+      alert("Fetch Data Error", error);
     }
   };
   useEffect(() => {

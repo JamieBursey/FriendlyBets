@@ -15,7 +15,6 @@ const CompareBets = async () => {
       const firstGoal = liveData.plays.find(
         (play) => play.typeDescKey === "goal"
       );
-      console.log(firstGoal);
     } catch (error) {
       console.log("error", error);
     }

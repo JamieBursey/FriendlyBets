@@ -25,7 +25,7 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
 
       const option2PlayerID = findPlayerID(roster);
       const option2PlayerName = findPlayerName(roster, option2PlayerID);
-      options.push(`${option2PlayerName} will get 5 shots on net`);
+      options.push(`${option2PlayerName} will get 2 shots on net`);
     } else {
       options.push("Roster update at puck drop");
     }
@@ -51,7 +51,6 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
             ? liveGameData.rosterSpots
             : []),
         ];
-        console.log("roster", roster);
 
         const generatedOptions = generateBettingOptions(roster);
         setBetOptions(generatedOptions);

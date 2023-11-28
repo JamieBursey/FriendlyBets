@@ -19,8 +19,6 @@ function FetchFromAPI() {
         const firstGoal = liveData.plays.find(
           (play) => play.typeDescKey === "goal"
         );
-        console.log(firstGoal);
-        console.log(liveData);
       } catch (error) {
         console.log("error", error);
       }
