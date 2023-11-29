@@ -5,7 +5,6 @@ import { getAllUsers, getAllBets } from "../Data";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 const BetPage = () => {
-  const bets = [];
   const gameInfo = localStorage.getItem("selectedGame");
   const selectedGame = JSON.parse(gameInfo);
   const navigate = useNavigate();
@@ -20,18 +19,13 @@ const BetPage = () => {
   }, []);
 
   const updateCheckedBets = (betOption) => {
-    // TODO: Bug where if bet options is unchecked, does it deletes it?
-    setSelectedBets((prevSelectedBets) => ({
-      ...prevSelectedBets,
-      [betOption]: !prevSelectedBets[betOption],
-    }));
+    setSelectedBets({ [betOption]: true }); //sets just one player to bet against.
   };
   const placeBet = () => {
     if (!selectedFriends || selectedFriends === "") {
       alert("Please select a friend to bet with.");
       return;
     }
-    let allUsers = getAllUsers();
     let allBets = getAllBets();
     let currentUser = JSON.parse(
       localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
@@ -95,9 +89,9 @@ const BetPage = () => {
           <select
             className="form-select"
             value={selectedFriends}
-            onChange={(e) => setSelectedFriends(e.target.value)} //need to check what happens if i change the friend selected.
+            onChange={(e) => setSelectedFriends(e.target.value)}
           >
-            <option selected>Select a Friend</option>
+            <option value="">Select a Friend</option>
             {usersFriendList.map((friend, index) => (
               <option key={index} value={friend}>
                 {friend}

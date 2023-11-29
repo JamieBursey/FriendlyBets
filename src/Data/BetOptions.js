@@ -88,7 +88,7 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
           handleCheckedBet(e.target.value);
         }}
       >
-        <option selected>Select a Bet</option>
+        <option value="">Select a Bet</option>
         {betOptions.map((option, index) => (
           <option key={index} value={option}>
             {option}

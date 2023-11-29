@@ -4,7 +4,7 @@ import Table from "./Table";
 import Buttons from "./Buttons";
 import Matches from "./Matches";
 import NavBar from "./NavBar";
-import { acceptBets } from "./HandleBets";
+import { acceptBets, deleteBets } from "./HandleBets";
 import { SportsDiv } from "./divColors";
 import { TodaysGames } from "./TodaysGames";
 import { CheckBetResults } from "./CheckBets";
@@ -19,4 +19,5 @@ export {
   TodaysGames,
   acceptBets,
   CheckBetResults,
+  deleteBets,
 };

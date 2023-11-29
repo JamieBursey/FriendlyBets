@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { getAllBets } from "../Data";
-import { CheckBetResults, acceptBets } from "../Components";
-const Loader = () => <div> Loading .... </div>;
+import { CheckBetResults, acceptBets, deleteBets } from "../Components";
+const Loader = () => (
+  <div className="spinner-border text-success" role="status">
+    <span className="visually-hidden">Loading...</span>
+  </div>
+);
 
 const MyBets = () => {
   const navigate = useNavigate();
@@ -47,7 +51,7 @@ const MyBets = () => {
           <p>
             {betCreator} bets {wager}
           </p>
-          <p>result:{result}</p>
+          <p>Result:{result}</p>
           <div className="row">
             {betStatus === "pending" && betCreator == loggedInUserUsername ? (
               <p>Awaiting {friends} Confirmation</p>
@@ -63,7 +67,12 @@ const MyBets = () => {
                   </button>
                 </div>
                 <div className="col">
-                  <button className="btn btn-secondary w-100">Decline</button>
+                  <button
+                    className="btn btn-secondary w-100"
+                    onClick={() => deleteBets(betId, fetchBetData)}
+                  >
+                    Decline
+                  </button>
                 </div>
               </>
             ) : (
