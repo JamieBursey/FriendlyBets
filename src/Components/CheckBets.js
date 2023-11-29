@@ -1,7 +1,7 @@
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { findPlayerIdByName } from "../Data";
 
-const CheckBetResults = async (betId) => {
+const CheckBetResults = async (betId, callback) => {
   let allBets = JSON.parse(localStorage.getItem(LOCALSTORAGE.BETS));
   let bet = allBets.find((bet) => bet.betId === betId);
   if (!bet) {
@@ -91,6 +91,9 @@ const CheckBetResults = async (betId) => {
       }
       allBets[betIndex] = bet;
       localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));
+      if (callback) {
+        callback();
+      }
     }
   } catch (error) {
     console.error("error", error);

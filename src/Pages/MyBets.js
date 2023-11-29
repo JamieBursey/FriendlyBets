@@ -29,7 +29,7 @@ const MyBets = () => {
       .filter(([key, value]) => value)
       .map(([key, value]) => key);
     return (
-      <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
+      <div key={betId} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
           <h5 className="card-title">{gameTitle}</h5>
           <div className="row">
@@ -57,7 +57,7 @@ const MyBets = () => {
                 <div className="col">
                   <button
                     className="btn btn-primary w-100 mb-1"
-                    onClick={() => acceptBets(betId, betCreator)}
+                    onClick={() => acceptBets(betId, betCreator, fetchBetData)}
                   >
                     Accept
                   </button>
@@ -69,7 +69,7 @@ const MyBets = () => {
             ) : (
               <button
                 onClick={() => {
-                  CheckBetResults(betId);
+                  CheckBetResults(betId, fetchBetData);
                 }}
                 className="btn btn-primary w-100"
               >
@@ -82,7 +82,7 @@ const MyBets = () => {
     );
   };
 
-  const fetchData = () => {
+  const fetchBetData = () => {
     let betsArrString = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
     let allBets = getAllBets();
     let userBets = betsArrString ? JSON.parse(betsArrString) : [];
@@ -104,8 +104,6 @@ const MyBets = () => {
         bet.betStatus === "active"
     );
 
-    // let pendingBets = betsArr.filter((bet) => bet.betStatus === "pending");
-    // let activeBets = betsArr.filter((bet) => bet.betStatus === "active");
     let pendingBetsCard = pendingBets.map((b) => {
       const betId = b.betId;
       const gameTitle = b.gameTitle;
@@ -161,7 +159,7 @@ const MyBets = () => {
   };
   useEffect(() => {
     // Whenever the page loads, then this is executed
-    fetchData();
+    fetchBetData();
   }, []);
 
   return (
