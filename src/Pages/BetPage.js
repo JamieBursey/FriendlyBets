@@ -19,15 +19,6 @@ const BetPage = () => {
     setUsersFriendList(loggedInUsr.friends);
   }, []);
 
-  const handleFriendSelection = (friend) => {
-    // TODO: Bug where if username is unchecked, does it deletes it?
-
-    setSelectedFriends((prevSelectedFriends) => ({
-      ...prevSelectedFriends,
-      [friend]: !prevSelectedFriends[friend],
-    }));
-  };
-
   const updateCheckedBets = (betOption) => {
     // TODO: Bug where if bet options is unchecked, does it deletes it?
     setSelectedBets((prevSelectedBets) => ({
@@ -64,7 +55,6 @@ const BetPage = () => {
       result: "Waiting",
       friends: [selectedFriends],
       // TODO: do a 1 to 1, not an array of friends, select one user from the dropdown
-      // TODO: change it to maybe friendsAgainst?
       betStatus: "pending",
     };
     // Object.keys(selectedFriends).forEach((friendUsername) => {
@@ -83,7 +73,6 @@ const BetPage = () => {
     // localStorage.setItem(LOGGEDIN_USER.LOGGEDIN_USER, JSON.stringify(currentUser));
     allBets.push(newBet);
     localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));
-    console.log("test", allUsers);
     navigate(NAVIGATION.MYBETS);
   };
   return (

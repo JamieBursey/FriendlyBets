@@ -28,17 +28,16 @@ const MyBets = () => {
     const betDescriptions = Object.entries(betDes)
       .filter(([key, value]) => value)
       .map(([key, value]) => key);
-    console.log("Rendering card: ", betCreator, loggedInUserUsername);
     return (
       <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
           <h5 className="card-title">{gameTitle}</h5>
           <div className="row">
             <div className="col">
-              <img src={awayLogo}></img>
+              <img src={homeLogo}></img>
             </div>
             <div className="col">
-              <img src={homeLogo} />
+              <img src={awayLogo} />
             </div>
           </div>
           <p>{friends}</p>
@@ -92,8 +91,6 @@ const MyBets = () => {
       localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
     );
 
-    console.log("All Bets", allBets);
-
     let pendingBets = allBets.filter(
       (bet) =>
         (bet.betCreator === currentUser.username ||
@@ -107,11 +104,8 @@ const MyBets = () => {
         bet.betStatus === "active"
     );
 
-    console.log("pending", pendingBets, "active", activeBets);
-
     // let pendingBets = betsArr.filter((bet) => bet.betStatus === "pending");
     // let activeBets = betsArr.filter((bet) => bet.betStatus === "active");
-    console.log("active bets", activeBetArr);
     let pendingBetsCard = pendingBets.map((b) => {
       const betId = b.betId;
       const gameTitle = b.gameTitle;
