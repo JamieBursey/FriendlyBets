@@ -35,6 +35,16 @@ const MyBets = () => {
     return (
       <div key={betId} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
+          <div className="position-absolute top-0 end-0 me-1 mt-1">
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={() => {
+                deleteBets(betId, fetchBetData);
+              }}
+            ></button>
+          </div>
           <h5 className="card-title">{gameTitle}</h5>
           <div className="row">
             <div className="col">
