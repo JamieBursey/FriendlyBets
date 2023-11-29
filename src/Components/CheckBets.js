@@ -92,7 +92,7 @@ const CheckBetResults = async (betId, callback) => {
       allBets[betIndex] = bet;
       localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));
       if (callback) {
-        callback();
+        callback(); // used to re-render the cards in myBets
       }
     }
   } catch (error) {
