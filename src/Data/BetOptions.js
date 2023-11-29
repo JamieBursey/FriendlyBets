@@ -14,18 +14,25 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
       ? `${player.firstName.default} ${player.lastName.default}`
       : "Unknown Player";
   };
-  const generateBettingOptions = (roster) => {
+  const generateBettingOptions = (roster, homeTeam, awayTeam) => {
     const options = [];
 
     if (roster.length > 0) {
       // Generate a separate option for each bet
-      const option1PlayerID = findPlayerID(roster);
-      const option1PlayerName = findPlayerName(roster, option1PlayerID);
-      options.push(`${option1PlayerName} will score the first goal`);
+      const goalPlayerID = findPlayerID(roster);
+      const scoringPlayerName = findPlayerName(roster, goalPlayerID);
+      options.push(`${scoringPlayerName} will score the first goal`);
 
-      const option2PlayerID = findPlayerID(roster);
-      const option2PlayerName = findPlayerName(roster, option2PlayerID);
-      options.push(`${option2PlayerName} will get 2 shots on net`);
+      const shotsPlayerID = findPlayerID(roster);
+      const ShootingPlayerName = findPlayerName(roster, shotsPlayerID);
+      options.push(`${ShootingPlayerName} will get 2 shots on net`);
+
+      const assistPlayerID = findPlayerID(roster);
+      const assistPlayerName = findPlayerName(roster, assistPlayerID);
+      options.push(`${assistPlayerName} will make an assist`);
+
+      options.push(`${homeTeam} will win`);
+      options.push(`${awayTeam} will win`);
     } else {
       options.push("Roster update at puck drop");
     }
@@ -44,7 +51,9 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
           `https://api-web.nhle.com/v1/gamecenter/${gameNumber}/play-by-play`
         );
         const liveGameData = await response.json();
-
+        const homeTeam = liveGameData.homeTeam.name.default;
+        const awayTeam = liveGameData.awayTeam.name.default;
+        console.log("livedata", liveGameData);
         const roster = [
           ...(Array.isArray(liveGameData.rosterSpots) &&
           liveGameData.rosterSpots.length > 0
@@ -52,7 +61,11 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
             : []),
         ];
 
-        const generatedOptions = generateBettingOptions(roster);
+        const generatedOptions = generateBettingOptions(
+          roster,
+          homeTeam,
+          awayTeam
+        );
         setBetOptions(generatedOptions);
       } catch (error) {
         console.log(error);

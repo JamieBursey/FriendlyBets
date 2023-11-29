@@ -34,10 +34,10 @@ const MyBets = () => {
           <h5 className="card-title">{gameTitle}</h5>
           <div className="row">
             <div className="col">
-              <img src={awayLogo}></img>
+              <img src={homeLogo}></img>
             </div>
             <div className="col">
-              <img src={homeLogo} />
+              <img src={awayLogo} />
             </div>
           </div>
           <p>{friends}</p>
