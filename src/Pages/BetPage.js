@@ -30,11 +30,9 @@ const BetPage = () => {
     let currentUser = JSON.parse(
       localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
     );
-    // const selectedFriendUsernames = Object.keys(selectedFriends).filter(
-    //   (friend) => selectedFriends[friend]
-    // );
+
     const generateBetId = () => {
-      const randomId = new Date().getTime();
+      const randomId = new Date().getTime(); //uses a time stamp to generate a uniqe id.
       return randomId;
     };
     const newBet = {
@@ -48,23 +46,8 @@ const BetPage = () => {
       wager: Wager,
       result: "Waiting",
       friends: [selectedFriends],
-      // TODO: do a 1 to 1, not an array of friends, select one user from the dropdown
       betStatus: "pending",
     };
-    // Object.keys(selectedFriends).forEach((friendUsername) => {
-    //   if (selectedFriends[friendUsername]) {
-    //     let friend = allUsers.find((user) => user.username === friendUsername);
-    //     if (friend) {
-    //       if (!friend.bets) friend.bets = [];
-    //       friend.bets.push({ ...newBet });
-    //     }
-    //   }
-    // });
-    // allUsers = allUsers.map((user) =>
-    //   user.username === currentUser.username ? currentUser : user
-    // );
-    // localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(allUsers));
-    // localStorage.setItem(LOGGEDIN_USER.LOGGEDIN_USER, JSON.stringify(currentUser));
     allBets.push(newBet);
     localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));
     navigate(NAVIGATION.MYBETS);

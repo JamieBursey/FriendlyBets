@@ -8,7 +8,7 @@ import {
   editUser,
 } from "./RegisteredUser";
 import { BettingOptions } from "./BetOptions";
-import { getAllBets, checkBetType, findPlayerIdByName } from "./Bets";
+import { getAllBets, findPlayerIdByName } from "./Bets";
 // import {} from "./Matches"
 
 export {
@@ -23,6 +23,5 @@ export {
   editUser,
   BettingOptions,
   getAllBets,
-  checkBetType,
   findPlayerIdByName,
 };
