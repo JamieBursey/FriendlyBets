@@ -34,7 +34,7 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
       options.push(`${homeTeam} will win`);
       options.push(`${awayTeam} will win`);
     } else {
-      options.push("Roster update at puck drop");
+      options.push("Game Not Started");
     }
 
     return options;
