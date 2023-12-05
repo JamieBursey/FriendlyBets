@@ -14,7 +14,6 @@ import {
   FullSchedule,
   BetPage,
   MyBets,
-  PlayerCompare,
   FriendRequests,
 } from "./Pages";
 import { NavBar } from "./Components";
@@ -37,7 +36,6 @@ function App() {
           <Route path="/fullSchedule" element={<FullSchedule />} />
           <Route path="/betPage" element={<BetPage />} />
           <Route path="/MyBets" element={<MyBets />} />
-          <Route path="/PlayerStats" element={<PlayerCompare />} />
           <Route path="/FriendRequest" element={<FriendRequests />} />
         </Routes>
       </BrowserRouter>

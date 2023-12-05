@@ -21,12 +21,16 @@ const sendFriendRequest = (toUserName) => {
   );
   const fromUserName = loggedInUser.username;
   const friendRequests =
-    JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUESTS)) || [];
+    JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
   const existingRequest = friendRequests.find(
     (request) => request.from === fromUserName && request.to === toUserName
   );
   if (existingRequest) {
     alert("Friend request already sent.");
+    return;
+  }
+  if (loggedInUser.friends.includes(toUserName)) {
+    alert("Friend already added");
     return;
   }
 
@@ -85,10 +89,14 @@ const acceptFriendRequest = (requestId) => {
 
     editUser(currentUser.username, currentUser);
     editUser(requestingUser.username, requestingUser);
-
+    friendRequests.splice([requestIndex].from);
     localStorage.setItem(
       LOCALSTORAGE.FRIENDREQUEST,
       JSON.stringify(friendRequests)
+    );
+    localStorage.setItem(
+      LOCALSTORAGE.LOGGEDINUSER,
+      JSON.stringify(currentUser)
     );
   }
 };
