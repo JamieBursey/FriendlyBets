@@ -191,16 +191,3 @@ export { BetPage };
 //     ]
 //   }
 // ]
-
-/*
-HW
-- Update localstorage get/set to use configuration page
-- Update navigation to use configuration page
-- Update MyBets Cards to show game info and bet status
-- Move navbar options from dropdown to navbar
-Bonus
-- Add a refresh btn, pull the game info, check if it istill pending or not
-- If not pending, remove the object from the array, and push it again with the coreect status
-- save the array again to the local storage
-- Refresh the page: navigate(mybets) or another option is to change the value of the arrayBets using the state function setArrBets
-*/

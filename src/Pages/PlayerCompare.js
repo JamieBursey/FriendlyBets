@@ -1,0 +1,2 @@
+const PlayerCompare = () => {};
+export { PlayerCompare };

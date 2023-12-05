@@ -39,7 +39,7 @@ const CheckBetResults = async (betId, callback) => {
 
     const isGameFinished =
       resultsData.gameState === "OFF" ||
-      resultsData.clock.timeRemaining === "00:00"; //used to check if game is over before giving results for game winner
+      resultsData.clock.timeRemaining === "00:00";
 
     const betCreator = bet.betCreator;
     for (const [betDescription, isActive] of Object.entries(

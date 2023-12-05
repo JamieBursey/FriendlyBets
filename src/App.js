@@ -14,6 +14,8 @@ import {
   FullSchedule,
   BetPage,
   MyBets,
+  PlayerCompare,
+  FriendRequests,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -35,6 +37,8 @@ function App() {
           <Route path="/fullSchedule" element={<FullSchedule />} />
           <Route path="/betPage" element={<BetPage />} />
           <Route path="/MyBets" element={<MyBets />} />
+          <Route path="/PlayerStats" element={<PlayerCompare />} />
+          <Route path="/FriendRequest" element={<FriendRequests />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,27 +1,29 @@
-import { getFriend, setFriend, renderFriends } from "./Friends";
-import { PlayerData } from "./Players";
 import {
-  getAllUsers,
-  findUser,
-  checkUserPassword,
-  addFriend,
+  getFriend,
+  renderFriends,
+  sendFriendRequest,
   editUser,
-} from "./RegisteredUser";
+  acceptFriendRequest,
+  rejectFriendRequest,
+} from "./Friends";
+import { PlayerData } from "./Players";
+import { getAllUsers, findUser, checkUserPassword } from "./RegisteredUser";
 import { BettingOptions } from "./BetOptions";
 import { getAllBets, findPlayerIdByName } from "./Bets";
 // import {} from "./Matches"
 
 export {
   getFriend,
-  setFriend,
   renderFriends,
   PlayerData,
   getAllUsers,
   findUser,
   checkUserPassword,
-  addFriend,
+  sendFriendRequest,
   editUser,
   BettingOptions,
   getAllBets,
   findPlayerIdByName,
+  acceptFriendRequest,
+  rejectFriendRequest,
 };
