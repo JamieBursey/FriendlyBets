@@ -21,6 +21,15 @@ const CheckBetResults = async (betId, callback) => {
       ? `${betCreator} Wins`
       : `${betCreator} Lost`;
   };
+  const checkAssistPlayer = (playerId, plays) => {
+    const assists = plays.filter(
+      (play) =>
+        play.typeDescKey === "goal" &&
+        (play.details.assist1PlayerId === playerId ||
+          play.details.assist2PlayerId === playerId)
+    );
+    return assists.length >= 1 ? `${betCreator} Wins` : `${betCreator} Lost`;
+  };
   try {
     const response = await fetch(
       `https://api-web.nhle.com/v1/gamecenter/${gameNumber}/play-by-play`
@@ -30,7 +39,7 @@ const CheckBetResults = async (betId, callback) => {
 
     const isGameFinished =
       resultsData.gameState === "OFF" ||
-      resultsData.clock.timeRemaining === "00:00"; //used to check if game is over before giving results for game winner
+      resultsData.clock.timeRemaining === "00:00";
 
     const betCreator = bet.betCreator;
     for (const [betDescription, isActive] of Object.entries(
@@ -70,7 +79,15 @@ const CheckBetResults = async (betId, callback) => {
 
         bet.result = shotsResult;
       }
-
+      if (betDescription.includes("will make an assist")) {
+        const playerName = betDescription.split(" will get 2 shots on net")[0];
+        const playerId = findPlayerIdByName(
+          playerName,
+          resultsData.rosterSpots
+        );
+        const playerAssist = checkAssistPlayer(playerId, resultsData.plays);
+        bet.result = playerAssist;
+      }
       if (
         betDescription === `${resultsData.homeTeam.name.default} will win` &&
         isGameFinished
@@ -80,6 +97,7 @@ const CheckBetResults = async (betId, callback) => {
         bet.result =
           homeScore > awayScore ? `${betCreator} Wins` : `${betCreator} Lost`;
       }
+
       if (
         betDescription === `${resultsData.awayTeam.name.default} will win` &&
         isGameFinished

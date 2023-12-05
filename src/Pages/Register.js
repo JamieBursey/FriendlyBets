@@ -6,6 +6,7 @@ function Register() {
   const navigate = useNavigate();
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
+  const [email, setEmail] = useState(null);
   const registerUser = () => {
     const existingUsers =
       JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
@@ -15,7 +16,7 @@ function Register() {
     if (isUserExisting) {
       alert("username already exist");
     } else {
-      const newUser = { username, password, bets: [], owed: [], friends: [] };
+      const newUser = { username, password, email, bets: [], friends: [] };
       existingUsers.push(newUser);
       localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(existingUsers));
       localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newUser));
@@ -26,10 +27,19 @@ function Register() {
     <div className="bg-dark d-flex justify-content-center p-2 vh-100">
       <div className="card w-75 h-75">
         <div className="card-body">
-          <h5 className="card-title">Card title</h5>
-          <h6 className="card-subtitle mb-2">Card subtitle</h6>
+          <h5 className="card-title text-center text-primary">
+            Time To Register!
+          </h5>
           <div className="mb-3">
-            <label className="form-label">Email address</label>
+            <div className="mb-3">
+              <input
+                type="email"
+                className="form-control"
+                id="RegisterEmail"
+                placeholder="Enter Email"
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </div>
             <input
               type="text"
               className="form-control"
@@ -38,6 +48,7 @@ function Register() {
               onChange={(event) => setUserName(event.target.value)}
             />
           </div>
+
           <div className="mb-3 row">
             <label className="form-label">Password</label>
             <input

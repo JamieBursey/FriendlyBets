@@ -9,7 +9,8 @@ module.exports = {
   },
   LOCALSTORAGE: {
     USERS: "ALL_USERS",
-    BETS: "Bets", // TODO: Change to BETS
+    BETS: "BETS", // TODO: Change to BETS
     LOGGEDINUSER: "LOGGEDIN_USER",
+    FRIENDREQUEST: "FRIEND_REQUEST",
   },
 };

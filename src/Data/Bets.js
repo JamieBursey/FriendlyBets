@@ -15,47 +15,6 @@ const getPlayerIdByName = (playerName, resultsData) => {
   );
   return player ? player.id : null;
 };
-const checkBetType = (betDescriptionObject, resultsData) => {
-  const betDescriptions = Object.keys(betDescriptionObject);
-
-  for (const description of betDescriptions) {
-    if (
-      description.includes("will score the first goal") &&
-      betDescriptionObject[description]
-    ) {
-      const playerName = description.split(" will score the first goal")[0];
-      const playerId = getPlayerIdByName(playerName, resultsData);
-      const firstGoalEvent = resultsData.plays.find(
-        (event) => event.typeDescKey === "goal"
-      );
-
-      if (
-        firstGoalEvent &&
-        firstGoalEvent.details.scoringPlayerId === playerId
-      ) {
-        return "Won";
-      }
-    } else if (
-      description.includes("will have more than 2 shots on net") &&
-      betDescriptionObject[description]
-    ) {
-      const playerName = description.split(
-        " will have more than 2 shots on net"
-      )[0];
-      const playerId = getPlayerIdByName(playerName, resultsData);
-      const shotsOnGoal = resultsData.plays.filter(
-        (event) =>
-          event.typeDescKey === "shot-on-goal" &&
-          event.details.shootingPlayerId === playerId
-      );
-
-      if (shotsOnGoal.length > 2) {
-        return "Won";
-      }
-    }
-  }
-  return "Waiting";
-};
 const findPlayerIdByName = (playerName, rosterSpots) => {
   const [firstName, lastName] = playerName.split(" ");
   for (const player of rosterSpots) {
@@ -69,4 +28,4 @@ const findPlayerIdByName = (playerName, rosterSpots) => {
   }
   return null;
 };
-export { getAllBets, checkBetType, findPlayerIdByName };
+export { getAllBets, findPlayerIdByName };

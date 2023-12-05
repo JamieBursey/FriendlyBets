@@ -1,48 +1,34 @@
 import { LOCALSTORAGE } from "../Config";
-import { editUser, getAllUsers } from "../Data";
-
+import { useState } from "react";
+import { getAllUsers, sendFriendRequest } from "../Data";
 const AddFriends = () => {
   const loggedInStr = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const loggedInUser = JSON.parse(loggedInStr);
-  const addFriend = (friendUserObj, loggedInUserObj) => {
-    const currentFriendsUsernameList = loggedInUserObj.friends || [];
-    let friendAlreadyExist = false;
-    currentFriendsUsernameList.forEach((friendUsername) => {
-      if (friendUsername === friendUserObj.username) {
-        alert("Friend already exist");
-        friendAlreadyExist = true;
-      }
-    });
-    if (friendAlreadyExist === false) {
-      currentFriendsUsernameList.push(friendUserObj.username);
+  const [email, setEmail] = useState("");
 
-      let newLoggedInUserObj = loggedInUserObj;
-      newLoggedInUserObj.friends = currentFriendsUsernameList;
+  const handleSendFriendRequest = () => {
+    const allUsers = getAllUsers();
+    const userToRequest = allUsers.find((user) => user.email === email);
 
-      editUser(loggedInUserObj.username, newLoggedInUserObj);
-      localStorage.setItem(
-        LOCALSTORAGE.LOGGEDINUSER,
-        JSON.stringify(newLoggedInUserObj)
-      );
+    if (userToRequest) {
+      sendFriendRequest(userToRequest.username);
+      setEmail("");
+    } else {
+      alert("User Not Found");
     }
   };
-  const renderUsers = () => {
-    let allUsers = getAllUsers();
 
-    return allUsers.map((player) => (
-      <div key={player["username"]} className="col fs-4 text-danger ">
-        <div className="row">
-          <div className="col">{player["username"]}</div>
-          <div className="col">
-            <button onClick={() => addFriend(player, loggedInUser)}>
-              Add Friend
-            </button>
-          </div>
-        </div>
-      </div>
-    ));
-  };
-  return <div>{renderUsers()}</div>;
+  return (
+    <div>
+      <input
+        type="email"
+        placeholder="Friends Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button onClick={handleSendFriendRequest}>Send Friend Request</button>
+    </div>
+  );
 };
 
 export { AddFriends };
