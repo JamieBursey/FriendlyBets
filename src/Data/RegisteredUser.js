@@ -17,6 +17,15 @@ const findUser = (username) => {
     return foundUser;
   }
 };
+const findUserByEmail = (email) => {
+  const allUsers = getAllUsers(); // [{id: "", ....} , {}]
+  const foundUser = allUsers.find((user) => user.email === email);
+  if (foundUser == null) {
+    return null;
+  } else {
+    return foundUser;
+  }
+};
 
 const checkUserPassword = (userPassword, inputPassword) => {
   if (userPassword === inputPassword) {
@@ -26,4 +35,4 @@ const checkUserPassword = (userPassword, inputPassword) => {
   }
 };
 
-export { getAllUsers, checkUserPassword, findUser };
+export { getAllUsers, checkUserPassword, findUser, findUserByEmail };

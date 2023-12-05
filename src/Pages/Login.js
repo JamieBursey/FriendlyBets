@@ -1,15 +1,15 @@
-import { findUser, checkUserPassword } from "../Data";
+import { findUser, checkUserPassword, findUserByEmail } from "../Data";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 
 function Login() {
   const navigate = useNavigate();
-  const [username, setUserName] = useState(null);
+  const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
 
   const loginHandler = () => {
-    const foundUser = findUser(username);
+    const foundUser = findUserByEmail(email);
 
     // Check if foundUser is not null before trying to access its properties
     if (foundUser != null) {
@@ -24,7 +24,7 @@ function Login() {
         alert("Incorrect password");
       }
     } else {
-      alert("Username does not exist");
+      alert("User does not exist");
     }
   };
   return (
@@ -32,15 +32,14 @@ function Login() {
       <div className="card w-75 h-75">
         <div className="card-body">
           <h5 className="card-title">Card title</h5>
-          <h6 className="card-subtitle mb-2">Card subtitle</h6>
           <div className="mb-3">
             <label className="form-label">Email address</label>
             <input
               type="text"
               className="form-control"
               id="userName"
-              placeholder="userName"
-              onChange={(event) => setUserName(event.target.value)}
+              placeholder="Email"
+              onChange={(event) => setEmail(event.target.value)}
             />
           </div>
           <div className="mb-3 row">
