@@ -31,7 +31,9 @@ function Login() {
     <div className="bg-dark d-flex justify-content-center p-2 vh-100">
       <div className="card w-75 h-75">
         <div className="card-body">
-          <h5 className="card-title">Card title</h5>
+          <h5 className="card-title text-center text-success">
+            Lets Get Betting!
+          </h5>
           <div className="mb-3">
             <label className="form-label">Email address</label>
             <input

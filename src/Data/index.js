@@ -12,6 +12,7 @@ import {
   findUser,
   checkUserPassword,
   findUserByEmail,
+  renderFriendList,
 } from "./RegisteredUser";
 import { BettingOptions } from "./BetOptions";
 import { getAllBets, findPlayerIdByName } from "./Bets";
@@ -32,4 +33,5 @@ export {
   acceptFriendRequest,
   rejectFriendRequest,
   findUserByEmail,
+  renderFriendList,
 };
