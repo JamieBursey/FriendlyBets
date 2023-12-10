@@ -4,7 +4,9 @@ import { acceptFriendRequest, rejectFriendRequest } from "../Data";
 
 const FriendRequests = () => {
   const [requests, setRequests] = useState([]);
-
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER))
+  );
   useEffect(() => {
     const storedRequests =
       JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
@@ -19,8 +21,14 @@ const FriendRequests = () => {
   }, []);
 
   const handleAccept = (requestId) => {
-    acceptFriendRequest(requestId);
-    setRequests(requests.filter((request) => request.id !== requestId));
+    acceptFriendRequest(requestId, (updatedCurrentUser) => {
+      setCurrentUser(updatedCurrentUser);
+      localStorage.setItem(
+        LOCALSTORAGE.LOGGEDINUSER,
+        JSON.stringify(updatedCurrentUser)
+      );
+      setRequests(requests.filter((request) => request.id !== requestId));
+    });
   };
 
   return (

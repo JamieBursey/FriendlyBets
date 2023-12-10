@@ -7,7 +7,13 @@ import {
   rejectFriendRequest,
 } from "./Friends";
 import { PlayerData } from "./Players";
-import { getAllUsers, findUser, checkUserPassword } from "./RegisteredUser";
+import {
+  getAllUsers,
+  findUser,
+  checkUserPassword,
+  findUserByEmail,
+  renderFriendList,
+} from "./RegisteredUser";
 import { BettingOptions } from "./BetOptions";
 import { getAllBets, findPlayerIdByName } from "./Bets";
 // import {} from "./Matches"
@@ -26,4 +32,6 @@ export {
   findPlayerIdByName,
   acceptFriendRequest,
   rejectFriendRequest,
+  findUserByEmail,
+  renderFriendList,
 };

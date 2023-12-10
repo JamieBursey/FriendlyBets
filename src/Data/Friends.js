@@ -5,6 +5,7 @@ const getFriend = (username) => {
   return { username: "", password: "" };
 };
 const editUser = (username, newUserObj) => {
+  // TODO: search all functions that still work based on username and replace them with email
   let userFound = findUser(username);
   // Get All User Array
   const allUserArray = getAllUsers();
@@ -20,6 +21,7 @@ const sendFriendRequest = (toUserName) => {
     localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
   );
   const fromUserName = loggedInUser.username;
+  const fromUserEmail = loggedInUser.email;
   const friendRequests =
     JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
   const existingRequest = friendRequests.find(
@@ -38,6 +40,7 @@ const sendFriendRequest = (toUserName) => {
     id: `${fromUserName}_${toUserName}`,
     from: fromUserName,
     to: toUserName,
+    email: fromUserEmail,
     status: "pending",
   };
   friendRequests.push(newRequest);
@@ -69,7 +72,7 @@ const renderFriends = () => {
   ));
 };
 
-const acceptFriendRequest = (requestId) => {
+const acceptFriendRequest = (requestId, callBack) => {
   const friendRequests =
     JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
   const requestIndex = friendRequests.findIndex(
@@ -84,19 +87,27 @@ const acceptFriendRequest = (requestId) => {
     );
     const requestingUser = findUser(friendRequests[requestIndex].from);
 
-    currentUser.friends = [...currentUser.friends, requestingUser.username];
-    requestingUser.friends = [...requestingUser.friends, currentUser.username];
+    if (
+      !currentUser.friends.some(
+        (friend) => friend.username === requestingUser.username
+      )
+    ) {
+      currentUser.friends.push(requestingUser.username);
+    }
+    if (
+      !requestingUser.friends.some(
+        (friend) => friend.username === currentUser.username
+      )
+    ) {
+      requestingUser.friends.push(currentUser.username);
+    }
 
     editUser(currentUser.username, currentUser);
     editUser(requestingUser.username, requestingUser);
-    friendRequests.splice([requestIndex].from);
+
     localStorage.setItem(
       LOCALSTORAGE.FRIENDREQUEST,
       JSON.stringify(friendRequests)
-    );
-    localStorage.setItem(
-      LOCALSTORAGE.LOGGEDINUSER,
-      JSON.stringify(currentUser)
     );
   }
 };
