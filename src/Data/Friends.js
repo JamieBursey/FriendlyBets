@@ -31,6 +31,10 @@ const sendFriendRequest = (toUserName) => {
     alert("Friend request already sent.");
     return;
   }
+  if (loggedInUser.friends.includes(toUserName)) {
+    alert("Friend already added");
+    return;
+  }
 
   const newRequest = {
     id: `${fromUserName}_${toUserName}`,
@@ -101,12 +105,10 @@ const acceptFriendRequest = (requestId, callBack) => {
     editUser(currentUser.username, currentUser);
     editUser(requestingUser.username, requestingUser);
 
-    friendRequests.splice(requestIndex, 1);
     localStorage.setItem(
       LOCALSTORAGE.FRIENDREQUEST,
       JSON.stringify(friendRequests)
     );
-    callBack(currentUser);
   }
 };
 

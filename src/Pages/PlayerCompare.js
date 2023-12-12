@@ -1,2 +1,1 @@
-const PlayerCompare = () => {};
-export { PlayerCompare };
+
