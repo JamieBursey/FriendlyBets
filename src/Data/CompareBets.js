@@ -1,4 +1,6 @@
-const gameID = localStorage.getItem("selectedGame");
+const { LOCALSTORAGE } = require("../Config");
+
+const gameID = localStorage.getItem(LOCALSTORAGE.SELECTEDGAME);
 const gameIDData = JSON.parse(gameID);
 const gameNumber = gameIDData.game_ID;
 

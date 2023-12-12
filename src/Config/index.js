@@ -12,5 +12,6 @@ module.exports = {
     BETS: "BETS", // TODO: Change to BETS
     LOGGEDINUSER: "LOGGEDIN_USER",
     FRIENDREQUEST: "FRIEND_REQUEST",
+    SELECTEDGAME: "SELECTED_GAME",
   },
 };
