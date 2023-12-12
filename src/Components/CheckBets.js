@@ -1,4 +1,4 @@
-import { LOCALSTORAGE, NAVIGATION } from "../Config";
+import { LOCALSTORAGE } from "../Config";
 import { findPlayerIdByName } from "../Data";
 
 const CheckBetResults = async (betId, callback) => {
@@ -39,7 +39,7 @@ const CheckBetResults = async (betId, callback) => {
 
     const isGameFinished =
       resultsData.gameState === "OFF" ||
-      resultsData.clock.timeRemaining === "00:00";
+      (resultsData.clock.timeRemaining === "00:00" && resultsData.period === 3);
 
     const betCreator = bet.betCreator;
     for (const [betDescription, isActive] of Object.entries(

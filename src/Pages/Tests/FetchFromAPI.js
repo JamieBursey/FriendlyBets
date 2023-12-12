@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { LOCALSTORAGE } from "../../Config";
 
 function FetchFromAPI() {
-  const gameID = localStorage.getItem("selectedGame");
+  const gameID = localStorage.getItem(LOCALSTORAGE.SELECTEDGAME);
   const gameIDData = JSON.parse(gameID);
   const gameNumber = gameIDData.game_ID;
 

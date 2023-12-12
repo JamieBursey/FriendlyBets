@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LOCALSTORAGE } from "../Config";
 
 const TodaysGames = () => {
   const navigate = useNavigate();
@@ -19,7 +20,10 @@ const TodaysGames = () => {
       homeLogo,
       awayLogo,
     };
-    localStorage.setItem("selectedGame", JSON.stringify(gameDetails));
+    localStorage.setItem(
+      LOCALSTORAGE.SELECTEDGAME,
+      JSON.stringify(gameDetails)
+    );
     navigate("/betPage");
   };
   const actionBtnTwo = () => {
@@ -103,6 +107,7 @@ const TodaysGames = () => {
       const todayStr = today.toISOString().slice(0, 10);
 
       const todaysGames = games.gameWeek.find((day) => day.date === todayStr);
+      console.log(todaysGames);
 
       todaysGames.games.forEach((game) => {
         const awayTeamID = game.awayTeam.abbrev;

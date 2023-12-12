@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { LOCALSTORAGE } from "../Config";
 
 export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
   const [betOptions, setBetOptions] = useState([]);
@@ -42,7 +43,7 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
 
   useEffect(() => {
     const playByPlay = async () => {
-      const gameID = localStorage.getItem("selectedGame");
+      const gameID = localStorage.getItem(LOCALSTORAGE.SELECTEDGAME);
       const gameIDData = JSON.parse(gameID);
       const gameNumber = gameIDData.game_ID;
 

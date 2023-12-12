@@ -5,7 +5,7 @@ import { getAllUsers, getAllBets } from "../Data";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 
 const BetPage = () => {
-  const gameInfo = localStorage.getItem("selectedGame");
+  const gameInfo = localStorage.getItem(LOCALSTORAGE.SELECTEDGAME);
   const selectedGame = JSON.parse(gameInfo);
   const navigate = useNavigate();
   const [selectedFriends, setSelectedFriends] = useState("");
