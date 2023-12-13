@@ -1,9 +1,11 @@
 import { LOCALSTORAGE } from "../Config";
 import { useState } from "react";
-import { getAllUsers, sendFriendRequest } from "../Data";
+import { getAllUsers, sendFriendRequest, renderFriendList } from "../Data";
+import { render } from "@testing-library/react";
 const AddFriends = () => {
-  const loggedInStr = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
-  const loggedInUser = JSON.parse(loggedInStr);
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER))
+  );
   const [email, setEmail] = useState("");
 
   const handleSendFriendRequest = () => {
@@ -17,7 +19,19 @@ const AddFriends = () => {
       alert("User Not Found");
     }
   };
+  const renderFriends = () => {
+    console.log("renderFriends", currentUser.friends);
+    return (
+      <>
+        <div className="text-center fs-1 text-danger">Friends</div>
+        <div className="">
+          {currentUser ? renderFriendList(currentUser, setCurrentUser) : null}
+        </div>
 
+        <div className="App p-3"></div>
+      </>
+    );
+  };
   return (
     <div>
       <input
@@ -26,7 +40,10 @@ const AddFriends = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <button onClick={handleSendFriendRequest}>Send Friend Request</button>
+      <button className="btn btn-success " onClick={handleSendFriendRequest}>
+        Send Friend Request
+      </button>
+      <div>{renderFriends()}</div>;
     </div>
   );
 };

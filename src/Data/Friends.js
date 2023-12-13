@@ -104,18 +104,19 @@ const acceptFriendRequest = (requestId, callBack) => {
 
     editUser(currentUser.username, currentUser);
     editUser(requestingUser.username, requestingUser);
-
+    friendRequests.splice(requestIndex, 1);
     localStorage.setItem(
       LOCALSTORAGE.FRIENDREQUEST,
       JSON.stringify(friendRequests)
     );
+    callBack(currentUser);
   }
 };
 
 const rejectFriendRequest = (requestId) => {
   const friendRequests =
     JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
-  const updatedRequests = friendRequests.splice(
+  const updatedRequests = friendRequests.filter(
     (request) => request.id !== requestId
   );
 

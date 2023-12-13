@@ -78,27 +78,40 @@ const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
 
 const renderFriendList = (currentUser, setLoggedInUser) => {
   const allUsers = getAllUsers();
-  return currentUser.friends.map((friendUsername) => {
-    let friendUser = allUsers.filter(
-      (user) => user.username == friendUsername
-    )[0];
-    return friendUser ? (
-      <div key={friendUser.email} className="bg-white w-25">
-        <div className="bg-white">
-          <p>Username: {friendUser.username}</p>
-          <p>Email: {friendUser.email}</p>
-        </div>
-        <button
-          onClick={() =>
-            deleteFriend(friendUser.username, currentUser, setLoggedInUser)
-          }
-          className="delete-friend-btn"
-        >
-          Delete
-        </button>
-      </div>
-    ) : null;
-  });
+  return (
+    <div className="row">
+      {currentUser.friends.map((friendUsername) => {
+        let friendUser = allUsers.find(
+          (user) => user.username === friendUsername
+        );
+        return friendUser ? (
+          <div
+            key={friendUser.email}
+            className="col-sm-12 col-md-6 col-lg-4 mb-3"
+          >
+            <div className="card bg-success">
+              <div className="card-body text-center">
+                <h5 className="card-title">{friendUser.username}</h5>
+                <p className="card-text">{friendUser.email}</p>
+                <button
+                  onClick={() =>
+                    deleteFriend(
+                      friendUser.username,
+                      currentUser,
+                      setLoggedInUser
+                    )
+                  }
+                  className="btn btn-danger"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null;
+      })}
+    </div>
+  );
 };
 
 export {

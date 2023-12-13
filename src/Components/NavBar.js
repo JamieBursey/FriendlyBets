@@ -67,7 +67,7 @@ function NavBar() {
                     className="nav-link text-success"
                     to={NAVIGATION.ADDFRIENDS}
                   >
-                    Add-Friends
+                    Friends
                   </Link>
                 </li>
               </>
