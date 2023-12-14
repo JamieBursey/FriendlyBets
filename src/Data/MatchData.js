@@ -149,20 +149,37 @@ const TodaysGames = () => {
     </div>
   );
 };
-
 const LiveGames = () => {
   const [liveGamesArr, setLiveGamesArr] = useState([]);
+  const navigate = useNavigate();
+  const actionBtnOne = (game) => {
+    const gameDetails = {
+      game_ID: game.id,
+      gameTitle: `${game.awayTeam.abbrev} vs ${game.homeTeam.abbrev}`,
+      gameTime: game.startTimeUTC,
+      gameDay: game.startTimeUTC,
+      homeLogo: game.homeTeam.logo,
+      awayLogo: game.awayTeam.logo,
+    };
+    localStorage.setItem(
+      LOCALSTORAGE.SELECTEDGAME,
+      JSON.stringify(gameDetails)
+    );
+    navigate("/betPage");
+  };
 
   const fetchLiveGames = async () => {
-    const apiUrl = `https://api-web.nhle.com/v1/schedule/now`;
+    const apiUrl = `https://api-web.nhle.com/v1/score/now`;
     try {
       const response = await fetch(apiUrl);
       const allGames = await response.json();
-      const liveGamesList = allGames.games.filter(
-        (game) => game.gameState !== "OFF"
+      console.log("allgames", allGames);
+      const liveGames = allGames.games.filter(
+        (game) => game.gameState === "LIVE" || game.gameState === "CRIT"
       );
-      if (liveGamesList.length > 0) {
-        setLiveGamesArr(liveGamesList);
+
+      if (liveGames.length > 0) {
+        setLiveGamesArr(liveGames);
       }
     } catch (error) {
       console.error("Error fetching live games:", error);
@@ -179,17 +196,48 @@ const LiveGames = () => {
       <div className="row">
         {liveGamesArr.length > 0 ? (
           liveGamesArr.map((game, index) => (
-            <div key={index} className="col-md-4 mb-4">
+            <div key={index} className="col-md-6 mb-4">
               <div className="card">
                 <div className="card-body">
                   <h5 className="card-title">
                     {game.awayTeam.abbrev} vs {game.homeTeam.abbrev}
                   </h5>
-                  <div className="col">
-                    <img src={game.awayTeam.logo} alt=""></img>
+                  <div className="row">
+                    <div className="col">
+                      <img
+                        src={game.awayTeam.logo}
+                        alt=""
+                        className="img-fluid"
+                      ></img>
+                    </div>
+                    <div className="col">
+                      <img
+                        src={game.homeTeam.logo}
+                        alt=""
+                        className="img-fluid"
+                      />
+                    </div>
                   </div>
-                  <div className="col">
-                    <img src={game.homeTeam.logo} alt="" />
+                  <div>
+                    <h1>Score</h1>
+                  </div>
+                  <div className="row">
+                    <div className="col">
+                      <p>{game.awayTeam.score} </p>
+                    </div>
+                    <div className="col">
+                      <p>{game.homeTeam.score}</p>
+                    </div>
+                    <div className="row">
+                      <div className="col">
+                        <button
+                          onClick={() => actionBtnOne(game)}
+                          className="btn btn-primary w-100"
+                        >
+                          Bet Friends
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <p>
