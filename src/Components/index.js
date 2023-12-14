@@ -6,7 +6,7 @@ import Matches from "./Matches";
 import NavBar from "./NavBar";
 import { acceptBets, deleteBets } from "./HandleBets";
 import { SportsDiv } from "./divColors";
-import { TodaysGames } from "./TodaysGames";
+// import { TodaysGames, liveGames } from "./TodaysGames";
 import { CheckBetResults } from "./CheckBets";
 
 export {
@@ -16,8 +16,9 @@ export {
   Matches,
   SportsDiv,
   NavBar,
-  TodaysGames,
+  // TodaysGames,
   acceptBets,
   CheckBetResults,
   deleteBets,
+  // liveGames,
 };

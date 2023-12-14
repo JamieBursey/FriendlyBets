@@ -27,21 +27,41 @@ const FriendRequests = () => {
         LOCALSTORAGE.LOGGEDINUSER,
         JSON.stringify(updatedCurrentUser)
       );
+
       setRequests(requests.filter((request) => request.id !== requestId));
     });
   };
+  const handleRejectFriend = (requestId) => {
+    rejectFriendRequest(requestId);
+    setRequests(requests.filter((request) => request.id !== requestId));
+  };
 
   return (
-    <div>
-      {requests.map((request) => (
-        <div key={request.id}>
-          <p>Friend request from {request.from}</p>
-          <button onClick={() => handleAccept(request.id)}>Accept</button>
-          <button onClick={() => rejectFriendRequest(request.id)}>
-            Reject
-          </button>
-        </div>
-      ))}
+    <div className="container mt-3">
+      <div className="row">
+        {requests.map((request) => (
+          <div key={request.id} className="col-md-4 mb-3">
+            <div className="card text-center">
+              <div className="card-body">
+                <h5 className="card-title text-info">{request.from}</h5>
+                <p className="card-text">Would like to be your friend</p>
+                <button
+                  onClick={() => handleAccept(request.id)}
+                  className="btn btn-primary mr-2"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => handleRejectFriend(request.id)}
+                  className="btn btn-secondary mx-2"
+                >
+                  Decline
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

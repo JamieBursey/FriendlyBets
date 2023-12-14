@@ -16,6 +16,7 @@ import {
 } from "./RegisteredUser";
 import { BettingOptions } from "./BetOptions";
 import { getAllBets, findPlayerIdByName } from "./Bets";
+import { TodaysGames, LiveGames } from "./MatchData";
 // import {} from "./Matches"
 
 export {
@@ -34,4 +35,6 @@ export {
   rejectFriendRequest,
   findUserByEmail,
   renderFriendList,
+  TodaysGames,
+  LiveGames,
 };
