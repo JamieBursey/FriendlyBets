@@ -70,6 +70,16 @@ function NavBar() {
                     Friends
                   </Link>
                 </li>
+                <div className="nav-bar me-2">
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link text-success"
+                      to={NAVIGATION.NOTIFICATIONS}
+                    >
+                      Notifications
+                    </Link>
+                  </li>
+                </div>
               </>
             ) : null}
           </ul>

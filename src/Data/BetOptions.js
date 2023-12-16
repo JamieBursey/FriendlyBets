@@ -1,45 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
 
+const findPlayerID = (roster) => {
+  const randomIndex = Math.floor(Math.random() * roster.length);
+  return roster[randomIndex].playerId;
+};
+const findPlayerName = (roster, playerId) => {
+  const player = roster.find((player) => player.playerId === playerId);
+  return player
+    ? `${player.firstName.default} ${player.lastName.default}`
+    : "Unknown Player";
+};
+const generateBettingOptions = (roster, homeTeam, awayTeam) => {
+  const options = [];
+
+  if (roster.length > 0) {
+    // Generate a separate option for each bet
+    const goalPlayerID = findPlayerID(roster);
+    const scoringPlayerName = findPlayerName(roster, goalPlayerID);
+    options.push(`${scoringPlayerName} will score the first goal`);
+
+    const shotsPlayerID = findPlayerID(roster);
+    const ShootingPlayerName = findPlayerName(roster, shotsPlayerID);
+    options.push(`${ShootingPlayerName} will get 2 shots on net`);
+
+    const assistPlayerID = findPlayerID(roster);
+    const assistPlayerName = findPlayerName(roster, assistPlayerID);
+    options.push(`${assistPlayerName} will make an assist`);
+
+    options.push(`${homeTeam} will win`);
+    options.push(`${awayTeam} will win`);
+  } else {
+    options.push("Game Not Started");
+  }
+
+  return options;
+};
+
+const handleCheckedBet = (option, updateCheckedBets) => {
+  updateCheckedBets(option);
+};
+
 export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
   const [betOptions, setBetOptions] = useState([]);
   const [selectedBet, setSelectedBet] = useState("");
-
-  const findPlayerID = (roster) => {
-    const randomIndex = Math.floor(Math.random() * roster.length);
-    return roster[randomIndex].playerId;
-  };
-  const findPlayerName = (roster, playerId) => {
-    const player = roster.find((player) => player.playerId === playerId);
-    return player
-      ? `${player.firstName.default} ${player.lastName.default}`
-      : "Unknown Player";
-  };
-  const generateBettingOptions = (roster, homeTeam, awayTeam) => {
-    const options = [];
-
-    if (roster.length > 0) {
-      // Generate a separate option for each bet
-      const goalPlayerID = findPlayerID(roster);
-      const scoringPlayerName = findPlayerName(roster, goalPlayerID);
-      options.push(`${scoringPlayerName} will score the first goal`);
-
-      const shotsPlayerID = findPlayerID(roster);
-      const ShootingPlayerName = findPlayerName(roster, shotsPlayerID);
-      options.push(`${ShootingPlayerName} will get 2 shots on net`);
-
-      const assistPlayerID = findPlayerID(roster);
-      const assistPlayerName = findPlayerName(roster, assistPlayerID);
-      options.push(`${assistPlayerName} will make an assist`);
-
-      options.push(`${homeTeam} will win`);
-      options.push(`${awayTeam} will win`);
-    } else {
-      options.push("Game Not Started");
-    }
-
-    return options;
-  };
 
   useEffect(() => {
     const playByPlay = async () => {
@@ -76,9 +80,6 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
     playByPlay();
   }, []);
 
-  const handleCheckedBet = (option) => {
-    updateCheckedBets(option);
-  };
   return (
     <div className="mb-3">
       <select
@@ -86,7 +87,7 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
         value={selectedBet}
         onChange={(e) => {
           setSelectedBet(e.target.value);
-          handleCheckedBet(e.target.value);
+          handleCheckedBet(e.target.value, updateCheckedBets);
         }}
       >
         <option value="">Select a Bet</option>

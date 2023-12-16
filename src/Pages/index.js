@@ -9,7 +9,7 @@ import { FetchFromAPI } from "./Tests/FetchFromAPI";
 import { FullSchedule } from "./FullSchedule";
 import { BetPage } from "./BetPage";
 import { MyBets } from "./MyBets";
-import { FriendRequests } from "./FriendRequests";
+import { FriendRequests } from "./Notifications";
 
 export {
   Home,
