@@ -1,7 +1,6 @@
 import { LOCALSTORAGE } from "../Config";
 import { useState } from "react";
 import { getAllUsers, sendFriendRequest, renderFriendList } from "../Data";
-import { render } from "@testing-library/react";
 const AddFriends = () => {
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER))

@@ -15,7 +15,7 @@ function Home() {
   return (
     <div>
       <Banner />
-      <Buttons />
+      {/* <Buttons /> */}
       <Matches />
     </div>
   );

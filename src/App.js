@@ -36,7 +36,7 @@ function App() {
           <Route path="/fullSchedule" element={<FullSchedule />} />
           <Route path="/betPage" element={<BetPage />} />
           <Route path="/MyBets" element={<MyBets />} />
-          <Route path="/FriendRequest" element={<FriendRequests />} />
+          <Route path="/Notifications" element={<FriendRequests />} />
         </Routes>
       </BrowserRouter>
     </div>

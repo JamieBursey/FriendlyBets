@@ -80,7 +80,7 @@ const TodaysGames = () => {
                 onClick={() => actionBtnTwo(game_ID, gameTitle)}
                 className="btn btn-primary w-100"
               >
-                Full Schedule
+                Weekly Schedule
               </button>
             </div>
           </div>
@@ -192,7 +192,7 @@ const LiveGames = () => {
 
   return (
     <div className="container">
-      <h2 className="text-success">Live Games</h2>
+      <h2 className="text-info">Live Games</h2>
       <div className="row">
         {liveGamesArr.length > 0 ? (
           liveGamesArr.map((game, index) => (
