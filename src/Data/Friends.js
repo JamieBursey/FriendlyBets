@@ -4,6 +4,7 @@ import { findUser, getAllUsers } from "./RegisteredUser";
 const getFriend = (username) => {
   return { username: "", password: "" };
 };
+
 const editUser = (username, newUserObj) => {
   // TODO: search all functions that still work based on username and replace them with email
   let userFound = findUser(username);

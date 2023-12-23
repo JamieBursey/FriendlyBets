@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { LOCALSTORAGE, NAVIGATION } from "../Config";
+import { LOCALSTORAGE } from "../Config";
 import { getAllBets } from "../Data";
 import { CheckBetResults, acceptBets, deleteBets } from "../Components";
 const Loader = () => (
@@ -10,7 +9,6 @@ const Loader = () => (
 );
 
 const MyBets = () => {
-  const navigate = useNavigate();
   const [betsArr, setBetsArr] = useState([]);
   const [activeBetArr, setActiveBetArr] = useState([]);
 
@@ -63,10 +61,10 @@ const MyBets = () => {
           </p>
           <p>Result:{result}</p>
           <div className="row">
-            {betStatus === "pending" && betCreator == loggedInUserUsername ? (
+            {betStatus === "pending" && betCreator === loggedInUserUsername ? (
               <p>Awaiting {friends} Confirmation</p>
             ) : null}
-            {betStatus === "pending" && betCreator != loggedInUserUsername ? (
+            {betStatus === "pending" && betCreator !== loggedInUserUsername ? (
               <>
                 <div className="col">
                   <button
@@ -188,14 +186,14 @@ const MyBets = () => {
       <div>
         <h2>Pending Bets</h2>
         <div className="row justify-content-center">
-          {betsArr.length === 0 ? <Loader /> : betsArr}
+          {betsArr.length === 0 ? "No Pending Bets" : betsArr}
         </div>
       </div>
 
       <div>
         <h2>Active Bets</h2>
         <div className="row justify-content-center">
-          {activeBetArr.length === 0 ? <Loader /> : activeBetArr}
+          {activeBetArr.length === 0 ? "No Pending Bets" : activeBetArr}
         </div>
       </div>
     </div>
