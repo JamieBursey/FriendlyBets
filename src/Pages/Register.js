@@ -7,6 +7,7 @@ function Register() {
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
   const [email, setEmail] = useState(null);
+  const [favoriteTeam, setFavoriteTeam] = useState("");
   const registerUser = () => {
     const existingUsers =
       JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
@@ -20,6 +21,7 @@ function Register() {
         username,
         password,
         email,
+        favoriteTeam,
         bets: [],
         friends: [],
         avatar: [],

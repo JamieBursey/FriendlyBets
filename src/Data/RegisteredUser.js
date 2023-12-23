@@ -40,12 +40,12 @@ const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
   const allUsers = getAllUsers();
   //fetch friend
   let friendUser = allUsers.filter(
-    (user) => user.username == friendUsername
+    (user) => user.username === friendUsername
   )[0];
 
   // modify currentUser friend list
   const updatedFriends = (currentUser.friends = currentUser.friends.filter(
-    (username) => username != friendUser.username
+    (username) => username !== friendUser.username
   ));
   const currenUserUpdate = {
     ...currentUser,
@@ -54,7 +54,7 @@ const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
 
   // modify friendUser friend list
   friendUser.friends = friendUser.friends.filter(
-    (username) => username != currentUser.username
+    (username) => username !== currentUser.username
   );
 
   // Get rid of the original currentUser and friendUser

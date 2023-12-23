@@ -32,7 +32,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/myAccount" element={<MyAccount />} />
           <Route path="/addFriends" element={<AddFriends />} />
-          <Route path="/test/fetchFromAPI" element={<FetchFromAPI />} />
+          {/* <Route path="/test/fetchFromAPI" element={<FetchFromAPI />} /> */}
           <Route path="/fullSchedule" element={<FullSchedule />} />
           <Route path="/betPage" element={<BetPage />} />
           <Route path="/MyBets" element={<MyBets />} />
