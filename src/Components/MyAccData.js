@@ -42,6 +42,7 @@ const MyAccountChanges = () => {
 
   const displayNameChange = (event) => {
     setDisplayName(event.target.value);
+    console.log("change");
   };
 
   const updateDisplayName = () => {
