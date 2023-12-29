@@ -63,10 +63,21 @@ const MyAccountChanges = () => {
   };
 
   const updateEmail = () => {
+    const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS));
+    const checkEmails = allUsers.some((user) => user.email === email);
+    if (checkEmails) {
+      alert("Email in Use");
+      return;
+    }
+
     const newEmail = {
       ...loggedUser,
       email: email,
     };
+    const updatedUsers = allUsers.map((user) =>
+      user.username === loggedUser.username ? newEmail : user
+    );
+    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
     localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newEmail));
   };
 
