@@ -8,7 +8,12 @@ import { acceptBets, deleteBets } from "./HandleBets";
 import { SportsDiv } from "./divColors";
 // import { TodaysGames, liveGames } from "./TodaysGames";
 import { CheckBetResults } from "./CheckBets";
-import { avatarComponent } from "./MyAccData";
+import {
+  avatarComponent,
+  displayName,
+  myAccEmail,
+  MyAccountChanges,
+} from "./MyAccData";
 
 export {
   Banner,
@@ -22,6 +27,9 @@ export {
   CheckBetResults,
   deleteBets,
   avatarComponent,
+  displayName,
+  myAccEmail,
+  MyAccountChanges,
 
   // liveGames,
 };
