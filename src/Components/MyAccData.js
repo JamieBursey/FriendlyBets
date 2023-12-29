@@ -40,6 +40,22 @@ const MyAccountChanges = () => {
   const [displayName, setDisplayName] = useState(loggedUser.username || "");
   const [password, setPassword] = useState("");
 
+  const displayNameChange = (event) => {
+    setDisplayName(event.target.value);
+  };
+
+  const updateDisplayName = () => {
+    const updatedUserInfo = {
+      ...loggedUser,
+      username: displayName,
+    };
+    localStorage.setItem(
+      LOCALSTORAGE.LOGGEDINUSER,
+      JSON.stringify(updatedUserInfo)
+    );
+    console.log("updatedInfo");
+  };
+
   return (
     <>
       <div className="d-flex justify-content-center">
@@ -48,6 +64,7 @@ const MyAccountChanges = () => {
             type="text"
             className="form-control"
             placeholder="Change Users Display Name"
+            onChange={displayNameChange}
             aria-label="Recipient's username"
             aria-describedby="button-addon2"
           />
