@@ -42,6 +42,12 @@ const MyAccountChanges = () => {
 
   const displayNameChange = (event) => {
     setDisplayName(event.target.value);
+    console.log("change");
+  };
+
+  const emailChange = (event) => {
+    setEmail(event.target.value);
+    console.log("change2");
   };
 
   const updateDisplayName = () => {
@@ -54,6 +60,14 @@ const MyAccountChanges = () => {
       JSON.stringify(updatedUserInfo)
     );
     console.log("updatedInfo");
+  };
+
+  const updateEmail = () => {
+    const newEmail = {
+      ...loggedUser,
+      email: email,
+    };
+    localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newEmail));
   };
 
   return (
@@ -71,6 +85,7 @@ const MyAccountChanges = () => {
           <button
             className="btn btn-outline-secondary"
             type="button"
+            onClick={updateDisplayName}
             id="button-addon2"
           >
             Change Name
@@ -83,12 +98,14 @@ const MyAccountChanges = () => {
             type="text"
             className="form-control "
             placeholder="Change Users email"
+            onChange={emailChange}
             aria-label="Recipient's email"
             aria-describedby="button-addon3"
           />
           <button
             className="btn btn-outline-secondary"
             type="button"
+            onClick={updateEmail}
             id="button-addon3"
           >
             Change Email
