@@ -4,7 +4,7 @@ import { LOCALSTORAGE } from "../Config";
 import { useState } from "react";
 
 const loggedUser = JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER));
-
+const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS));
 const displayName = () => {
   const name = loggedUser.username;
   return (
@@ -63,7 +63,6 @@ const MyAccountChanges = () => {
   };
 
   const updateEmail = () => {
-    const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS));
     const checkEmails = allUsers.some((user) => user.email === email);
     if (checkEmails) {
       alert("Email in Use");
@@ -79,8 +78,8 @@ const MyAccountChanges = () => {
     );
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
     localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newEmail));
+    console.log(allUsers);
   };
-
   return (
     <>
       <div className="d-flex justify-content-center">
@@ -125,6 +124,27 @@ const MyAccountChanges = () => {
       </div>
     </>
   );
+};
+
+const AboutMeComponent = () => {
+  const [aboutMe, setAboutMe] = useState(loggedUser.aboutMe || "");
+  const addAboutMe = (event) => {
+    setAboutMe(event.target.value);
+  };
+  const updateAboutMe = () => {
+    const addNewAboutMe = {
+      ...loggedUser,
+      aboutMe: aboutMe,
+    };
+    localStorage.setItem(
+      LOCALSTORAGE.LOGGEDINUSER,
+      JSON.stringify(addNewAboutMe)
+    );
+    const updatedUsers = allUsers.map((user) =>
+      user.aboutMe === loggedUser.AboutMe ? addNewAboutMe : user
+    );
+    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
+  };
 };
 
 export { avatarComponent, displayName, myAccEmail, MyAccountChanges };
