@@ -7,14 +7,13 @@ import { useNavigate } from "react-router-dom";
 const loggedUser = JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER));
 const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS));
 const DisplayName = ({ user }) => {
-  const name = loggedUser.username;
   return (
     <div className="text-center">
       <h6 className="fs-1 text-info">Display Name: {user.username}</h6>
     </div>
   );
 };
-const AvatarComponent = () => {
+const AvatarComponent = ({ user }) => {
   const textSize = {
     fontSize: "100px",
     fontWeight: "bold",
@@ -24,7 +23,7 @@ const AvatarComponent = () => {
       <Avatar
         round={true}
         size="150"
-        name={loggedUser.username}
+        name={user.username}
         textSize={textSize}
       />
     </div>
@@ -32,15 +31,39 @@ const AvatarComponent = () => {
 };
 
 const MyAccEmail = ({ user }) => {
-  const userEmail = loggedUser.email;
   return <div className="text-center text-info fs-2">Email: {user.email}</div>;
 };
-const RenderAboutMe = () => {
-  const userAboutMe = loggedUser.aboutMe;
-  if (userAboutMe)
+const RenderAboutMe = ({ user }) => {
+  if (user.aboutMe)
     return (
-      <div className="text-center text-info fs-2">About: {userAboutMe}</div>
+      <div
+        className="card text-center mx-auto mt-5 text-bg-secondary mb-3"
+        style={{ maxWidth: "18rem" }}
+      >
+        <div className="card-header">About</div>
+        <div className="card-body">
+          <p className="card-text">{user.aboutMe}</p>
+        </div>
+      </div>
     );
+};
+
+const NavigateToUpdate = () => {
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate("/UpdateMyAccount");
+  };
+  return (
+    <div className="text-center mt-5">
+      <button
+        type="button"
+        onClick={handleButtonClick}
+        className="btn btn-outline-light"
+      >
+        Update Account
+      </button>
+    </div>
+  );
 };
 
 const MyAccountChanges = () => {
@@ -141,6 +164,7 @@ const MyAccountChanges = () => {
 };
 
 const AboutMeComponent = () => {
+  const navigate = useNavigate();
   const [aboutMe, setAboutMe] = useState(loggedUser.aboutMe || "");
 
   const addAboutMe = (event) => {
@@ -164,6 +188,7 @@ const AboutMeComponent = () => {
       user.username === loggedUser.username ? addNewAboutMe : user
     );
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
+    navigate("/MyAccount");
   };
   return (
     <div className="d-flex justify-content-center my-3">
@@ -190,4 +215,5 @@ export {
   MyAccountChanges,
   AboutMeComponent,
   RenderAboutMe,
+  NavigateToUpdate,
 };

@@ -4,6 +4,7 @@ import {
   DisplayName,
   MyAccEmail,
   RenderAboutMe,
+  NavigateToUpdate,
 } from "../Components";
 import { LOCALSTORAGE } from "../Config";
 
@@ -23,6 +24,7 @@ function MyAccount() {
       <DisplayName user={loggedUser} />
       <MyAccEmail user={loggedUser} />
       <RenderAboutMe user={loggedUser} />
+      <NavigateToUpdate />
     </>
   );
 }

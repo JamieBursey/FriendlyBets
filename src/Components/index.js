@@ -15,6 +15,7 @@ import {
   MyAccountChanges,
   AboutMeComponent,
   RenderAboutMe,
+  NavigateToUpdate,
 } from "./MyAccData";
 
 export {
@@ -34,6 +35,7 @@ export {
   MyAccountChanges,
   AboutMeComponent,
   RenderAboutMe,
+  NavigateToUpdate,
 
   // liveGames,
 };

@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { LOCALSTORAGE } from "../Config";
 import {
   MyAccountChanges,
   AboutMeComponent,
@@ -5,11 +7,20 @@ import {
 } from "../Components";
 
 function UpdateMyAccount() {
+  const [loggedUser, setLoggedUser] = useState({});
+
+  useEffect(() => {
+    const currentLoggedUser = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+    );
+    setLoggedUser(currentLoggedUser);
+  }, []);
+
   return (
     <>
-      <div>{AvatarComponent()}</div>
-      <div>{MyAccountChanges()}</div>
-      <div>{AboutMeComponent()}</div>
+      <AvatarComponent user={loggedUser} />
+      <MyAccountChanges />
+      <AboutMeComponent />
     </>
   );
 }
