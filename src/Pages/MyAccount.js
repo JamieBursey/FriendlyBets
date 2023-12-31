@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
-  avatarComponent,
-  displayName,
-  myAccEmail,
-  MyAccountChanges,
+  AvatarComponent,
+  DisplayName,
+  MyAccEmail,
+  RenderAboutMe,
 } from "../Components";
+import { LOCALSTORAGE } from "../Config";
 
 function MyAccount() {
+  const [loggedUser, setLoggedUser] = useState({});
+
+  useEffect(() => {
+    const currentLoggedUser = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+    );
+    setLoggedUser(currentLoggedUser);
+  }, []);
+
   return (
     <>
-      <div>{avatarComponent()}</div>;<div>{displayName()}</div>
-      <div>{myAccEmail()}</div>
-      <div>{MyAccountChanges()}</div>
+      <AvatarComponent user={loggedUser} />
+      <DisplayName user={loggedUser} />
+      <MyAccEmail user={loggedUser} />
+      <RenderAboutMe user={loggedUser} />
     </>
   );
 }

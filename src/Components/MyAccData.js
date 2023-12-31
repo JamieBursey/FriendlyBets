@@ -2,18 +2,19 @@ import React from "react";
 import Avatar from "react-avatar";
 import { LOCALSTORAGE } from "../Config";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const loggedUser = JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER));
 const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS));
-const displayName = () => {
+const DisplayName = ({ user }) => {
   const name = loggedUser.username;
   return (
     <div className="text-center">
-      <h6 className="fs-1 text-info">Display Name: {name}</h6>
+      <h6 className="fs-1 text-info">Display Name: {user.username}</h6>
     </div>
   );
 };
-const avatarComponent = () => {
+const AvatarComponent = () => {
   const textSize = {
     fontSize: "100px",
     fontWeight: "bold",
@@ -30,15 +31,22 @@ const avatarComponent = () => {
   );
 };
 
-const myAccEmail = () => {
+const MyAccEmail = ({ user }) => {
   const userEmail = loggedUser.email;
-  return <div className="text-center text-info fs-2">Email: {userEmail}</div>;
+  return <div className="text-center text-info fs-2">Email: {user.email}</div>;
+};
+const RenderAboutMe = () => {
+  const userAboutMe = loggedUser.aboutMe;
+  if (userAboutMe)
+    return (
+      <div className="text-center text-info fs-2">About: {userAboutMe}</div>
+    );
 };
 
 const MyAccountChanges = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState(loggedUser.email || "");
   const [displayName, setDisplayName] = useState(loggedUser.username || "");
-  const [password, setPassword] = useState("");
 
   const displayNameChange = (event) => {
     setDisplayName(event.target.value);
@@ -55,11 +63,16 @@ const MyAccountChanges = () => {
       ...loggedUser,
       username: displayName,
     };
+    const updatedUsers = allUsers.map((user) =>
+      user.username === loggedUser.username ? updatedUserInfo : user
+    );
+    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
     localStorage.setItem(
       LOCALSTORAGE.LOGGEDINUSER,
       JSON.stringify(updatedUserInfo)
     );
-    console.log("updatedInfo");
+    console.log("Navigating to MyAccount");
+    navigate("/MyAccount");
   };
 
   const updateEmail = () => {
@@ -76,9 +89,10 @@ const MyAccountChanges = () => {
     const updatedUsers = allUsers.map((user) =>
       user.username === loggedUser.username ? newEmail : user
     );
+
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
     localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newEmail));
-    console.log(allUsers);
+    navigate("/MyAccount");
   };
   return (
     <>
@@ -128,23 +142,52 @@ const MyAccountChanges = () => {
 
 const AboutMeComponent = () => {
   const [aboutMe, setAboutMe] = useState(loggedUser.aboutMe || "");
+
   const addAboutMe = (event) => {
     setAboutMe(event.target.value);
+    console.log("render?");
   };
+
   const updateAboutMe = () => {
     const addNewAboutMe = {
       ...loggedUser,
       aboutMe: aboutMe,
     };
+    console.log("test render");
+
     localStorage.setItem(
       LOCALSTORAGE.LOGGEDINUSER,
       JSON.stringify(addNewAboutMe)
     );
+
     const updatedUsers = allUsers.map((user) =>
-      user.aboutMe === loggedUser.AboutMe ? addNewAboutMe : user
+      user.username === loggedUser.username ? addNewAboutMe : user
     );
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
   };
+  return (
+    <div className="d-flex justify-content-center my-3">
+      <div className="input-group w-25">
+        <textarea
+          className="form-control"
+          placeholder="Tell us about yourself"
+          onChange={addAboutMe}
+        />
+      </div>
+      <div className="d-flex justify-content-center">
+        <button className="btn btn-outline-secondary" onClick={updateAboutMe}>
+          Update About Me
+        </button>
+      </div>
+    </div>
+  );
 };
 
-export { avatarComponent, displayName, myAccEmail, MyAccountChanges };
+export {
+  AvatarComponent,
+  DisplayName,
+  MyAccEmail,
+  MyAccountChanges,
+  AboutMeComponent,
+  RenderAboutMe,
+};

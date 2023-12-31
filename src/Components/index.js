@@ -9,10 +9,12 @@ import { SportsDiv } from "./divColors";
 // import { TodaysGames, liveGames } from "./TodaysGames";
 import { CheckBetResults } from "./CheckBets";
 import {
-  avatarComponent,
-  displayName,
-  myAccEmail,
+  AvatarComponent,
+  DisplayName,
+  MyAccEmail,
   MyAccountChanges,
+  AboutMeComponent,
+  RenderAboutMe,
 } from "./MyAccData";
 
 export {
@@ -26,10 +28,12 @@ export {
   acceptBets,
   CheckBetResults,
   deleteBets,
-  avatarComponent,
-  displayName,
-  myAccEmail,
+  AvatarComponent,
+  DisplayName,
+  MyAccEmail,
   MyAccountChanges,
+  AboutMeComponent,
+  RenderAboutMe,
 
   // liveGames,
 };
