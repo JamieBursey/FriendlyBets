@@ -15,6 +15,7 @@ import {
   BetPage,
   MyBets,
   FriendRequests,
+  UpdateMyAccount,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -37,6 +38,7 @@ function App() {
           <Route path="/betPage" element={<BetPage />} />
           <Route path="/MyBets" element={<MyBets />} />
           <Route path="/Notifications" element={<FriendRequests />} />
+          <Route path="/UpdateMyAccount" element={<UpdateMyAccount />} />
         </Routes>
       </BrowserRouter>
     </div>

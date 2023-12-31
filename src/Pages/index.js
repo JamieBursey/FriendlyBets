@@ -5,11 +5,12 @@ import { Login } from "./Login";
 import { Register } from "./Register";
 import { MyAccount } from "./MyAccount";
 import { AddFriends } from "./AddFriends";
-import { FetchFromAPI } from "./Tests/FetchFromAPI";
+// import { FetchFromAPI } from "./Tests/FetchFromAPI";
 import { FullSchedule } from "./FullSchedule";
 import { BetPage } from "./BetPage";
 import { MyBets } from "./MyBets";
 import { FriendRequests } from "./Notifications";
+import { UpdateMyAccount } from "./UpdateMyAcc";
 
 export {
   Home,
@@ -19,9 +20,10 @@ export {
   Register,
   MyAccount,
   AddFriends,
-  FetchFromAPI,
+  // FetchFromAPI,
   FullSchedule,
   BetPage,
   MyBets,
   FriendRequests,
+  UpdateMyAccount,
 };

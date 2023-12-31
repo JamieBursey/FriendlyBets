@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
-import {
-  AvatarComponent,
-  DisplayName,
-  MyAccEmail,
-  RenderAboutMe,
-  NavigateToUpdate,
-} from "../Components";
+import { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
+import {
+  MyAccountChanges,
+  AboutMeComponent,
+  AvatarComponent,
+} from "../Components";
 
-function MyAccount() {
+function UpdateMyAccount() {
   const [loggedUser, setLoggedUser] = useState({});
 
   useEffect(() => {
@@ -21,12 +19,10 @@ function MyAccount() {
   return (
     <>
       <AvatarComponent user={loggedUser} />
-      <DisplayName user={loggedUser} />
-      <MyAccEmail user={loggedUser} />
-      <RenderAboutMe user={loggedUser} />
-      <NavigateToUpdate />
+      <MyAccountChanges />
+      <AboutMeComponent />
     </>
   );
 }
 
-export { MyAccount };
+export { UpdateMyAccount };
