@@ -33,15 +33,22 @@ const AddFriends = () => {
   };
   return (
     <div>
-      <input
-        type="email"
-        placeholder="Friends Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button className="btn btn-success " onClick={handleSendFriendRequest}>
-        Send Friend Request
-      </button>
+      <div className="input-group mb-3 mt-3 w-50 mx-auto">
+        <input
+          type="email"
+          className="form-control me-1"
+          placeholder="Friends Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button
+          className="btn btn-outline-success"
+          onClick={handleSendFriendRequest}
+          type="button"
+        >
+          Send Friend Request
+        </button>
+      </div>
       <div>{renderFriends()}</div>;
     </div>
   );

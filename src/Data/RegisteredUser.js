@@ -89,10 +89,19 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
             key={friendUser.email}
             className="col-sm-12 col-md-6 col-lg-4 mb-3"
           >
-            <div className="card bg-success">
+            <div className="card bg-info">
               <div className="card-body text-center">
                 <h5 className="card-title">{friendUser.username}</h5>
                 <p className="card-text">{friendUser.email}</p>
+                <div
+                  className="card text-center mx-auto mt-2 text-bg-secondary mb-3"
+                  style={{ maxWidth: "18rem" }}
+                >
+                  <div className="card-header">About</div>
+                  <div className="card-body">
+                    <p className="card-text">{friendUser.aboutMe}</p>
+                  </div>
+                </div>
                 <button
                   onClick={() =>
                     deleteFriend(
@@ -101,7 +110,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                       setLoggedInUser
                     )
                   }
-                  className="btn btn-danger"
+                  className="btn btn-outline-danger"
                 >
                   Delete
                 </button>
