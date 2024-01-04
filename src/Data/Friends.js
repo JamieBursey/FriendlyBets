@@ -36,6 +36,10 @@ const sendFriendRequest = (toUserName) => {
     alert("Friend already added");
     return;
   }
+  if (loggedInUser.username === toUserName) {
+    alert("Can Not Add yourself");
+    return;
+  }
 
   const newRequest = {
     id: `${fromUserName}_${toUserName}`,
