@@ -84,14 +84,28 @@ const MyBets = () => {
                 </div>
               </>
             ) : (
-              <button
-                onClick={() => {
-                  CheckBetResults(betId, fetchBetData);
-                }}
-                className="btn btn-primary w-100"
-              >
-                Refresh Bet
-              </button>
+              <div className="row">
+                <div className="col">
+                  <button
+                    onClick={() => {
+                      CheckBetResults(betId, fetchBetData);
+                    }}
+                    className="btn btn-primary w-100"
+                  >
+                    Results
+                  </button>
+                </div>
+                <div className="col">
+                  <button
+                    onClick={() => {
+                      deleteBets(betId, fetchBetData);
+                    }}
+                    className="btn btn-primary w-100"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </div>
