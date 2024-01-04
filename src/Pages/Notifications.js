@@ -39,28 +39,36 @@ const FriendRequests = () => {
   return (
     <div className="container mt-3">
       <div className="row">
-        {requests.map((request) => (
-          <div key={request.id} className="col-md-4 mb-3">
-            <div className="card text-center">
-              <div className="card-body">
-                <h5 className="card-title text-info">{request.from}</h5>
-                <p className="card-text">Would like to be your friend</p>
-                <button
-                  onClick={() => handleAccept(request.id)}
-                  className="btn btn-primary mr-2"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() => handleRejectFriend(request.id)}
-                  className="btn btn-secondary mx-2"
-                >
-                  Decline
-                </button>
+        {requests.length >= 1 ? (
+          requests.map((request) => (
+            <div key={request.id} className="col-md-4 mb-3">
+              <div className="card text-center">
+                <div className="card-body">
+                  <h5 className="card-title text-info">{request.from}</h5>
+                  <p className="card-text">Would like to be your friend</p>
+                  <button
+                    onClick={() => handleAccept(request.id)}
+                    className="btn btn-primary mr-2"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleRejectFriend(request.id)}
+                    className="btn btn-secondary mx-2"
+                  >
+                    Decline
+                  </button>
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div>
+            <h2 className="text-center text-info">
+              Sorry, it seems you have no notifications
+            </h2>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

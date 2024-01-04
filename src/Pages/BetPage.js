@@ -83,8 +83,10 @@ const BetPage = () => {
           </select>
         </div>
         <input
+          style={{ backgroundColor: "#f2f2f2", borderColor: "gray" }}
+          className="mb-3"
           type="text"
-          placeholder="Set Wager"
+          placeholder="Type Your Wager"
           onChange={(event) => setWager(event.target.value)}
         ></input>
         <>
@@ -97,10 +99,7 @@ const BetPage = () => {
         <button className="btn btn-primary mx-1" onClick={placeBet}>
           Place Bet
         </button>
-        <button
-          className="btn btn-primary"
-          onClick={() => console.log(setWager)}
-        >
+        <button className="btn btn-primary" onClick={() => navigate("/MyBets")}>
           Check Bets
         </button>
       </div>
