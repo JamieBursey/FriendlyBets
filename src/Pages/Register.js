@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
+import { TeamDropdown } from "../Data";
 
 function Register() {
   const navigate = useNavigate();
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
   const [email, setEmail] = useState(null);
+  const [favoriteTeam, setFavoriteTeam] = useState(null);
   const registerUser = () => {
     const existingUsers =
       JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
@@ -20,6 +22,7 @@ function Register() {
         username,
         password,
         email,
+        favoriteTeam,
         bets: [],
         friends: [],
         avatar: [],
@@ -37,6 +40,7 @@ function Register() {
           <h5 className="card-title text-center text-primary">
             Time To Register!
           </h5>
+          <TeamDropdown teamSelect={setFavoriteTeam} />
           <div className="mb-3">
             <div className="mb-3">
               <input

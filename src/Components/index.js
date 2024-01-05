@@ -16,6 +16,7 @@ import {
   AboutMeComponent,
   RenderAboutMe,
   NavigateToUpdate,
+  RenderFavoriteTeam,
 } from "./MyAccData";
 
 export {
@@ -36,6 +37,6 @@ export {
   AboutMeComponent,
   RenderAboutMe,
   NavigateToUpdate,
-
+  RenderFavoriteTeam,
   // liveGames,
 };
