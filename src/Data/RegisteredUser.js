@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { LOCALSTORAGE } from "../Config";
 
 const getAllUsers = () => {
@@ -123,10 +124,62 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
   );
 };
 
+const TeamDropdown = ({ teamSelect }) => {
+  const [team, setTeam] = useState([]);
+
+  useEffect(() => {
+    const fetchTeam = async () => {
+      const response = await fetch("https://api-web.nhle.com/v1/schedule/now");
+      const teamData = await response.json();
+
+      const games = teamData.gameWeek[0].games;
+      const teamLogos = [];
+
+      games.forEach((game) => {
+        if (!teamLogos.includes(game.awayTeam.logo)) {
+          teamLogos.push(game.awayTeam.logo);
+        }
+        if (!teamLogos.includes(game.homeTeam.logo)) {
+          teamLogos.push(game.homeTeam.logo);
+        }
+      });
+      setTeam(teamLogos);
+    };
+    fetchTeam();
+  }, []);
+  return (
+    <div class="dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Dropdown button
+      </button>
+      <ul class="dropdown-menu">
+        {team.map((logo, index) => {
+          return (
+            <li key={index}>
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => teamSelect(logo)}
+              >
+                <img src={logo} style={{ width: "30px", height: "30px" }} />
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
 export {
   getAllUsers,
   checkUserPassword,
   findUser,
   findUserByEmail,
   renderFriendList,
+  TeamDropdown,
 };

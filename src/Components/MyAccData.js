@@ -19,13 +19,17 @@ const AvatarComponent = ({ user }) => {
     fontWeight: "bold",
   };
   return (
-    <div className="text-center">
-      <Avatar
-        round={true}
-        size="150"
-        name={user.username}
-        textSize={textSize}
-      />
+    <div className="row">
+      <div className="col">
+        {" "}
+        <Avatar
+          round={true}
+          size="150"
+          name={user.username}
+          textSize={textSize}
+        />
+      </div>
+      <div className="col">{RenderFavoriteTeam({ user })}</div>
     </div>
   );
 };
@@ -47,7 +51,16 @@ const RenderAboutMe = ({ user }) => {
       </div>
     );
 };
-
+const RenderFavoriteTeam = ({ user }) => {
+  return (
+    <div className="text-center text-info fs-2">
+      <img
+        src={user.favoriteTeam}
+        style={{ width: "100px", height: "100px" }}
+      />
+    </div>
+  );
+};
 const NavigateToUpdate = () => {
   const navigate = useNavigate();
   const handleButtonClick = () => {
@@ -216,4 +229,5 @@ export {
   AboutMeComponent,
   RenderAboutMe,
   NavigateToUpdate,
+  RenderFavoriteTeam,
 };
