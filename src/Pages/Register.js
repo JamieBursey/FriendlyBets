@@ -40,7 +40,6 @@ function Register() {
           <h5 className="card-title text-center text-primary">
             Time To Register!
           </h5>
-          <TeamDropdown teamSelect={setFavoriteTeam} />
           <div className="mb-3">
             <div className="mb-3">
               <input
@@ -60,8 +59,7 @@ function Register() {
             />
           </div>
 
-          <div className="mb-3 row">
-            <label className="form-label">Password</label>
+          <div className="mb-3">
             <input
               type="password"
               className="form-control"
@@ -70,6 +68,7 @@ function Register() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
+          <TeamDropdown teamSelect={setFavoriteTeam} />
           <div className="row text-center">
             <div className="col-md-12 p-2">
               <button
