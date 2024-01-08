@@ -17,6 +17,7 @@ import {
   RenderAboutMe,
   NavigateToUpdate,
   RenderFavoriteTeam,
+  UpdateFavTeam,
 } from "./MyAccData";
 
 export {
@@ -38,5 +39,6 @@ export {
   RenderAboutMe,
   NavigateToUpdate,
   RenderFavoriteTeam,
+  UpdateFavTeam,
   // liveGames,
 };

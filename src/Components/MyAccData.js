@@ -1,9 +1,13 @@
 import React from "react";
 import Avatar from "react-avatar";
 import { LOCALSTORAGE } from "../Config";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+const dropDownScroll = {
+  maxHeight: "200px",
+  overflow: "scroll",
+};
 const loggedUser = JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER));
 const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS));
 const DisplayName = ({ user }) => {
@@ -221,6 +225,99 @@ const AboutMeComponent = () => {
   );
 };
 
+const UpdateFavTeam = () => {
+  const navigate = useNavigate();
+  const loggedUser = JSON.parse(
+    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+  );
+  const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
+  const [favTeam, setFavTeam] = useState(loggedUser.favoriteTeam || "");
+  const [teamLogos, setTeamLogos] = useState([]);
+
+  useEffect(() => {
+    const fetchTeam = async () => {
+      const response = await fetch("https://api-web.nhle.com/v1/schedule/now");
+      const teamData = await response.json();
+      const teamLogos = [];
+
+      teamData.gameWeek.forEach((week) => {
+        week.games.forEach((game) => {
+          console.log(teamData);
+          const homeLogo = game.homeTeam.logo;
+          const awayLogo = game.awayTeam.logo;
+          teamLogos.push(homeLogo);
+          teamLogos.push(awayLogo);
+        });
+      });
+      setTeamLogos(teamLogos);
+    };
+
+    fetchTeam();
+  }, []);
+
+  const newTeamChange = () => {
+    const ChangeTeam = {
+      ...loggedUser,
+      favoriteTeam: favTeam,
+    };
+    localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(ChangeTeam));
+    const updatedUsers = allUsers.map((user) =>
+      user.username === loggedUser.username ? ChangeTeam : user
+    );
+    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
+    navigate("/MyAccount");
+  };
+
+  return (
+    <div className="text-center">
+      <div
+        className="btn-group"
+        role="group"
+        aria-label="Button group with nested dropdown"
+      >
+        <div className="btn-group" role="group">
+          <button
+            type="button"
+            className="btn btn-secondary dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Select Favorite Team
+          </button>
+          <ul className="dropdown-menu" style={dropDownScroll}>
+            {teamLogos.map((logo, index) => (
+              <li key={index}>
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={() => {
+                    setFavTeam(logo);
+                  }}
+                >
+                  <img
+                    src={logo}
+                    alt={`Team ${index}`}
+                    style={{ width: "30px", height: "30px" }}
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <button
+          type="button"
+          className="btn btn-outline-secondary"
+          onClick={newTeamChange}
+        >
+          Update Favorite Team
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default UpdateFavTeam;
+
 export {
   AvatarComponent,
   DisplayName,
@@ -230,4 +327,5 @@ export {
   RenderAboutMe,
   NavigateToUpdate,
   RenderFavoriteTeam,
+  UpdateFavTeam,
 };

@@ -4,6 +4,7 @@ import {
   MyAccountChanges,
   AboutMeComponent,
   AvatarComponent,
+  UpdateFavTeam,
 } from "../Components";
 
 function UpdateMyAccount() {
@@ -20,6 +21,7 @@ function UpdateMyAccount() {
     <>
       <AvatarComponent user={loggedUser} />
       <MyAccountChanges />
+      <UpdateFavTeam />
       <AboutMeComponent />
     </>
   );
