@@ -233,6 +233,7 @@ const UpdateFavTeam = () => {
   const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
   const [favTeam, setFavTeam] = useState(loggedUser.favoriteTeam || "");
   const [teamLogos, setTeamLogos] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState("");
 
   useEffect(() => {
     const fetchTeam = async () => {
@@ -242,11 +243,14 @@ const UpdateFavTeam = () => {
 
       teamData.gameWeek.forEach((week) => {
         week.games.forEach((game) => {
-          console.log(teamData);
           const homeLogo = game.homeTeam.logo;
           const awayLogo = game.awayTeam.logo;
-          teamLogos.push(homeLogo);
-          teamLogos.push(awayLogo);
+          if (!teamLogos.includes(homeLogo)) {
+            teamLogos.push(homeLogo);
+          }
+          if (!teamLogos.includes(awayLogo)) {
+            teamLogos.push(awayLogo);
+          }
         });
       });
       setTeamLogos(teamLogos);
@@ -267,6 +271,10 @@ const UpdateFavTeam = () => {
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
     navigate("/MyAccount");
   };
+  const handleSelectedTeam = (logo) => {
+    setFavTeam(logo);
+    setSelectedTeam(logo);
+  };
 
   return (
     <div className="text-center">
@@ -282,7 +290,14 @@ const UpdateFavTeam = () => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Select Favorite Team
+            {selectedTeam ? (
+              <img
+                src={selectedTeam}
+                style={{ width: "30px", height: "30px" }}
+              />
+            ) : (
+              "Select Favorite Team"
+            )}
           </button>
           <ul className="dropdown-menu" style={dropDownScroll}>
             {teamLogos.map((logo, index) => (
@@ -291,7 +306,7 @@ const UpdateFavTeam = () => {
                   className="dropdown-item"
                   href="#"
                   onClick={() => {
-                    setFavTeam(logo);
+                    handleSelectedTeam(logo);
                   }}
                 >
                   <img

@@ -126,45 +126,56 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
 
 const TeamDropdown = ({ teamSelect }) => {
   const [team, setTeam] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState("");
 
   useEffect(() => {
     const fetchTeam = async () => {
       const response = await fetch("https://api-web.nhle.com/v1/schedule/now");
       const teamData = await response.json();
-
-      const games = teamData.gameWeek[0].games;
       const teamLogos = [];
 
-      games.forEach((game) => {
-        if (!teamLogos.includes(game.awayTeam.logo)) {
-          teamLogos.push(game.awayTeam.logo);
-        }
-        if (!teamLogos.includes(game.homeTeam.logo)) {
-          teamLogos.push(game.homeTeam.logo);
-        }
+      teamData.gameWeek.forEach((week) => {
+        week.games.forEach((game) => {
+          const homeLogo = game.homeTeam.logo;
+          const awayLogo = game.awayTeam.logo;
+          if (!teamLogos.includes(homeLogo)) {
+            teamLogos.push(homeLogo);
+          }
+          if (!teamLogos.includes(awayLogo)) {
+            teamLogos.push(awayLogo);
+          }
+        });
       });
       setTeam(teamLogos);
     };
     fetchTeam();
   }, []);
+  const handleSelectedTeam = (logo) => {
+    setSelectedTeam(logo);
+    teamSelect(logo);
+  };
   return (
-    <div class="dropdown">
+    <div className="dropdown ">
       <button
-        class="btn btn-secondary dropdown-toggle"
+        className="btn btn-outline-secondary dropdown-toggle"
         type="button"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        Dropdown button
+        {selectedTeam ? (
+          <img src={selectedTeam} style={{ width: "30px", height: "30px" }} />
+        ) : (
+          "Select Favorite Team"
+        )}
       </button>
-      <ul class="dropdown-menu">
+      <ul className="dropdown-menu">
         {team.map((logo, index) => {
           return (
             <li key={index}>
               <a
                 className="dropdown-item"
                 href="#"
-                onClick={() => teamSelect(logo)}
+                onClick={() => handleSelectedTeam(logo)}
               >
                 <img src={logo} style={{ width: "30px", height: "30px" }} />
               </a>
