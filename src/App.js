@@ -18,9 +18,14 @@ import {
   UpdateMyAccount,
 } from "./Pages";
 import { NavBar } from "./Components";
+import { adminUser } from "./Data";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    adminUser();
+  }, []);
   return (
     <div className="bg-dark" style={{ minHeight: "100vh" }}>
       <BrowserRouter>
