@@ -5,6 +5,7 @@ import {
   editUser,
   acceptFriendRequest,
   rejectFriendRequest,
+  renderFriendList,
 } from "./Friends";
 import { PlayerData } from "./Players";
 import {
@@ -12,8 +13,8 @@ import {
   findUser,
   checkUserPassword,
   findUserByEmail,
-  renderFriendList,
   TeamDropdown,
+  adminUser,
 } from "./RegisteredUser";
 import { BettingOptions } from "./BetOptions";
 import { getAllBets, findPlayerIdByName } from "./Bets";
@@ -39,4 +40,5 @@ export {
   TodaysGames,
   LiveGames,
   TeamDropdown,
+  adminUser,
 };

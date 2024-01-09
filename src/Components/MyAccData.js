@@ -23,9 +23,8 @@ const AvatarComponent = ({ user }) => {
     fontWeight: "bold",
   };
   return (
-    <div className="row">
-      <div className="col">
-        {" "}
+    <div className="row mt-2 align-items-center text-center">
+      <div className="col ms-5 d-flex justify-content-end">
         <Avatar
           round={true}
           size="150"
@@ -33,7 +32,9 @@ const AvatarComponent = ({ user }) => {
           textSize={textSize}
         />
       </div>
-      <div className="col">{RenderFavoriteTeam({ user })}</div>
+      <div className="col d-flex justify-content-start">
+        {RenderFavoriteTeam({ user })}
+      </div>
     </div>
   );
 };
