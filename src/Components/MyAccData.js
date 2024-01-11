@@ -59,11 +59,15 @@ const RenderAboutMe = ({ user }) => {
 const RenderFavoriteTeam = ({ user }) => {
   return (
     <div className="text-center text-info fs-2">
-      <img
-        src={user.favoriteTeam}
-        alt="favorite_Team"
-        style={{ width: "100px", height: "100px" }}
-      />
+      {user.favoriteTeam ? (
+        <img
+          src={user.favoriteTeam}
+          alt="favorite_Team"
+          style={{ width: "100px", height: "100px" }}
+        />
+      ) : (
+        <p>Select team in update account</p>
+      )}
     </div>
   );
 };
@@ -87,8 +91,11 @@ const NavigateToUpdate = () => {
 
 const MyAccountChanges = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState(loggedUser.email || "");
-  const [displayName, setDisplayName] = useState(loggedUser.username || "");
+  console.log("email error", loggedUser);
+  const [email, setEmail] = useState(loggedUser ? loggedUser.email : "");
+  const [displayName, setDisplayName] = useState(
+    loggedUser ? loggedUser.username : ""
+  );
 
   const displayNameChange = (event) => {
     setDisplayName(event.target.value);
@@ -181,7 +188,7 @@ const MyAccountChanges = () => {
 
 const AboutMeComponent = () => {
   const navigate = useNavigate();
-  const [aboutMe, setAboutMe] = useState(loggedUser.aboutMe || "");
+  const [aboutMe, setAboutMe] = useState(loggedUser ? loggedUser.aboutMe : "");
 
   const addAboutMe = (event) => {
     setAboutMe(event.target.value);

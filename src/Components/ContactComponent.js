@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
 
 function RenderContact() {
   const [formInput, setFormInput] = useState({
+    id: "",
     name: "",
     email: "",
     subject: "",
@@ -14,7 +15,15 @@ function RenderContact() {
     setFormInput((prevState) => ({ ...prevState, [name]: value }));
   };
   const handleSubmit = () => {
-    const adminMessages = localStorage.getItem(LOCALSTORAGE.ADMIN);
+    const adminMessages = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.ADMIN_MESSSAGES) || "[]"
+    );
+    const newMessage = [...adminMessages, formInput];
+    localStorage.setItem(
+      LOCALSTORAGE.ADMIN_MESSSAGES,
+      JSON.stringify(newMessage)
+    );
+
     console.log(adminMessages);
     console.log("input", formInput);
   };
@@ -126,4 +135,60 @@ function RenderContact() {
   );
 }
 
-export { RenderContact };
+const AdminMessages = () => {
+  const [messages, setMessages] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const loggedInUser = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+    );
+    const adminMessages = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.ADMIN_MESSSAGES) || "[]"
+    );
+
+    if (loggedInUser && loggedInUser.username === "Admin") {
+      setIsAdmin(true);
+      setMessages(adminMessages);
+    }
+  }, []);
+
+  if (!isAdmin) {
+    return;
+  }
+  return (
+    <div className="container">
+      {messages.length > 0 ? (
+        messages.map((message, index) => (
+          <div className="card">
+            <div class="card-body">
+              <h5 class="card-title">{message.Name}</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">
+                {message.email}
+              </h6>
+              <div
+                className="card text-center mx-auto mt-2 mb-3"
+                style={{ maxWidth: "18rem", backgroundColor: "#d6d6d6" }}
+              >
+                <div className="card-header">{message.subject}</div>
+                <div className="card-body">
+                  <p className="card-text">{message.message}</p>
+                </div>
+              </div>
+
+              <a href="#" class="card-link">
+                Card link
+              </a>
+              <a href="#" class="card-link">
+                Another link
+              </a>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p></p>
+      )}
+    </div>
+  );
+};
+export { RenderContact, AdminMessages };

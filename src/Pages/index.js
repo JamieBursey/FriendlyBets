@@ -9,8 +9,8 @@ import { AddFriends } from "./AddFriends";
 import { FullSchedule } from "./FullSchedule";
 import { BetPage } from "./BetPage";
 import { MyBets } from "./MyBets";
-import { FriendRequests } from "./Notifications";
 import { UpdateMyAccount } from "./UpdateMyAcc";
+import { RenderRequests } from "./Notifications";
 
 export {
   Home,
@@ -24,6 +24,6 @@ export {
   FullSchedule,
   BetPage,
   MyBets,
-  FriendRequests,
   UpdateMyAccount,
+  RenderRequests,
 };
