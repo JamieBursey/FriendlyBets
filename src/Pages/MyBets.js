@@ -121,7 +121,6 @@ const MyBets = () => {
     let currentUser = JSON.parse(
       localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
     );
-    console.log("allbet", allBets);
     let pendingBets = allBets.filter(
       (bet) =>
         (bet.betCreator === currentUser.username ||

@@ -19,6 +19,7 @@ import {
   RenderFavoriteTeam,
   UpdateFavTeam,
 } from "./MyAccData";
+import { RenderContact } from "./ContactComponent";
 
 export {
   Banner,
@@ -40,5 +41,6 @@ export {
   NavigateToUpdate,
   RenderFavoriteTeam,
   UpdateFavTeam,
+  RenderContact,
   // liveGames,
 };
