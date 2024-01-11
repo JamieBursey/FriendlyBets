@@ -22,7 +22,6 @@ const findPlayerIdByName = (playerName, rosterSpots) => {
       player.firstName.default === firstName &&
       player.lastName.default === lastName
     ) {
-      console.log(player.playerId);
       return player.playerId;
     }
   }

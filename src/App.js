@@ -10,7 +10,6 @@ import {
   Register,
   MyAccount,
   AddFriends,
-  FetchFromAPI,
   FullSchedule,
   BetPage,
   MyBets,

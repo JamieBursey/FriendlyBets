@@ -42,8 +42,8 @@ const adminUser = () => {
   if (!adminCheck) {
     const admin = {
       username: "Admin",
-      password: "adminpassword",
-      email: "admin@example.com",
+      password: "admin",
+      email: "admin@email.com",
       favoriteTeam: "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
       bets: [],
       friends: [],

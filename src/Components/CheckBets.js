@@ -35,7 +35,6 @@ const CheckBetResults = async (betId, callback) => {
       `https://api-web.nhle.com/v1/gamecenter/${gameNumber}/play-by-play`
     );
     const resultsData = await response.json();
-    console.log("results", resultsData);
 
     const isGameFinished =
       resultsData.gameState === "OFF" ||

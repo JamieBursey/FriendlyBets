@@ -61,6 +61,7 @@ const RenderFavoriteTeam = ({ user }) => {
     <div className="text-center text-info fs-2">
       <img
         src={user.favoriteTeam}
+        alt="favorite_Team"
         style={{ width: "100px", height: "100px" }}
       />
     </div>
@@ -91,12 +92,10 @@ const MyAccountChanges = () => {
 
   const displayNameChange = (event) => {
     setDisplayName(event.target.value);
-    console.log("change");
   };
 
   const emailChange = (event) => {
     setEmail(event.target.value);
-    console.log("change2");
   };
 
   const updateDisplayName = () => {
@@ -112,7 +111,6 @@ const MyAccountChanges = () => {
       LOCALSTORAGE.LOGGEDINUSER,
       JSON.stringify(updatedUserInfo)
     );
-    console.log("Navigating to MyAccount");
     navigate("/MyAccount");
   };
 
@@ -195,7 +193,6 @@ const AboutMeComponent = () => {
       ...loggedUser,
       aboutMe: aboutMe,
     };
-    console.log("test render");
 
     localStorage.setItem(
       LOCALSTORAGE.LOGGEDINUSER,
@@ -294,6 +291,7 @@ const UpdateFavTeam = () => {
             {selectedTeam ? (
               <img
                 src={selectedTeam}
+                alt="selected_Team"
                 style={{ width: "30px", height: "30px" }}
               />
             ) : (
@@ -305,7 +303,7 @@ const UpdateFavTeam = () => {
               <li key={index}>
                 <a
                   className="dropdown-item"
-                  href="#"
+                  href="/#"
                   onClick={() => {
                     handleSelectedTeam(logo);
                   }}

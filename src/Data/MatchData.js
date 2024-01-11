@@ -110,7 +110,6 @@ const TodaysGames = () => {
       const todayStr = today.toISOString().slice(0, 10);
 
       const todaysGames = games.gameWeek.find((day) => day.date === todayStr);
-      console.log(todaysGames);
 
       todaysGames.games.forEach((game) => {
         const awayTeamID = game.awayTeam.abbrev;
