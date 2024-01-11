@@ -19,7 +19,8 @@ import {
   RenderFavoriteTeam,
   UpdateFavTeam,
 } from "./MyAccData";
-import { RenderContact } from "./ContactComponent";
+import { RenderContact, AdminMessages } from "./ContactComponent";
+import { FriendRequests } from "./NotificationComp";
 
 export {
   Banner,
@@ -42,5 +43,6 @@ export {
   RenderFavoriteTeam,
   UpdateFavTeam,
   RenderContact,
+  FriendRequests,
   // liveGames,
 };

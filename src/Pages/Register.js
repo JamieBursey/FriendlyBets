@@ -26,6 +26,7 @@ function Register() {
         bets: [],
         friends: [],
         avatar: [],
+        isAdmin: false,
       };
       existingUsers.push(newUser);
       localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(existingUsers));

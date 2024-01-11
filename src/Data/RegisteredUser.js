@@ -48,6 +48,8 @@ const adminUser = () => {
       bets: [],
       friends: [],
       avatar: [],
+      messages: [],
+      isAdmin: true,
     };
     allUsers.push(admin);
   }
