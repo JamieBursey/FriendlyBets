@@ -15,6 +15,8 @@ import {
   MyBets,
   RenderRequests,
   UpdateMyAccount,
+  UserManagement,
+  EditUserAsAdmin,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { adminUser } from "./Data";
@@ -43,6 +45,9 @@ function App() {
           <Route path="/MyBets" element={<MyBets />} />
           <Route path="/Notifications" element={<RenderRequests />} />
           <Route path="/UpdateMyAccount" element={<UpdateMyAccount />} />
+          <Route path="/UpdateMyAccount" element={<UpdateMyAccount />} />
+          <Route path="/UserManagement" element={<UserManagement />} />
+          <Route path="/EditUserAsAdmin" element={<EditUserAsAdmin />} />
         </Routes>
       </BrowserRouter>
     </div>

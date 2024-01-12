@@ -11,6 +11,8 @@ import { BetPage } from "./BetPage";
 import { MyBets } from "./MyBets";
 import { UpdateMyAccount } from "./UpdateMyAcc";
 import { RenderRequests } from "./Notifications";
+import { UserManagement } from "./UserManagement";
+import { EditUserAsAdmin } from "./AdminUpdate";
 
 export {
   Home,
@@ -26,4 +28,6 @@ export {
   MyBets,
   UpdateMyAccount,
   RenderRequests,
+  UserManagement,
+  EditUserAsAdmin,
 };
