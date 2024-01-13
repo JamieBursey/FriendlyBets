@@ -53,7 +53,7 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
 
       try {
         const response = await fetch(
-          `https://api-web.nhle.com/v1/gamecenter/${gameNumber}/play-by-play`
+          `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
         );
         const liveGameData = await response.json();
         const homeTeam = liveGameData.homeTeam.name.default;

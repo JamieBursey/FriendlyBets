@@ -242,7 +242,9 @@ const UpdateFavTeam = () => {
 
   useEffect(() => {
     const fetchTeam = async () => {
-      const response = await fetch("https://api-web.nhle.com/v1/schedule/now");
+      const response = await fetch(
+        "https://friendly-bets-back-end.vercel.app/api/now"
+      );
       const teamData = await response.json();
       const teamLogos = [];
 
@@ -310,7 +312,6 @@ const UpdateFavTeam = () => {
               <li key={index}>
                 <a
                   className="dropdown-item"
-                  href="/#"
                   onClick={() => {
                     handleSelectedTeam(logo);
                   }}

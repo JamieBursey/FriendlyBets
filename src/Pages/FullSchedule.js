@@ -39,7 +39,9 @@ const FullSchedule = () => {
   };
   const [arr, setArr] = useState([]);
   const fetchData = async () => {
-    const response = await fetch("https://api-web.nhle.com/v1/schedule/now");
+    const response = await fetch(
+      "https://friendly-bets-back-end.vercel.app/api/now"
+    );
     const allGames = await response.json();
     console.log("weekly", allGames);
     let arrHTMLObj = [];
