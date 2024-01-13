@@ -32,7 +32,7 @@ const CheckBetResults = async (betId, callback) => {
   };
   try {
     const response = await fetch(
-      `https://api-web.nhle.com/v1/gamecenter/${gameNumber}/play-by-play`
+      `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
     );
     const resultsData = await response.json();
 

@@ -11,7 +11,7 @@ const CompareBets = async () => {
   for (const bet of pendingBetsData) {
     try {
       const request = await fetch(
-        `https://api-web.nhle.com/v1/gamecenter/${gameNumber}/play-by-play`
+        `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
       );
       const liveData = await request.json();
       const firstGoal = liveData.plays.find(

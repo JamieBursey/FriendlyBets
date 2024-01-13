@@ -10,8 +10,19 @@ const EditUserAsAdmin = () => {
   );
 
   const handleUpdateUsers = () => {
-    const selectedUser = findUserByEmail(userToUpdate.email);
-    console.log(selectedUser);
+    const allUsers = getAllUsers();
+    const selectedUser = allUsers.findIndex(
+      (user) => user.email === userToUpdate.email
+    );
+    allUsers[selectedUser] = {
+      ...allUsers[selectedUser],
+      username: username,
+      password: password,
+      email: email,
+      isAdmin: isAdmin,
+    };
+
+    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(allUsers));
   };
   const [username, setUsername] = useState(userToUpdate.username || "");
   const [password, setPassword] = useState(userToUpdate.password || "");
@@ -37,7 +48,7 @@ const EditUserAsAdmin = () => {
       <h5>Email Change</h5>
       <div className="input-group mb-3">
         <span className="input-group-text" id="inputGroup-sizing-default">
-          {userToUpdate.username}
+          {userToUpdate.email}
         </span>
         <input
           type="text"

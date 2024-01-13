@@ -106,6 +106,16 @@ function NavBar() {
                     My Account
                   </button>
                 </li>
+                {loggedUser.isAdmin ? (
+                  <li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => navigate("/UserManagement")}
+                    >
+                      Update Users
+                    </button>
+                  </li>
+                ) : null}
                 <li>
                   <button
                     className="dropdown-item"

@@ -91,16 +91,9 @@ const TodaysGames = () => {
 
   const [todaysGameArr, setTodaysGameArr] = useState([]);
   const fetchData = async () => {
-    const apiUrl = `https://api-web.nhle.com/v1/schedule/now`;
-    // const corsProxuUrl = `https://cors-anywhere.herokuapp.com/`;
+    const apiUrl = `https://friendly-bets-back-end.vercel.app/api/now`;
     const finalUrl = apiUrl;
-    // const config = Config();
     try {
-      // if(config.ENABLE_DUMMY_RESPONSE){
-
-      // }else{
-
-      // }
       const response = await fetch(finalUrl, {});
 
       const games = await response.json();
@@ -168,7 +161,7 @@ const LiveGames = () => {
   };
 
   const fetchLiveGames = async () => {
-    const apiUrl = `https://api-web.nhle.com/v1/score/now`;
+    const apiUrl = `https://friendly-bets-back-end.vercel.app/api/score`;
     try {
       const response = await fetch(apiUrl);
       const allGames = await response.json();
