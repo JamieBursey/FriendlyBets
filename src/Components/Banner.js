@@ -21,7 +21,7 @@ function Banner() {
       style={bannerStyles}
       className="text-center text-success text-bg-dark p-3"
     >
-      <p style={bannerTextStyles} className="fs-1 fs-3-sm">
+      <p style={bannerTextStyles} className="fs-1 fs-2-sm">
         Friendly Bets
       </p>
     </div>
