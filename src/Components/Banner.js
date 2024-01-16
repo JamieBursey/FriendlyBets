@@ -5,7 +5,6 @@ const bannerStyles = {
   objectPosition: "center",
 };
 const bannerTextStyles = {
-  fontSize: "3rem",
   fontWeight: "bold",
   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
   letterSpacing: "0.1em",
@@ -20,9 +19,11 @@ function Banner() {
   return (
     <div
       style={bannerStyles}
-      className="text-center fs-1 text-success text-bg-dark p-3"
+      className="text-center text-success text-bg-dark p-3"
     >
-      <p style={bannerTextStyles}>Friendly Bets</p>
+      <p style={bannerTextStyles} className="fs-1 fs-2-sm">
+        Friendly Bets
+      </p>
     </div>
   );
 }

@@ -8,8 +8,6 @@ function NavBar() {
   const logout = () => {
     localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, null);
     navigate("/Login");
-
-    //return to the login page navigate("/login")
   };
 
   const loggedUser = JSON.parse(
@@ -50,7 +48,6 @@ function NavBar() {
                 Contact
               </Link>
             </li>
-
             {loggedUser ? (
               <>
                 <li className="nav-item">
@@ -70,19 +67,20 @@ function NavBar() {
                     Friends
                   </Link>
                 </li>
-                <div className="nav-bar me-2">
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link text-success"
-                      to={NAVIGATION.NOTIFICATIONS}
-                    >
-                      Notifications
-                    </Link>
-                  </li>
-                </div>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-success"
+                    to={NAVIGATION.NOTIFICATIONS}
+                  >
+                    Notifications
+                  </Link>
+                </li>
               </>
             ) : null}
           </ul>
+        </div>
+        <div className="d-flex align-items-center">
           {loggedUser ? (
             <div className="dropdown justify-content-between">
               <a
@@ -95,9 +93,6 @@ function NavBar() {
                 <Avatar round={true} size="40" name={loggedUser.username} />
               </a>
               <ul className="dropdown-menu dropdown-menu-end">
-                {/* <li>
-                  <a className="dropdown-item" href="/#"></a>
-                </li> */}
                 <li>
                   <button
                     className="dropdown-item"
