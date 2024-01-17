@@ -11,12 +11,20 @@ const CheckBetResults = async (betId, callback) => {
   const betCreator = bet.betCreator;
   const gameNumber = bet.gameId;
   const betIndex = allBets.findIndex((b) => b.betId === betId);
-  const checkShotsOnNet = (playerId, plays) => {
+  const checkShotsOnNet = (playerId, plays, isGameFinished) => {
+    if (isGameFinished) {
+      return "Waiting";
+    }
+
     const shotsOnGoal = plays.filter(
       (play) =>
-        play.typeDescKey === "shot-on-goal" &&
-        play.details.shootingPlayerId === playerId
+        (play.typeDescKey === "shot-on-goal" &&
+          play.details.shootingPlayerId === playerId) ||
+        (play.typeDescKey === "goal" &&
+          play.details.scoringPlayerId === playerId)
     );
+    console.log("shots", shotsOnGoal);
+
     return shotsOnGoal.length >= 2
       ? `${betCreator} Wins`
       : `${betCreator} Lost`;
@@ -28,7 +36,7 @@ const CheckBetResults = async (betId, callback) => {
         (play.details.assist1PlayerId === playerId ||
           play.details.assist2PlayerId === playerId)
     );
-    return assists.length >= 1 ? `${betCreator} Wins` : `${betCreator} Lost`;
+    return assists.length > 1 ? `${betCreator} Wins` : `${betCreator} Lost`;
   };
   try {
     const response = await fetch(
@@ -79,7 +87,7 @@ const CheckBetResults = async (betId, callback) => {
         bet.result = shotsResult;
       }
       if (betDescription.includes("will make an assist")) {
-        const playerName = betDescription.split(" will get 2 shots on net")[0];
+        const playerName = betDescription.split(" Will make nn assist")[0];
         const playerId = findPlayerIdByName(
           playerName,
           resultsData.rosterSpots
