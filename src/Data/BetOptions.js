@@ -19,6 +19,7 @@ const generateBettingOptions = (roster, homeTeam, awayTeam) => {
     const goalPlayerID = findPlayerID(roster);
     const scoringPlayerName = findPlayerName(roster, goalPlayerID);
     options.push(`${scoringPlayerName} will score the first goal`);
+    options.push(`${scoringPlayerName} will score anytime`);
 
     const shotsPlayerID = findPlayerID(roster);
     const ShootingPlayerName = findPlayerName(roster, shotsPlayerID);

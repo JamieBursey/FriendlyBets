@@ -29,7 +29,23 @@ const CheckBetResults = async (betId, callback) => {
       ? `${betCreator} Wins`
       : `${betCreator} Lost`;
   };
-  const checkAssistPlayer = (playerId, plays) => {
+  const checkAnytimeGoal = (playerId, plays, isGameFinished) => {
+    if (isGameFinished) {
+      return "Waiting";
+    }
+    const scoredAtLeastOnce = plays.some(
+      (play) =>
+        play.typeDescKey === "goal" && play.details.scoringPlayerId === playerId
+    );
+    if (scoredAtLeastOnce) {
+      return `${betCreator} Wins`;
+    }
+    return `${betCreator} Lost`;
+  };
+  const checkAssistPlayer = (playerId, plays, isGameFinished) => {
+    if (isGameFinished) {
+      return "Game not over";
+    }
     const assists = plays.filter(
       (play) =>
         play.typeDescKey === "goal" &&
@@ -76,13 +92,26 @@ const CheckBetResults = async (betId, callback) => {
           bet.result = "Loss";
         }
       }
+      if (betDescription.includes("will score anytime")) {
+        const playerName = betDescription.split(" will score anytime")[0];
+        const playerId = findPlayerIdByName(
+          playerName,
+          resultsData.rosterSpots
+        );
+        const scoreingResults = checkAnytimeGoal(playerId, resultsData.plays);
+        bet.result = scoreingResults;
+      }
       if (betDescription.includes("will get 2 shots on net")) {
         const playerName = betDescription.split(" will get 2 shots on net")[0];
         const playerId = findPlayerIdByName(
           playerName,
           resultsData.rosterSpots
         );
-        const shotsResult = checkShotsOnNet(playerId, resultsData.plays);
+        const shotsResult = checkShotsOnNet(
+          playerId,
+          resultsData.plays,
+          isGameFinished
+        );
 
         bet.result = shotsResult;
       }
