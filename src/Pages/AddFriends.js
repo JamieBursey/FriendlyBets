@@ -1,6 +1,18 @@
 import { LOCALSTORAGE } from "../Config";
 import { useState } from "react";
 import { getAllUsers, sendFriendRequest, renderFriendList } from "../Data";
+const HeaderStyle = {
+  fontSize: "3rem",
+  fontWeight: "bold",
+  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  letterSpacing: "0.1em",
+  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Adding some shadow for depth
+  background: "linear-gradient(45deg, #00b4d8, #90e0ef)", // Bright blue gradient
+  WebkitBackgroundClip: "text",
+  backgroundClip: "text",
+  color: "transparent",
+  display: "inline",
+};
 const AddFriends = () => {
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER))
@@ -22,7 +34,9 @@ const AddFriends = () => {
     console.log("renderFriends", currentUser.friends);
     return (
       <>
-        <div className="text-center fs-1 text-danger">Friends</div>
+        <div className="text-center">
+          <p style={HeaderStyle}>Friends</p>
+        </div>
         <div className="">
           {currentUser ? renderFriendList(currentUser, setCurrentUser) : null}
         </div>
@@ -37,17 +51,19 @@ const AddFriends = () => {
         <input
           type="email"
           className="form-control me-1"
-          placeholder="Friends Email"
+          placeholder="FriendRequest@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button
-          className="btn btn-outline-success"
-          onClick={handleSendFriendRequest}
-          type="button"
-        >
-          Send Friend Request
-        </button>
+        <div className="input-group-append">
+          <button
+            className="btn btn-outline-success"
+            onClick={handleSendFriendRequest}
+            type="button"
+          >
+            Send
+          </button>
+        </div>
       </div>
       <div>{renderFriends()}</div>;
     </div>
