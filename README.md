@@ -2,6 +2,26 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Steps to Use the Website
+
+### 1. Register
+
+1. Got to https://jamiebursey.github.io/FriendlyBets/
+2. If you're not logged in it will send you to https://jamiebursey.github.io/Login
+3. Click in Register
+
+<img width="1277" alt="image" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/7c73a92f-a0da-4475-9f90-678fac63b410">
+
+4. 
+
+### 2. Login
+
+### 3. Creating a Bet
+
+### 4. 
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
