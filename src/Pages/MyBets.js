@@ -52,12 +52,11 @@ const MyBets = () => {
               <img src={awayLogo} />
             </div>
           </div>
-          <p>{friends}</p>
           {betDescriptions.map((desc, index) => (
             <p key={index}>{desc}</p>
           ))}
           <p>
-            {betCreator} bets {wager}
+            {betCreator} bets {friends}: {wager}
           </p>
           <p>Result:{result}</p>
           <div className="row">
