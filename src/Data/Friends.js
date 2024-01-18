@@ -55,7 +55,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
         return friendUser ? (
           <div
             key={friendUser.email}
-            className="col-sm-12 col-md-6 col-lg-4 mb-3"
+            className="col-xs-4 col-sm-4 col-sm-4 col-md col-lg mb-3 ms-2"
           >
             <div className="card bg-white">
               <div className="card-body text-center">
@@ -68,12 +68,12 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                   />
                 </div>
                 <div
-                  className="card text-center mx-auto mt-2 mb-3"
+                  className="card text-center bg-gradient mx-auto mt-2 mb-3"
                   style={{ maxWidth: "18rem", backgroundColor: "#d6d6d6" }}
                 >
                   <div className="card-header">About</div>
                   <div className="card-body">
-                    <p className="card-text">{friendUser.aboutMe}</p>
+                    <p className="card-text bg-dark">{friendUser.aboutMe}</p>
                   </div>
                 </div>
                 <button

@@ -31,7 +31,7 @@ function Register() {
       existingUsers.push(newUser);
       localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(existingUsers));
       localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newUser));
-      navigate("/");
+      navigate("/FriendlyBets");
     }
   };
   return (

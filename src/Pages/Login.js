@@ -19,7 +19,7 @@ function Login() {
           LOCALSTORAGE.LOGGEDINUSER,
           JSON.stringify(foundUser)
         );
-        navigate("/");
+        navigate("/FriendlyBets");
       } else {
         alert("Incorrect password");
       }

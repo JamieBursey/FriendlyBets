@@ -1,6 +1,6 @@
 module.exports = {
   NAVIGATION: {
-    HOME: "/",
+    HOME: "/FriendlyBets",
     ABOUT: "/about",
     CONTACT: "/contact",
     LOGIN: "/login",
