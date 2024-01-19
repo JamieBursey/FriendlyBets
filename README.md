@@ -10,7 +10,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 2. If you're not logged in it will send you to https://jamiebursey.github.io/Login
 3. Click in Register
 
-<img width="1277" alt="image" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/7c73a92f-a0da-4475-9f90-678fac63b410">
+
 
 4. 
 
