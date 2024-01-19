@@ -195,7 +195,7 @@ const AdminMessages = () => {
             </div>
             <div className="card-footer text-body-secondary">
               <a
-                className="btn btn-outlined-danger"
+                className="btn btn-outline-danger"
                 onClick={() => deleteMessage(index)}
               >
                 Delete Message
