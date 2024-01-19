@@ -3,6 +3,7 @@ import Avatar from "react-avatar";
 import { LOCALSTORAGE } from "../Config";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { bannerTextStyles } from "./Banner";
 
 const dropDownScroll = {
   maxHeight: "200px",
@@ -24,6 +25,9 @@ const AvatarComponent = ({ user }) => {
   };
   return (
     <div className="row mt-2 align-items-center text-center">
+      <div className="text-center" style={bannerTextStyles}>
+        <h1>Update Account</h1>
+      </div>
       <div className="col ms-5 d-flex justify-content-end">
         <Avatar
           round={true}
@@ -91,55 +95,55 @@ const NavigateToUpdate = () => {
 
 const MyAccountChanges = () => {
   const navigate = useNavigate();
-  console.log("email error", loggedUser);
+  const loggedUser = JSON.parse(
+    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+  );
+  const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS) || "[]");
+
   const [email, setEmail] = useState(loggedUser ? loggedUser.email : "");
   const [displayName, setDisplayName] = useState(
     loggedUser ? loggedUser.username : ""
   );
+  const [password, setPassword] = useState(
+    loggedUser ? loggedUser.password : ""
+  );
 
-  const displayNameChange = (event) => {
-    setDisplayName(event.target.value);
-  };
+  const emailChange = (event) => setEmail(event.target.value);
+  const displayNameChange = (event) => setDisplayName(event.target.value);
+  const passwordChange = (event) => setPassword(event.target.value);
 
-  const emailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const updateDisplayName = () => {
+  const saveChanges = () => {
+    // Check if email is already in use
+    const emailAlreadyInUse = allUsers.some(
+      (user) => user.email === email && user.username !== loggedUser.username
+    );
+    if (emailAlreadyInUse) {
+      alert("Email in Use");
+      return;
+    }
     const updatedUserInfo = {
       ...loggedUser,
       username: displayName,
+      email: email,
+      password: password,
     };
+
+    // Update users in allUsers
     const updatedUsers = allUsers.map((user) =>
       user.username === loggedUser.username ? updatedUserInfo : user
     );
+
+    // Save updated info in localStorage
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
     localStorage.setItem(
       LOCALSTORAGE.LOGGEDINUSER,
       JSON.stringify(updatedUserInfo)
     );
+
+    // Navigate to MyAccount page
     navigate("/MyAccount");
   };
 
-  const updateEmail = () => {
-    const checkEmails = allUsers.some((user) => user.email === email);
-    if (checkEmails) {
-      alert("Email in Use");
-      return;
-    }
-
-    const newEmail = {
-      ...loggedUser,
-      email: email,
-    };
-    const updatedUsers = allUsers.map((user) =>
-      user.username === loggedUser.username ? newEmail : user
-    );
-
-    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
-    localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newEmail));
-    navigate("/MyAccount");
-  };
   return (
     <>
       <div className="d-flex justify-content-center mt-3">
@@ -147,40 +151,42 @@ const MyAccountChanges = () => {
           <input
             type="text"
             className="form-control"
-            placeholder={loggedUser.username}
+            placeholder={displayName}
             onChange={displayNameChange}
             aria-label="Recipient's username"
-            aria-describedby="button-addon2"
           />
-          <button
-            className="btn btn-outline-secondary"
-            type="button"
-            onClick={updateDisplayName}
-            id="button-addon2"
-          >
-            Change Name
-          </button>
         </div>
       </div>
       <div className="d-flex justify-content-center">
         <div className="input-group mb-3 w-50">
           <input
             type="text"
-            className="form-control "
-            placeholder={loggedUser.email}
+            className="form-control"
+            placeholder={email}
             onChange={emailChange}
             aria-label="Recipient's email"
-            aria-describedby="button-addon3"
           />
-          <button
-            className="btn btn-outline-secondary"
-            type="button"
-            onClick={updateEmail}
-            id="button-addon3"
-          >
-            Change Email
-          </button>
         </div>
+      </div>
+      <div className="d-flex justify-content-center">
+        <div className="input-group mb-3 w-50">
+          <input
+            type="text"
+            className="form-control"
+            placeholder={password}
+            onChange={passwordChange}
+            aria-label="Recipient's password"
+          />
+        </div>
+      </div>
+      <div className="d-flex justify-content-center mb-3">
+        <button
+          className="btn btn-outline-secondary"
+          type="button"
+          onClick={saveChanges}
+        >
+          Save Changes
+        </button>
       </div>
     </>
   );
@@ -214,7 +220,7 @@ const AboutMeComponent = () => {
   };
   return (
     <div className="d-flex justify-content-center my-3">
-      <div className="input-group w-25">
+      <div className="w-25">
         <textarea
           className="form-control"
           placeholder={
@@ -222,11 +228,11 @@ const AboutMeComponent = () => {
           }
           onChange={addAboutMe}
         />
-      </div>
-      <div className="d-flex justify-content-center">
-        <button className="btn btn-outline-secondary" onClick={updateAboutMe}>
-          Update About Me
-        </button>
+        <div className="d-flex justify-content-center mt-2">
+          <button className="btn btn-outline-secondary" onClick={updateAboutMe}>
+            Update About Me
+          </button>
+        </div>
       </div>
     </div>
   );
