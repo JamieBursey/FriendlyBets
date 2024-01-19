@@ -142,12 +142,12 @@ const MyAccountChanges = () => {
   };
   return (
     <>
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center mt-3">
         <div className="input-group mb-3 w-50">
           <input
             type="text"
             className="form-control"
-            placeholder="Change Users Display Name"
+            placeholder={loggedUser.username}
             onChange={displayNameChange}
             aria-label="Recipient's username"
             aria-describedby="button-addon2"
@@ -167,7 +167,7 @@ const MyAccountChanges = () => {
           <input
             type="text"
             className="form-control "
-            placeholder="Change Users email"
+            placeholder={loggedUser.email}
             onChange={emailChange}
             aria-label="Recipient's email"
             aria-describedby="button-addon3"
@@ -217,7 +217,9 @@ const AboutMeComponent = () => {
       <div className="input-group w-25">
         <textarea
           className="form-control"
-          placeholder="Tell us about yourself"
+          placeholder={
+            loggedUser.aboutMe ? loggedUser.aboutMe : "Tell us about yourself"
+          }
           onChange={addAboutMe}
         />
       </div>
