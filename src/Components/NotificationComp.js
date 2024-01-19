@@ -65,7 +65,7 @@ const FriendRequests = () => {
         ) : (
           <div>
             <h2 className="text-center text-info">
-              Sorry, it seems you have no notifications
+              Sorry, it seems you have no friend requests
             </h2>
           </div>
         )}

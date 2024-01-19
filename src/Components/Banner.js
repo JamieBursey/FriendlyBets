@@ -8,8 +8,8 @@ const bannerTextStyles = {
   fontWeight: "bold",
   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
   letterSpacing: "0.1em",
-  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Adding some shadow for depth
-  background: "linear-gradient(45deg, #00b4d8, #90e0ef)", // Bright blue gradient
+  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+  background: "linear-gradient(45deg, #00b4d8, #90e0ef)",
   WebkitBackgroundClip: "text",
   backgroundClip: "text",
   color: "transparent",
@@ -29,3 +29,4 @@ function Banner() {
 }
 
 export default Banner;
+export { bannerTextStyles };
