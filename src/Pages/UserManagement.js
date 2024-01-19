@@ -33,7 +33,7 @@ const UserManagement = () => {
   };
   return (
     <div className="mt-2">
-      <table className="table">
+      <table className="table table-info table-striped">
         <thead>
           <tr>
             <th scope="col">#</th>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 import { useState } from "react";
-import { getAllUsers, findUserByEmail } from "../Data";
+import { getAllUsers } from "../Data";
 
 const EditUserAsAdmin = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const EditUserAsAdmin = () => {
       <h5>Password Change</h5>
       <div className="input-group mb-3">
         <span className="input-group-text" id="inputGroup-sizing-default">
-          {userToUpdate.username}
+          Username
         </span>
         <input
           type="text"
@@ -48,7 +48,7 @@ const EditUserAsAdmin = () => {
       <h5>Email Change</h5>
       <div className="input-group mb-3">
         <span className="input-group-text" id="inputGroup-sizing-default">
-          {userToUpdate.email}
+          Email
         </span>
         <input
           type="text"
@@ -62,7 +62,7 @@ const EditUserAsAdmin = () => {
       <h5>Password Change</h5>
       <div className="input-group mb-3">
         <span className="input-group-text" id="inputGroup-sizing-default">
-          {userToUpdate.password}
+          Password
         </span>
         <input
           type="text"
