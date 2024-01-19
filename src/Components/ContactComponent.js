@@ -49,6 +49,7 @@ function RenderContact() {
                     type="text"
                     id="name"
                     name="name"
+                    placeholder="John"
                     className="form-control"
                     onChange={onchange}
                   />
@@ -62,6 +63,7 @@ function RenderContact() {
                     type="text"
                     id="email"
                     name="email"
+                    placeholder="example@email.com"
                     className="form-control"
                     onChange={onchange}
                   />
@@ -77,6 +79,7 @@ function RenderContact() {
                     type="text"
                     id="subject"
                     name="subject"
+                    placeholder="Some Subject"
                     className="form-control"
                     onChange={onchange}
                   />
@@ -195,7 +198,7 @@ const AdminMessages = () => {
             </div>
             <div className="card-footer text-body-secondary">
               <a
-                className="btn btn-outlined-danger"
+                className="btn btn-outline-danger"
                 onClick={() => deleteMessage(index)}
               >
                 Delete Message
