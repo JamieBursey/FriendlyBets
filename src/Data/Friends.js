@@ -57,7 +57,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
             key={friendUser.email}
             className="col-xs-4 col-sm-4 col-sm-4 col-md col-lg mb-3 ms-2"
           >
-            <div className="card bg-white">
+            <div className="card bg-white h-100">
               <div className="card-body text-center">
                 <h5 className="card-title">{friendUser.username}</h5>
                 <p className="card-text">{friendUser.email}</p>
@@ -73,9 +73,16 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                 >
                   <div className="card-header">About</div>
                   <div className="card-body">
-                    <p className="card-text bg-dark">{friendUser.aboutMe}</p>
+                    <p
+                      className="card-text bg-dark text-info"
+                      style={{ overFlow: "auto" }}
+                    >
+                      {friendUser.aboutMe}
+                    </p>
                   </div>
                 </div>
+              </div>
+              <div className="text-center">
                 <button
                   onClick={() =>
                     deleteFriend(
@@ -84,7 +91,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                       setLoggedInUser
                     )
                   }
-                  className="btn btn-outline-danger"
+                  className="btn btn-outline-danger mb-2 w-50"
                 >
                   Delete
                 </button>

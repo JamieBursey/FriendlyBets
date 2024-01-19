@@ -25,9 +25,7 @@ const AvatarComponent = ({ user }) => {
   };
   return (
     <div className="row mt-2 align-items-center text-center">
-      <div className="text-center" style={bannerTextStyles}>
-        <h1>Update Account</h1>
-      </div>
+      <div className="mb-3"></div>
       <div className="col ms-5 d-flex justify-content-end">
         <Avatar
           round={true}
@@ -121,6 +119,8 @@ const MyAccountChanges = () => {
       alert("Email in Use");
       return;
     }
+
+    // Update user info
     const updatedUserInfo = {
       ...loggedUser,
       username: displayName,
@@ -128,7 +128,7 @@ const MyAccountChanges = () => {
       password: password,
     };
 
-    // Update users in allUsers
+    // Update users list
     const updatedUsers = allUsers.map((user) =>
       user.username === loggedUser.username ? updatedUserInfo : user
     );
@@ -181,7 +181,7 @@ const MyAccountChanges = () => {
       </div>
       <div className="d-flex justify-content-center mb-3">
         <button
-          className="btn btn-outline-secondary"
+          className="btn btn-outline-info"
           type="button"
           onClick={saveChanges}
         >
@@ -194,28 +194,42 @@ const MyAccountChanges = () => {
 
 const AboutMeComponent = () => {
   const navigate = useNavigate();
+  const loggedUser = JSON.parse(
+    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+  );
+
   const [aboutMe, setAboutMe] = useState(loggedUser ? loggedUser.aboutMe : "");
 
   const addAboutMe = (event) => {
     setAboutMe(event.target.value);
-    console.log("render?");
   };
 
   const updateAboutMe = () => {
-    const addNewAboutMe = {
-      ...loggedUser,
+    const currentUser = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
+    );
+    if (!currentUser) {
+      console.error("No logged-in user found");
+      return;
+    }
+
+    const updatedUserInfo = {
+      ...currentUser,
       aboutMe: aboutMe,
     };
-
     localStorage.setItem(
       LOCALSTORAGE.LOGGEDINUSER,
-      JSON.stringify(addNewAboutMe)
+      JSON.stringify(updatedUserInfo)
     );
 
+    const allUsers = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE.USERS) || "[]"
+    );
     const updatedUsers = allUsers.map((user) =>
-      user.username === loggedUser.username ? addNewAboutMe : user
+      user.username === currentUser.username ? updatedUserInfo : user
     );
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
+
     navigate("/MyAccount");
   };
   return (
@@ -228,8 +242,8 @@ const AboutMeComponent = () => {
           }
           onChange={addAboutMe}
         />
-        <div className="d-flex justify-content-center mt-2">
-          <button className="btn btn-outline-secondary" onClick={updateAboutMe}>
+        <div className="d-flex justify-content-center mt-2 mb-5">
+          <button className="btn btn-outline-info" onClick={updateAboutMe}>
             Update About Me
           </button>
         </div>
@@ -336,7 +350,7 @@ const UpdateFavTeam = () => {
         </div>
         <button
           type="button"
-          className="btn btn-outline-secondary"
+          className="btn btn-outline-secondary text-info"
           onClick={newTeamChange}
         >
           Update Favorite Team
