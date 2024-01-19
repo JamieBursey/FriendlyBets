@@ -8,6 +8,7 @@ import { acceptBets, deleteBets } from "./HandleBets";
 import { SportsDiv } from "./divColors";
 // import { TodaysGames, liveGames } from "./TodaysGames";
 import { CheckBetResults } from "./CheckBets";
+import { bannerTextStyles } from "./Banner";
 import {
   AvatarComponent,
   DisplayName,
@@ -44,5 +45,6 @@ export {
   UpdateFavTeam,
   RenderContact,
   FriendRequests,
+  bannerTextStyles,
   // liveGames,
 };

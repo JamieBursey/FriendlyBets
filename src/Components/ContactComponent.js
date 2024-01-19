@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
+import { bannerTextStyles } from "./Banner";
 
 function RenderContact() {
   const [formInput, setFormInput] = useState({
@@ -139,6 +140,16 @@ const AdminMessages = () => {
   const [messages, setMessages] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const deleteMessage = (indexToDelete) => {
+    const updatedMessages = messages.filter(
+      (deleteMessage, index) => index !== indexToDelete
+    );
+    setMessages(updatedMessages);
+    localStorage.setItem(
+      LOCALSTORAGE.ADMIN_MESSSAGES,
+      JSON.stringify(updatedMessages)
+    );
+  };
   useEffect(() => {
     const loggedInUser = JSON.parse(
       localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
@@ -159,34 +170,43 @@ const AdminMessages = () => {
   return (
     <div className="container">
       {messages.length > 0 ? (
+        <div className="text-center">
+          {" "}
+          <h1 className="text-center" style={bannerTextStyles}>
+            Messages
+          </h1>
+        </div>
+      ) : null}
+      {messages.length > 0 ? (
         messages.map((message, index) => (
-          <div className="card">
-            <div class="card-body">
-              <h5 class="card-title">{message.Name}</h5>
-              <h6 class="card-subtitle mb-2 text-body-secondary">
+          <div className="card text-center mt-2" key={index}>
+            <div className="card-header text-info fw-bold">
+              {message.subject}
+            </div>
+            <div className="card-body">
+              <h5 className="card-title">{message.Name}</h5>
+              <h6 className="card-subtitle mb-2 text-body-secondary">
                 {message.email}
               </h6>
-              <div
-                className="card text-center mx-auto mt-2 mb-3"
-                style={{ maxWidth: "18rem", backgroundColor: "#d6d6d6" }}
-              >
-                <div className="card-header">{message.subject}</div>
-                <div className="card-body">
-                  <p className="card-text">{message.message}</p>
-                </div>
-              </div>
-
-              <a href="#" class="card-link">
-                Card link
+              <p className="card-text">{message.message}</p>
+              <a href="#" className="btn btn-primary">
+                Home
               </a>
-              <a href="#" class="card-link">
-                Another link
+            </div>
+            <div className="card-footer text-body-secondary">
+              <a
+                className="btn btn-outlined-danger"
+                onClick={() => deleteMessage(index)}
+              >
+                Delete Message
               </a>
             </div>
           </div>
         ))
       ) : (
-        <p></p>
+        <div>
+          <p className="text-center text-info mt-3">No messages to display.</p>
+        </div>
       )}
     </div>
   );
