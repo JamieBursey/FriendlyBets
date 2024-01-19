@@ -26,13 +26,15 @@
     -->
     <title>Friendly Bets</title>
     <script type="text/javascript">
-      (function() {
-        var redirection = sessionStorage.redirect;
+      setTimeout(function() {
+        let redirection = sessionStorage.redirect;
         delete sessionStorage.redirect;
         if (redirection) {
-          window.location = redirection;
+          window.location.href = redirection;
+        } else {
+          window.location.href = '/';
         }
-      })();
+      }, 0);
     </script>
   </head>
   <body>
