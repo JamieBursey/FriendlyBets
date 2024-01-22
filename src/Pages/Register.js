@@ -36,8 +36,8 @@ function Register() {
     }
   };
   return (
-    <div className="bg-dark d-flex justify-content-center align-items-center p-2 vh-100">
-      <div className="card w-100 w-md-50 w-lg-25 p-4 shadow-lg">
+    <div className=" d-flex justify-content-center align-items-center p-2 vh-100">
+      <div className="card bg-secondary bg-gradient w-100 w-md-50 w-lg-25 p-5 shadow-lg">
         <div className="card-body">
           <h3 className="card-title text-center mb-4" style={bannerTextStyles}>
             Time To Register!

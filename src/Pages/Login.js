@@ -29,8 +29,8 @@ function Login() {
     }
   };
   return (
-    <div className=" d-flex justify-content-center align-items-center p-2 vh-100">
-      <div className="card w-100 w-md-50 w-lg-25 p-4 shadow-lg">
+    <div className="d-flex justify-content-center align-items-center p-2 vh-100">
+      <div className="bg-secondary bg-gradient card w-100 w-md-50 w-lg-25 p-4 shadow-lg">
         <div className="card-body">
           <h3 className="card-title text-center mb-4" style={bannerTextStyles}>
             Lets Get Betting!
@@ -66,7 +66,10 @@ function Login() {
           >
             Login
           </button>
-          <Link to="/register" className="btn btn-success w-100 mt-2">
+          <Link
+            to="/register"
+            className="btn btn-success bg-gradient w-100 mt-2"
+          >
             Register
           </Link>
         </div>
