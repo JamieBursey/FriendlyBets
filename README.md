@@ -14,9 +14,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### 2. Login
 1. If you already have an account you can Log in directly
-2. 
+<img width="1277" alt="Screen Shot 2024-01-22 at 2 20 37 PM" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/c278d236-ec9f-4b81-873c-23204a688c15">
 
 ### 3. Creating a Bet
+1. While on the Home page you will see a number of games for the day as well as live games.
+2. If no games have started you will see a message saying "No Live Games", however in the Todays Games you can click the buttong to see the weekly schedule
+ <img width="1274" alt="NHL Schedule" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/e84e666f-cd8b-48c8-8eb3-9e2d21122ec1">
+3.
 
 ### 4. 
 
