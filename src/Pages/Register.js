@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 import { TeamDropdown } from "../Data";
+import { bannerTextStyles } from "../Components";
 
 function Register() {
   const navigate = useNavigate();
@@ -35,53 +36,38 @@ function Register() {
     }
   };
   return (
-    <div className="bg-dark d-flex justify-content-center p-2 vh-100">
-      <div className="card w-75 h-75">
+    <div className=" d-flex justify-content-center align-items-center p-2 vh-100">
+      <div className="card bg-secondary bg-gradient w-100 w-md-50 w-lg-25 p-5 shadow-lg">
         <div className="card-body">
-          <h5 className="card-title text-center text-primary">
+          <h3 className="card-title text-center mb-4" style={bannerTextStyles}>
             Time To Register!
-          </h5>
-          <div className="mb-3">
-            <div className="mb-3">
-              <input
-                type="email"
-                className="form-control"
-                id="RegisterEmail"
-                placeholder="Enter Email"
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </div>
-            <input
-              type="text"
-              className="form-control"
-              id="RegisterUserName"
-              placeholder="Username"
-              onChange={(event) => setUserName(event.target.value)}
-            />
-          </div>
-
-          <div className="mb-3">
-            <input
-              type="password"
-              className="form-control"
-              id="RegisterPassword"
-              placeholder="Enter Password"
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </div>
+          </h3>
+          <input
+            type="email"
+            className="form-control mb-3"
+            placeholder="Enter Email"
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <input
+            type="text"
+            className="form-control mb-3"
+            placeholder="Username"
+            onChange={(event) => setUserName(event.target.value)}
+          />
+          <input
+            type="password"
+            className="form-control mb-3"
+            placeholder="Enter Password"
+            onChange={(event) => setPassword(event.target.value)}
+          />
           <TeamDropdown teamSelect={setFavoriteTeam} />
-          <div className="row text-center">
-            <div className="col-md-12 p-2">
-              <button
-                className="btn btn-lg btn-primary btn-block"
-                type="button"
-                onClick={registerUser}
-              >
-                Register
-              </button>
-            </div>
-            <div className="col-md-12 p-2"></div>
-          </div>
+          <button
+            className="btn btn-primary mt-4 w-100"
+            type="button"
+            onClick={registerUser}
+          >
+            Register
+          </button>
         </div>
       </div>
     </div>

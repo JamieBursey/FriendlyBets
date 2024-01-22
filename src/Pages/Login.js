@@ -2,6 +2,7 @@ import { findUser, checkUserPassword, findUserByEmail } from "../Data";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
+import { bannerTextStyles } from "../Components";
 
 function Login() {
   const navigate = useNavigate();
@@ -28,14 +29,16 @@ function Login() {
     }
   };
   return (
-    <div className="bg-dark d-flex justify-content-center p-2 vh-100">
-      <div className="card w-75 h-75">
+    <div className="d-flex justify-content-center align-items-center p-2 vh-100">
+      <div className="bg-secondary bg-gradient card w-100 w-md-50 w-lg-25 p-4 shadow-lg">
         <div className="card-body">
-          <h5 className="card-title text-center text-success">
+          <h3 className="card-title text-center mb-4" style={bannerTextStyles}>
             Lets Get Betting!
-          </h5>
+          </h3>
           <div className="mb-3">
-            <label className="form-label">Email address</label>
+            <label htmlFor="userName" className="form-label">
+              Email address
+            </label>
             <input
               type="text"
               className="form-control"
@@ -44,8 +47,10 @@ function Login() {
               onChange={(event) => setEmail(event.target.value)}
             />
           </div>
-          <div className="mb-3 row">
-            <label className="form-label">Password</label>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
             <input
               type="password"
               className="form-control"
@@ -54,22 +59,19 @@ function Login() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <div className="row text-center">
-            <div className="col-md-12 p-2">
-              <button
-                className="btn btn-lg btn-primary btn-block"
-                type="button"
-                onClick={loginHandler}
-              >
-                Login
-              </button>
-            </div>
-            <div className="col-md-12 p-2">
-              <Link className="btn btn-success" to="/register">
-                Register
-              </Link>
-            </div>
-          </div>
+          <button
+            className="btn btn-primary mt-4 w-100"
+            type="button"
+            onClick={loginHandler}
+          >
+            Login
+          </button>
+          <Link
+            to="/register"
+            className="btn btn-success bg-gradient w-100 mt-2"
+          >
+            Register
+          </Link>
         </div>
       </div>
     </div>
