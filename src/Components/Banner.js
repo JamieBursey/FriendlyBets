@@ -13,7 +13,6 @@ const bannerTextStyles = {
   WebkitBackgroundClip: "text",
   backgroundClip: "text",
   color: "transparent",
-  display: "inline",
 };
 function Banner() {
   return (
