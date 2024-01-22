@@ -17,7 +17,11 @@ const FullSchedule = () => {
     homeLogo
   ) => {
     return (
-      <div key={gameId} className="col-3 card m-1" style={{ width: "18rem" }}>
+      <div
+        key={gameId}
+        className="mx-auto col-3 card m-1"
+        style={{ width: "18rem" }}
+      >
         <div className="card-body">
           <h5 className="card-title text-center">{gameTitle}</h5>
           <p className="text-center">
@@ -76,7 +80,7 @@ const FullSchedule = () => {
 
   return (
     <div className="text-white text-center">
-      <h1>NHL Schedule</h1>
+      <h1>Weekly Schedule</h1>
       <div className="row">{arr}</div>
     </div>
   );
