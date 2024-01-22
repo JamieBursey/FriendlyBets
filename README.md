@@ -8,13 +8,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 1. Got to https://jamiebursey.github.io/FriendlyBets/
 2. If you're not logged in it will send you to https://jamiebursey.github.io/Login
-3. Click in Register
-
-
-
-4. 
+3. Click on Register
+<img width="1275" alt="Screen Shot 2024-01-22 at 3 31 08 PM" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/12821809-1fc6-4552-9018-7483c9e34199">
+4. You will automattically be logged in and redirected to the home page.
 
 ### 2. Login
+1. If you already have an account you can Log in directly
+2. 
 
 ### 3. Creating a Bet
 
