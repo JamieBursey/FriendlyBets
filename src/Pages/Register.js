@@ -51,7 +51,7 @@ function Register() {
           <input
             type="text"
             className="form-control mb-3"
-            placeholder="Username"
+            placeholder="Display Name"
             onChange={(event) => setUserName(event.target.value)}
           />
           <input

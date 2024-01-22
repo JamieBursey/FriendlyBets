@@ -60,23 +60,6 @@ const TodaysGames = () => {
           <div className="row">
             <div className="col">
               <button
-                onClick={() =>
-                  actionBtnOne(
-                    game_ID,
-                    gameTitle,
-                    gameTime,
-                    gameDay,
-                    homeLogo,
-                    awayLogo
-                  )
-                }
-                className="btn btn-primary w-100"
-              >
-                Bet Friends
-              </button>
-            </div>
-            <div className="col">
-              <button
                 onClick={() => actionBtnTwo(game_ID, gameTitle)}
                 className="btn btn-primary w-100"
               >

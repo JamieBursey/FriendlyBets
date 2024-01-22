@@ -89,29 +89,42 @@ const MyBets = () => {
               </>
             ) : (
               <div className="row">
-                <div className="col">
-                  {betCreator !== loggedInUserUsername ||
-                  betStatus !== "pending" ? (
+                {betCreator !== loggedInUserUsername ||
+                betStatus !== "pending" ? (
+                  <>
+                    <div className="col">
+                      <button
+                        onClick={() => {
+                          CheckBetResults(betId, fetchBetData);
+                        }}
+                        className="btn btn-primary w-100"
+                      >
+                        Results
+                      </button>
+                    </div>
+                    <div className="col">
+                      <button
+                        onClick={() => {
+                          deleteBets(betId, fetchBetData);
+                        }}
+                        className="btn btn-primary w-100"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="col-12">
                     <button
                       onClick={() => {
-                        CheckBetResults(betId, fetchBetData);
+                        deleteBets(betId, fetchBetData);
                       }}
-                      className="btn btn-primary w-100"
+                      className="btn btn-outline-danger w-100"
                     >
-                      Results
+                      Resind Bet
                     </button>
-                  ) : null}
-                </div>
-                <div className="col">
-                  <button
-                    onClick={() => {
-                      deleteBets(betId, fetchBetData);
-                    }}
-                    className="btn btn-primary w-100"
-                  >
-                    Delete
-                  </button>
-                </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -200,18 +213,18 @@ const MyBets = () => {
   }, []);
 
   return (
-    <div className="text-white text-center">
-      <h1 style={bannerTextStyles}> My Bets </h1>
+    <div className="text-center">
+      <h1 className="MyBets"> My Bets </h1>
 
       <div className="container  bg-dark bg-gradient rounded">
-        <h3 className="text-info">Pending Bets</h3>
+        <h3 className="text-white">Pending Bets</h3>
         <div className="row justify-content-center">
           {betsArr.length === 0 ? "No Pending Bets" : betsArr}
         </div>
       </div>
 
       <div className="container bg-dark bg-gradient mt-5 rounded">
-        <h2>Active Bets</h2>
+        <h2 className="text-white">Active Bets</h2>
         <div className="row justify-content-center">
           {activeBetArr.length === 0 ? "No Active Bets" : activeBetArr}
         </div>
