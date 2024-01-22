@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { LOCALSTORAGE } from "../Config";
 import { getAllBets } from "../Data";
-import { CheckBetResults, acceptBets, deleteBets } from "../Components";
+import {
+  CheckBetResults,
+  acceptBets,
+  bannerTextStyles,
+  deleteBets,
+} from "../Components";
 const Loader = () => (
   <div className="spinner-border text-success" role="status">
     <span className="visually-hidden">Loading...</span>
@@ -52,12 +57,12 @@ const MyBets = () => {
               <img src={awayLogo} />
             </div>
           </div>
-          {betDescriptions.map((desc, index) => (
-            <p key={index}>{desc}</p>
-          ))}
           <p>
             {betCreator} bets {friends}: {wager}
           </p>
+          {betDescriptions.map((desc, index) => (
+            <p key={index}>{desc}</p>
+          ))}
           <p>Result:{result}</p>
           <div className="row">
             {betStatus === "pending" && betCreator === loggedInUserUsername ? (
@@ -85,14 +90,17 @@ const MyBets = () => {
             ) : (
               <div className="row">
                 <div className="col">
-                  <button
-                    onClick={() => {
-                      CheckBetResults(betId, fetchBetData);
-                    }}
-                    className="btn btn-primary w-100"
-                  >
-                    Results
-                  </button>
+                  {betCreator !== loggedInUserUsername ||
+                  betStatus !== "pending" ? (
+                    <button
+                      onClick={() => {
+                        CheckBetResults(betId, fetchBetData);
+                      }}
+                      className="btn btn-primary w-100"
+                    >
+                      Results
+                    </button>
+                  ) : null}
                 </div>
                 <div className="col">
                   <button
@@ -193,19 +201,19 @@ const MyBets = () => {
 
   return (
     <div className="text-white text-center">
-      <h1> My Bets </h1>
+      <h1 style={bannerTextStyles}> My Bets </h1>
 
-      <div>
-        <h2>Pending Bets</h2>
+      <div className="container  bg-dark bg-gradient rounded">
+        <h3 className="text-info">Pending Bets</h3>
         <div className="row justify-content-center">
           {betsArr.length === 0 ? "No Pending Bets" : betsArr}
         </div>
       </div>
 
-      <div>
+      <div className="container bg-dark bg-gradient mt-5 rounded">
         <h2>Active Bets</h2>
         <div className="row justify-content-center">
-          {activeBetArr.length === 0 ? "No Pending Bets" : activeBetArr}
+          {activeBetArr.length === 0 ? "No Active Bets" : activeBetArr}
         </div>
       </div>
     </div>
