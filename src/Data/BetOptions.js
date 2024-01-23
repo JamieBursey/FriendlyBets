@@ -84,7 +84,7 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
   return (
     <div className="mb-3">
       <select
-        className="form-select"
+        className="form-select custom-select"
         value={selectedBet}
         onChange={(e) => {
           setSelectedBet(e.target.value);

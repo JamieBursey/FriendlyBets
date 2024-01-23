@@ -59,7 +59,9 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
           >
             <div className="card bg-white h-100">
               <div className="card-body text-center">
-                <h5 className="card-title">{friendUser.username}</h5>
+                <h5 className="card-title fw-bold fst-italic">
+                  {friendUser.username}
+                </h5>
                 <p className="card-text">{friendUser.email}</p>
                 <div>
                   <img
@@ -72,9 +74,9 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                   style={{ maxWidth: "18rem", backgroundColor: "#d6d6d6" }}
                 >
                   <div className="card-header">About</div>
-                  <div className="card-body">
+                  <div className="card-body bg-dark bg-gradient">
                     <p
-                      className="card-text bg-dark text-info"
+                      className="card-text text-info"
                       style={{ overFlow: "auto" }}
                     >
                       {friendUser.aboutMe}
@@ -93,7 +95,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                   }
                   className="btn btn-outline-danger mb-2 w-50"
                 >
-                  Delete
+                  Remove Friend
                 </button>
               </div>
             </div>

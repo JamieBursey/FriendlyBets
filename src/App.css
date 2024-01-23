@@ -2,3 +2,30 @@
     color: #B9B7B7
     
 }
+
+.custom-input,
+.custom-select {
+  border: 5px solid #a5c9ca;
+  border-radius: 1rem; 
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.1);
+  background-color: #eef7f8; 
+  color: #333333;
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+
+.custom-button {
+  background-color: #82ada9;
+  border-color: #82ada9;
+  color: #ffffff; 
+  border-radius: 1rem;
+  padding: 0.5rem 1rem; 
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.custom-button:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
