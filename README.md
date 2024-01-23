@@ -19,7 +19,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### 3. Adding Friends
 1. In the nav-bar you will see a Friends option. clicking it will redirect you to the Friends page
 2. You can add friends by entering their email.
-3. When accepted you will see information about the friend on this page.
+3. they will need to accept the friend request in their Notifications.
+   <img width="1278" alt="Screen Shot 2024-01-23 at 7 09 47 PM" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/84281644-af7f-49af-be9e-a0ffae5fbfff">
+4. When accepted you will see information about the friend on this page.
 <img width="1277" alt="FriendPage" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/69002d82-2978-42a4-9279-1edcfc46704a">
 
 ### 4. Creating a Bet
@@ -36,8 +38,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 <img width="1279" alt="ActiveBets" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/2fd14ba9-72d0-4260-bfc5-71c01aa3a3dc">
 
 
+### 5. My Account
+1. In the My Account page you will see a your display name, email, avatar, and favorite team. Along with a button to navigate to the update page.
+<img width="1276" alt="myAccount" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/3543bada-17e7-48a2-9982-0c0b91e83576">
 
-### 4. 
+2. once on the update page you will have the option to edit any fields you wish to change. the display name, email, password, ect. You will also have the option to add an about me section.
+<img width="1279" alt="updateAccount" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/8bb493dd-00f6-4bdc-9512-f40473a30e61">
+
 
 
 
