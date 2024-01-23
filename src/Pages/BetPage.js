@@ -53,7 +53,7 @@ const BetPage = () => {
     navigate(NAVIGATION.MYBETS);
   };
   return (
-    <div className="card mt-3" style={{ width: "90%", margin: "auto" }}>
+    <div className="container mt-4 text-center bg-secondary bg-gradient p-5 rounded">
       <div className="card-body">
         <h5 className="card-title text-center">{selectedGame.gameTitle}</h5>
         <p className="text-center">
@@ -61,16 +61,24 @@ const BetPage = () => {
         </p>
         <div className="row">
           <div className="col">
-            <img src={selectedGame.awayLogo}></img>
+            <img
+              src={selectedGame.awayLogo}
+              className="img-fluid"
+              style={{ width: "150px", height: "150px" }}
+            ></img>
           </div>
           <div className="col">
-            <img src={selectedGame.homeLogo} />
+            <img
+              src={selectedGame.homeLogo}
+              className="img-fluid"
+              style={{ width: "150px", height: "150px" }}
+            />
           </div>
         </div>
 
         <div className="mb-3">
           <select
-            className="form-select"
+            className="form-select custom-select"
             value={selectedFriends}
             onChange={(e) => setSelectedFriends(e.target.value)}
           >
@@ -84,7 +92,7 @@ const BetPage = () => {
         </div>
         <input
           style={{ backgroundColor: "#f2f2f2", borderColor: "gray" }}
-          className="mb-3"
+          className="mb-3 custom-input"
           type="text"
           placeholder="Type Your Wager"
           onChange={(event) => setWager(event.target.value)}
@@ -96,10 +104,13 @@ const BetPage = () => {
             selectedBets={selectedBets}
           />
         </>
-        <button className="btn btn-primary mx-1" onClick={placeBet}>
+        <button className="btn custom-button mx-1" onClick={placeBet}>
           Place Bet
         </button>
-        <button className="btn btn-primary" onClick={() => navigate("/MyBets")}>
+        <button
+          className="btn custom-button"
+          onClick={() => navigate("/MyBets")}
+        >
           Check Bets
         </button>
       </div>
