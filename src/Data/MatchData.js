@@ -42,7 +42,7 @@ const TodaysGames = () => {
     awayLogo
   ) => {
     return (
-      <div key={game_ID} className="col-3 card m-1" style={{ width: "18rem" }}>
+      <div key={game_ID} className="col-3 card m-1" style={{ width: "20rem" }}>
         <div className="card-body">
           <h5 className="card-title">{gameTitle}</h5>
           <div className="row">
@@ -166,63 +166,58 @@ const LiveGames = () => {
   }, []);
 
   return (
-    <div className="container">
-      <h2 className="text-info">Live Games</h2>
-      <div className="row">
+    <div className="text-white text-center">
+      <h1>Live Games</h1>
+      <div className="row justify-content-center">
         {liveGamesArr.length > 0 ? (
           liveGamesArr.map((game, index) => (
-            <div key={index} className="col-md-6 mb-4">
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="card-title">
-                    {game.awayTeam.abbrev} vs {game.homeTeam.abbrev}
-                  </h5>
-                  <div className="row">
-                    <div className="col">
-                      <img
-                        src={game.awayTeam.logo}
-                        alt=""
-                        className="img-fluid"
-                      ></img>
-                    </div>
-                    <div className="col">
-                      <img
-                        src={game.homeTeam.logo}
-                        alt=""
-                        className="img-fluid"
-                      />
-                    </div>
+            <div
+              key={index}
+              className="col-3 card m-1"
+              style={{ width: "20rem" }}
+            >
+              <div className="card-body">
+                <h5 className="card-title">
+                  {game.awayTeam.abbrev} vs {game.homeTeam.abbrev}
+                </h5>
+                <div className="row">
+                  <div className="col">
+                    <img
+                      src={game.awayTeam.logo}
+                      alt={`${game.awayTeam.abbrev} logo`}
+                      className="img-fluid"
+                    />
                   </div>
-                  <div>
-                    <h1>Score</h1>
+                  <div className="col">
+                    <img
+                      src={game.homeTeam.logo}
+                      alt={`${game.homeTeam.abbrev} logo`}
+                      className="img-fluid"
+                    />
                   </div>
-                  <div className="row">
-                    <div className="col">
-                      <p>{game.awayTeam.score} </p>
-                    </div>
-                    <div className="col">
-                      <p>{game.homeTeam.score}</p>
-                    </div>
-                    <div className="row">
-                      <div className="col">
-                        <button
-                          onClick={() => actionBtnOne(game)}
-                          className="btn btn-primary w-100"
-                        >
-                          Bet Friends
-                        </button>
-                      </div>
-                    </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <p>{game.awayTeam.score}</p>
+                  </div>
+                  <div className="col">
+                    <p>{game.homeTeam.score}</p>
                   </div>
                 </div>
                 <p>
                   {game.clock.timeRemaining} Period: {game.period}
                 </p>
+                <button
+                  onClick={() => actionBtnOne(game)}
+                  className="btn btn-primary w-100"
+                >
+                  Bet Friends
+                </button>
               </div>
             </div>
           ))
         ) : (
-          <p className="text-danger">No games have started.</p>
+          <p>No live games currently.</p>
         )}
       </div>
     </div>
