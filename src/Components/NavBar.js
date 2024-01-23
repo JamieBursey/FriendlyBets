@@ -76,6 +76,14 @@ function NavBar() {
                     Notifications
                   </Link>
                 </li>
+                {/* <li className="nav-item">
+                  <Link
+                    className="nav-link text-success"
+                    to="https://paypal.me/FriendlyBets?country.x=CA&locale.x=en_US"
+                  >
+                    Donate
+                  </Link>
+                </li> */}
               </>
             ) : null}
           </ul>
