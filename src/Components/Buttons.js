@@ -1,13 +1,17 @@
 import React from "react";
 import Avatar from "react-avatar";
-function buttons(buttonsData) {
+function buttons(buttonsData, onClickCallback) {
   return (
     <div className="App p-3 mb-3">
       <div className="container text-center">
         <div className="row">
           {buttonsData
             ? buttonsData.map((button, index) => (
-                <div className="col" key={index}>
+                <div
+                  className="col"
+                  key={index}
+                  onClick={() => onClickCallback(button.text)}
+                >
                   <Avatar size="100" src={button.imageURL} round={true} />
                 </div>
               ))
@@ -18,7 +22,7 @@ function buttons(buttonsData) {
   );
 }
 
-function AddButtons() {
+function AddButtons({ setSelectMatchesType }) {
   const sportButtons = [
     {
       text: "Fighting",
@@ -48,7 +52,9 @@ function AddButtons() {
   return (
     <>
       <div style={ButtonsBackground} className="App p-3 mb-3">
-        <div className="container text-center">{buttons(sportButtons)}</div>
+        <div className="container text-center">
+          {buttons(sportButtons, setSelectMatchesType)}
+        </div>
       </div>
     </>
   );
