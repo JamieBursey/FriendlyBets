@@ -19,7 +19,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### 3. Adding Friends
 1. In the nav-bar you will see a Friends option. clicking it will redirect you to the Friends page
 2. You can add friends by entering their email.
-3. they will need to accept the friend request in their Notifications.
+3. you will need to log out and log in as the second user to accept the friend request in their Notifications.
    <img width="1278" alt="Screen Shot 2024-01-23 at 7 09 47 PM" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/84281644-af7f-49af-be9e-a0ffae5fbfff">
 4. When accepted you will see information about the friend on this page.
 <img width="1277" alt="FriendPage" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/69002d82-2978-42a4-9279-1edcfc46704a">
@@ -32,7 +32,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 <img width="1276" alt="live games" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/4e5c26ea-408b-4955-aaf1-c29642dce47c">
 4. Select the friend you want to bet against and type in what you want to bet (Coffee, money, food, my favorite is tims iced cap)
 <img width="1279" alt="BetPage" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/23408c95-ad66-444a-b274-58510544a51e">
-5. The Friend will see the bet on their My Bets page with an accept and decline button. you will see it with the option to resind the bet if you want to back out before they accept.
+5. Log out and log back in to the user you sent the bet to. The Friend will see the bet on their My Bets page with an accept and decline button. you will see it with the option to resind the bet if you want to back out before they accept.
   <img width="1276" alt="pendingBetsPage" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/bf6d7102-2805-4579-a515-b9149c17176c">
 6. Once accepted you will see the bet in the active bets section of the My Bets page. there will be two buttons, one to check results and one to remove the bet from yours and the friends page. The idea is to remove the bet once you have paid the bet, but an honor system is important as this is not meant to be serious betting and nothing is to be forced. The bets are not mandatory to pay.
 <img width="1279" alt="ActiveBets" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/2fd14ba9-72d0-4260-bfc5-71c01aa3a3dc">
@@ -44,6 +44,19 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 2. once on the update page you will have the option to edit any fields you wish to change. the display name, email, password, ect. You will also have the option to add an about me section.
 <img width="1279" alt="updateAccount" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/8bb493dd-00f6-4bdc-9512-f40473a30e61">
+
+### 6. Admin Usage
+1. You will have the option to log in as an admin with extra features. To do this log in using email admine@email.com with password admin.
+<img width="1272" alt="Screen Shot 2024-01-25 at 6 38 42 PM" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/13d7b34c-d58a-4a94-ad8d-e1c8d3b6217e">
+2. After loggin in as the admin you will see a new link in your account dropdown to update Users.
+<img width="1271" alt="Screen Shot 2024-01-25 at 6 40 15 PM" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/326b1b87-e815-4121-b50f-9ecb2317d748">
+3. clicking this link will direct you to a table of all users that you can edit by clicking the Edit button
+<img width="1274" alt="image" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/b1b5502d-76db-4554-9253-fab7b885bb76">
+4. Here you can change the details of the user selected and even have to option to make them an admin as well.
+<img width="1272" alt="image" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/a748b803-8179-4fd3-83f9-37863b3cf68b">
+
+
+
 
 
 
