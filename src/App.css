@@ -22,7 +22,7 @@
   color: #ffffff; 
   border-radius: 1rem;
   padding: 0.5rem 1rem; 
-  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  transition: background-color .5s ease-in-out, border-color 0.15s ease-in-out;
 }
 
 .custom-button:hover {
