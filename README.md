@@ -56,7 +56,38 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 <img width="1272" alt="image" src="https://github.com/JamieBursey/FriendlyBets/assets/121978068/a748b803-8179-4fd3-83f9-37863b3cf68b">
 
 
+### 7. Data Structure
 
+#### Single User
+```
+{
+   "username":"Admin",
+   "password":"admin",
+   "email":"admin@email.com",
+   "favoriteTeam":"https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+   "bets":[],
+   "friends":["jamie","paul","Kelly"],"avatar":[],
+   "messages":[],
+   "isAdmin":true,
+   "aboutMe":"Lorem ipsum dolor sit amet"
+}
+```
+
+#### All Users
+```
+[
+   {
+      "username":"user1",
+      ....
+   },
+   {
+      "username":"user2",
+      ....
+   }
+]
+```
+
+### Future Updates
 
 
 
