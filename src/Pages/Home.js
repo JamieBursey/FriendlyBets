@@ -1,22 +1,33 @@
 import { Banner, Buttons, Matches } from "../Components";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { LOCALSTORAGE } from "../Config";
 
 function Home() {
   const checkIfLoggedInExists = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const navigate = useNavigate();
 
+  const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
+
   useEffect(() => {
     if (!checkIfLoggedInExists || checkIfLoggedInExists === "null") {
       navigate("/login");
     }
   }, [checkIfLoggedInExists, navigate]);
+  const selectMatchesUI = () => {
+    if (selectedMatchType == "Hockey") {
+      return <Matches />;
+    }
+    if (selectedMatchType == "Football") {
+      return <Matches />;
+    }
+  };
   return (
     <div>
+      {/* <Dropdown onChange={(e) => setSelectMatchesUI(e.target.value)} /> */}
       <Banner />
-      {/* <Buttons /> */}
-      <Matches />
+      <Buttons setSelectMatchesType={setSelectMatchesUI} />
+      {selectMatchesUI()}
     </div>
   );
 }
