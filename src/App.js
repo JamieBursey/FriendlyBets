@@ -17,6 +17,7 @@ import {
   UpdateMyAccount,
   UserManagement,
   EditUserAsAdmin,
+  NflWeeklySchedulePage,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { adminUser } from "./Data";
@@ -48,6 +49,7 @@ function App() {
           <Route path="/UpdateMyAccount" element={<UpdateMyAccount />} />
           <Route path="/UserManagement" element={<UserManagement />} />
           <Route path="/EditUserAsAdmin" element={<EditUserAsAdmin />} />
+          <Route path="/NflSchedule" element={<NflWeeklySchedulePage />} />
         </Routes>
       </BrowserRouter>
     </div>

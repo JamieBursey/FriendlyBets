@@ -1,4 +1,4 @@
-import { Banner, Buttons, Matches } from "../Components";
+import { Banner, Buttons, Matches, NflMatches } from "../Components";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { LOCALSTORAGE } from "../Config";
@@ -19,7 +19,7 @@ function Home() {
       return <Matches />;
     }
     if (selectedMatchType == "Football") {
-      return <Matches />;
+      return <NflMatches />;
     }
   };
   return (

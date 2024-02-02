@@ -2,13 +2,14 @@ import Banner from "./Banner";
 import Table from "./Table";
 
 import Buttons from "./Buttons";
-import Matches from "./Matches";
+import { Matches, NflMatches } from "./Matches";
 import NavBar from "./NavBar";
 import { acceptBets, deleteBets } from "./HandleBets";
 import { SportsDiv } from "./divColors";
 // import { TodaysGames, liveGames } from "./TodaysGames";
 import { CheckBetResults } from "./CheckBets";
 import { bannerTextStyles } from "./Banner";
+import { NflTodaySchedule, NflWeeklySchedule } from "./nfl.js/NflSchedule";
 import {
   AvatarComponent,
   DisplayName,
@@ -45,6 +46,9 @@ export {
   UpdateFavTeam,
   RenderContact,
   FriendRequests,
+  NflTodaySchedule,
+  NflWeeklySchedule,
+  NflMatches,
   bannerTextStyles,
   // liveGames,
 };
