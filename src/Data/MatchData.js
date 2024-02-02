@@ -124,6 +124,7 @@ const TodaysGames = () => {
     </div>
   );
 };
+
 const LiveGames = () => {
   const [liveGamesArr, setLiveGamesArr] = useState([]);
   const navigate = useNavigate();
@@ -148,7 +149,6 @@ const LiveGames = () => {
     try {
       const response = await fetch(apiUrl);
       const allGames = await response.json();
-      console.log("allgames", allGames);
       const liveGames = allGames.games.filter(
         (game) => game.gameState === "LIVE" || game.gameState === "CRIT"
       );

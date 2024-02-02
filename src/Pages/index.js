@@ -13,6 +13,7 @@ import { UpdateMyAccount } from "./UpdateMyAcc";
 import { RenderRequests } from "./Notifications";
 import { UserManagement } from "./UserManagement";
 import { EditUserAsAdmin } from "./AdminUpdate";
+import { NflWeeklySchedulePage } from "./NflWeeklySchedulePage";
 
 export {
   Home,
@@ -30,4 +31,5 @@ export {
   RenderRequests,
   UserManagement,
   EditUserAsAdmin,
+  NflWeeklySchedulePage,
 };

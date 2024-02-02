@@ -77,6 +77,8 @@ npm install react-router-dom --save
 npm install prop-types --save
 npm install react-avatar --save
 
+npm install --save gh-pages
+
 sudo su #entering admin level
 
 chmod -R 7777 . # Giving recursive permission to read/write
