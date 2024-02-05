@@ -89,6 +89,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Future Updates
 
+1.Adding more sports such as FootBall, Baseketball,Baseball.
+2. Adding a Mystery bet that will randomly select a betting wager that will have a value from $1-$20
+3. live updates on Plays during games.
+
 
 
 
