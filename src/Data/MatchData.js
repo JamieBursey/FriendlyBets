@@ -27,6 +27,7 @@ const TodaysGames = () => {
       LOCALSTORAGE.SELECTEDGAME,
       JSON.stringify(gameDetails)
     );
+
     navigate("/betPage");
   };
   const actionBtnTwo = () => {
@@ -60,10 +61,19 @@ const TodaysGames = () => {
           <div className="row">
             <div className="col">
               <button
-                onClick={() => actionBtnTwo(game_ID, gameTitle)}
+                onClick={() =>
+                  actionBtnOne(
+                    game_ID,
+                    gameTitle,
+                    gameTime,
+                    gameDay,
+                    homeLogo,
+                    awayLogo
+                  )
+                }
                 className="btn btn-primary w-100"
               >
-                Weekly Schedule
+                Bet Friends
               </button>
             </div>
           </div>
