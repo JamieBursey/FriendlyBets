@@ -13,6 +13,8 @@ const findPlayerName = (roster, playerId) => {
 };
 const generateBettingOptions = (roster, homeTeam, awayTeam) => {
   const options = [];
+  options.push(`${homeTeam} will win`);
+  options.push(`${awayTeam} will win`);
 
   if (roster.length > 0) {
     // Generate a separate option for each bet
@@ -28,11 +30,8 @@ const generateBettingOptions = (roster, homeTeam, awayTeam) => {
     const assistPlayerID = findPlayerID(roster);
     const assistPlayerName = findPlayerName(roster, assistPlayerID);
     options.push(`${assistPlayerName} will make an assist`);
-
-    options.push(`${homeTeam} will win`);
-    options.push(`${awayTeam} will win`);
   } else {
-    options.push("Game Not Started");
+    return options;
   }
 
   return options;

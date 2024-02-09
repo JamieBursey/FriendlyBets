@@ -125,9 +125,8 @@ const NflTodaySchedule = () => {
     </div>
   );
 };
-
+// weekly schedule
 const NflWeeklySchedule = () => {
-  //create Game Cards
   const createGameCard = (
     game_ID,
     gameTitle,
@@ -136,6 +135,28 @@ const NflWeeklySchedule = () => {
     homeLogo,
     awayLogo
   ) => {
+    const gameDate = new Date(
+      gameDay.slice(0, 4),
+      gameDay.slice(4, 6) - 1,
+      gameDay.slice(6, 8)
+    );
+    const dayOfWeek = gameDate.toLocaleDateString("en-US", {
+      weekday: "short",
+    });
+    const match = gameTime.match(/(\d+):(\d+)([ap]m)/);
+    const date = new Date(gameDate);
+    if (match) {
+      let [_, hour, minute, ampm] = match;
+      hour =
+        ampm.toLowerCase() === "p"
+          ? (parseInt(hour) % 12) + 12
+          : parseInt(hour);
+      date.setHours(hour, minute);
+    }
+    const timeString = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+    });
     return (
       <div key={game_ID} className="col-3 card m-1" style={{ width: "20rem" }}>
         <div className="card-body">
@@ -149,7 +170,7 @@ const NflWeeklySchedule = () => {
             </div>
           </div>
           <p>
-            {gameDay} at {new Date(gameTime).toLocaleTimeString()}
+            {dayOfWeek} at {timeString}
           </p>
 
           <div className="row"></div>
@@ -163,7 +184,6 @@ const NflWeeklySchedule = () => {
   const fetchData = async () => {
     const nflSeasonStartDate = new Date("2024-01-13");
     const currentDate = new Date();
-    const currentYear = currentDate.getFullYear().toString();
     const currentWeek = Math.floor(
       (currentDate - nflSeasonStartDate) / (7 * 24 * 60 * 60 * 1000) + 1
     );
@@ -173,7 +193,7 @@ const NflWeeklySchedule = () => {
     // const day = String(currentDate.getDate()).padStart(2, "0");
     // const currentDateString = `${year}${month}${day}`;
 
-    const url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLGamesForWeek?week=${currentWeek}&seasonType=post&season=2023`;
+    const url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLGamesForWeek?week=all&seasonType=all`;
 
     const options = {
       method: "GET",
