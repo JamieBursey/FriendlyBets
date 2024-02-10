@@ -4,7 +4,7 @@ import { Contact } from "./Contact";
 import { Login } from "./Login";
 import { Register } from "./Register";
 import { MyAccount } from "./MyAccount";
-import { AddFriends } from "./AddFriends";
+import { AddFriends, handleSendFriendRequest } from "./AddFriends";
 // import { FetchFromAPI } from "./Tests/FetchFromAPI";
 import { FullSchedule } from "./FullSchedule";
 import { BetPage } from "./BetPage";
@@ -32,4 +32,5 @@ export {
   UserManagement,
   EditUserAsAdmin,
   NflWeeklySchedulePage,
+  handleSendFriendRequest,
 };

@@ -13,22 +13,27 @@ const HeaderStyle = {
   color: "transparent",
   display: "inline",
 };
+
+const handleSendFriendRequest = (email, onSuccess) => {
+  const allUsers = getAllUsers();
+  const userToRequest = allUsers.find((user) => user.email === email);
+
+  if (userToRequest) {
+    sendFriendRequest(userToRequest.username);
+    onSuccess(); // Call the onSuccess callback
+  } else {
+    alert("User Not Found");
+  }
+};
+
 const AddFriends = () => {
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER))
   );
   const [email, setEmail] = useState("");
 
-  const handleSendFriendRequest = () => {
-    const allUsers = getAllUsers();
-    const userToRequest = allUsers.find((user) => user.email === email);
-
-    if (userToRequest) {
-      sendFriendRequest(userToRequest.username);
-      setEmail("");
-    } else {
-      alert("User Not Found");
-    }
+  const onSuccess = () => {
+    setEmail("");
   };
   const renderFriends = () => {
     console.log("renderFriends", currentUser.friends);
@@ -58,7 +63,7 @@ const AddFriends = () => {
         <div className="input-group-append">
           <button
             className="btn btn-outline-success"
-            onClick={handleSendFriendRequest}
+            onClick={() => handleSendFriendRequest(email, onSuccess)}
             type="button"
           >
             Send
@@ -70,4 +75,4 @@ const AddFriends = () => {
   );
 };
 
-export { AddFriends };
+export { AddFriends, handleSendFriendRequest };
