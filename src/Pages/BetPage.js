@@ -3,21 +3,29 @@ import { BettingOptions } from "../Data";
 import { useNavigate } from "react-router-dom";
 import { getAllUsers, getAllBets } from "../Data";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import { handleSendFriendRequest } from "./AddFriends";
 
 const BetPage = () => {
   const gameInfo = localStorage.getItem(LOCALSTORAGE.SELECTEDGAME);
   const selectedGame = JSON.parse(gameInfo);
+
   const navigate = useNavigate();
   const [selectedFriends, setSelectedFriends] = useState("");
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [selectedBets, setSelectedBets] = useState({});
   const [Wager, setWager] = useState("");
+  const [email, setEmail] = useState("");
+
   const loggedInUserData = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const loggedInUsr = loggedInUserData ? JSON.parse(loggedInUserData) : null;
   useEffect(() => {
     setUsersFriendList(loggedInUsr.friends);
   }, []);
-
+  const onSuccess = () => {
+    setEmail("");
+  };
   const updateCheckedBets = (betOption) => {
     setSelectedBets({ [betOption]: true }); //sets just one player to bet against.
   };
@@ -53,7 +61,15 @@ const BetPage = () => {
     navigate(NAVIGATION.MYBETS);
   };
   return (
-    <div className="container mt-4 text-center bg-secondary bg-gradient p-5 rounded">
+    <div
+      className="container mt-4 text-center bg-secondary bg-gradient p-5 rounded"
+      style={{ maxWidth: "1000px" }}
+    >
+      <div className="set-bet-div text-center">
+        <span className="straight-line"></span>
+        <p className="set-bet-text">Set Your Bet</p>
+        <span className="straight-line"></span>
+      </div>
       <div className="card-body">
         <h5 className="card-title text-center">{selectedGame.gameTitle}</h5>
         <p className="text-center">
@@ -75,8 +91,31 @@ const BetPage = () => {
             />
           </div>
         </div>
-
         <div className="mb-3">
+          {usersFriendList.length >= 1 ? (
+            <p className="friends-number">
+              <FontAwesomeIcon icon={faUserGroup} /> {usersFriendList.length}
+            </p>
+          ) : (
+            <div className=" mb-3 mt-3 w-50 mx-auto d-flex align-items-center">
+              <input
+                style={{ backgroundColor: "#f2f2f2", borderColor: "gray" }}
+                type="email"
+                className="form-control me-1 custom-input"
+                placeholder="FriendRequest@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <button
+                style={{ height: "3rem", width: "5rem" }}
+                className="btn btn-outline-info ms-2"
+                onClick={() => handleSendFriendRequest(email, onSuccess)}
+                type="button"
+              >
+                Send
+              </button>
+            </div>
+          )}
           <select
             className="form-select custom-select"
             value={selectedFriends}

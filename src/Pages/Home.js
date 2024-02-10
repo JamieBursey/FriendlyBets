@@ -20,6 +20,10 @@ function Home() {
     }
     if (selectedMatchType == "Football") {
       return <NflMatches />;
+    } else {
+      return (
+        <div className="text-center text-white">Feature not yet Added</div>
+      );
     }
   };
   return (
