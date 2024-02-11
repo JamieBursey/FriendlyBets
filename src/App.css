@@ -3,6 +3,25 @@
     
 }
 
+.header-text {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 32px; /* Increase font size */
+  font-weight: bold;
+  color: #ffffff; /* Use white or another light color for contrast */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Optional shadow for depth */
+  text-align: center;
+  margin-top: 20px; /* Adjust as needed */
+  margin-bottom: 20px;
+  
+}
+.logo {
+  height: 100px; 
+  width: 250px;
+  max-width: 600px; 
+  border-radius: 5%;
+  
+}
+
 .custom-input,
 .custom-select {
   border: 5px solid #a5c9ca;
@@ -89,4 +108,26 @@
     border-radius: 2rem;
     margin-bottom: 2rem;
   }
+}
+
+/* about page */
+.video-container {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  flex-direction: column;
+  border-radius: 2rem;
+  max-width: 60%;
+  margin: auto; 
+  padding: 1rem; 
+}
+
+.video-close-button {
+  border-radius: 2rem;
+  background-color: red;
+  align-self: flex-end; 
+  margin-right: .5rem;
+  height: 1.5rem;
+  font-size: small;
+  margin-bottom: .5rem;
 }

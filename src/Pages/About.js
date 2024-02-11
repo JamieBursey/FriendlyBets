@@ -3,14 +3,33 @@ import { Banner } from "../Components";
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const ShowVideo = ({ video, setVideo }) => {
+  if (!video) return null;
+  return (
+    <div className="bg-info video-container">
+      <button className="video-close-button" onClick={() => setVideo(false)}>
+        Close Video
+      </button>
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/YLslsZuEaNE?si=GbKbdYL4kRO-J06p"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      ></iframe>
+    </div>
+  );
+};
+
 function About() {
-  const [video, setVideo] = useState();
+  const [video, setVideo] = useState(true);
 
   return (
     <>
       <Banner />
       <div>
-        {/* Hero Section */}
         <div className="jumbotron text-center text-white">
           <h1 className="display-4">
             Welcome to Friendly Bets – Where Every Game Counts!
@@ -19,6 +38,9 @@ function About() {
             Experience the thrill of friendly betting in a fun, safe, and
             engaging environment.
           </p>
+        </div>
+        <div className="text-center container">
+          <ShowVideo video={video} setVideo={setVideo} />
         </div>
 
         <div className="container p-5 text-white">
