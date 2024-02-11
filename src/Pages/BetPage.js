@@ -76,14 +76,17 @@ const BetPage = () => {
           {new Date(selectedGame.gameTime).toLocaleTimeString()}
         </p>
         <div className="row">
-          <div className="col">
+          <div className="col d-flex justify-content-center align-items-center">
             <img
               src={selectedGame.awayLogo}
               className="img-fluid"
               style={{ width: "150px", height: "150px" }}
-            ></img>
+            />
           </div>
-          <div className="col">
+          <div className="col d-flex justify-content-center align-items-center">
+            <span className="vs-text">VS</span>
+          </div>
+          <div className="col d-flex justify-content-center align-items-center">
             <img
               src={selectedGame.homeLogo}
               className="img-fluid"
@@ -91,31 +94,33 @@ const BetPage = () => {
             />
           </div>
         </div>
+
+        {usersFriendList.length >= 1 ? (
+          <p className="friends-number">
+            <FontAwesomeIcon icon={faUserGroup} /> {usersFriendList.length}
+          </p>
+        ) : (
+          <div className=" mb-3 mt-3 w-50 mx-auto d-flex align-items-center">
+            <input
+              style={{ backgroundColor: "#f2f2f2", borderColor: "gray" }}
+              type="email"
+              className="form-control me-1 custom-input"
+              placeholder="FriendRequest@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button
+              style={{ height: "3rem", width: "6rem" }}
+              className="btn btn-outline-info ms-2"
+              onClick={() => handleSendFriendRequest(email, onSuccess)}
+              type="button"
+            >
+              Send
+            </button>
+          </div>
+        )}
+
         <div className="mb-3">
-          {usersFriendList.length >= 1 ? (
-            <p className="friends-number">
-              <FontAwesomeIcon icon={faUserGroup} /> {usersFriendList.length}
-            </p>
-          ) : (
-            <div className=" mb-3 mt-3 w-50 mx-auto d-flex align-items-center">
-              <input
-                style={{ backgroundColor: "#f2f2f2", borderColor: "gray" }}
-                type="email"
-                className="form-control me-1 custom-input"
-                placeholder="FriendRequest@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button
-                style={{ height: "3rem", width: "5rem" }}
-                className="btn btn-outline-info ms-2"
-                onClick={() => handleSendFriendRequest(email, onSuccess)}
-                type="button"
-              >
-                Send
-              </button>
-            </div>
-          )}
           <select
             className="form-select custom-select"
             value={selectedFriends}

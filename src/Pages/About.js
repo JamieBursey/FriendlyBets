@@ -1,8 +1,11 @@
 import React from "react";
 import { Banner } from "../Components";
+import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function About() {
+  const [video, setVideo] = useState();
+
   return (
     <>
       <Banner />

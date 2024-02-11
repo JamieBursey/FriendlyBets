@@ -15,6 +15,7 @@ import {
   findUserByEmail,
   TeamDropdown,
   adminUser,
+  RedirectBasedOnLogin,
 } from "./RegisteredUser";
 import { BettingOptions } from "./BetOptions";
 import { getAllBets, findPlayerIdByName } from "./Bets";
@@ -41,4 +42,5 @@ export {
   LiveGames,
   TeamDropdown,
   adminUser,
+  RedirectBasedOnLogin,
 };
