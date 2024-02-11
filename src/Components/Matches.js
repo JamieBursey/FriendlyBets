@@ -2,7 +2,7 @@ import { TodaysGames, LiveGames } from "../Data";
 import { NflTodaySchedule, NflWeeklySchedule } from "./nfl.js/NflSchedule";
 function Matches() {
   const backgroundColor = {
-    backgroundColor: "#0B1305",
+    background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
     borderRadius: "1rem",
   };
 

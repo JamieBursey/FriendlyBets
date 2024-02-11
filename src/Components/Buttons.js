@@ -46,7 +46,7 @@ function AddButtons({ setSelectMatchesType }) {
     },
   ];
   const ButtonsBackground = {
-    backgroundColor: "#0B1305",
+    background: "linear-gradient(to right, #0B1305 50%, #1e90ff 100%)",
     borderRadius: "5px",
   };
   return (
