@@ -9,11 +9,6 @@ function Home() {
 
   const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
 
-  useEffect(() => {
-    if (!checkIfLoggedInExists || checkIfLoggedInExists === "null") {
-      navigate("/login");
-    }
-  }, [checkIfLoggedInExists, navigate]);
   const selectMatchesUI = () => {
     if (selectedMatchType == "Hockey") {
       return <Matches />;

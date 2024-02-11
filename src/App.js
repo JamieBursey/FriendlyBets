@@ -24,15 +24,18 @@ import { NavBar } from "./Components";
 import { adminUser } from "./Data";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
+import { RedirectBasedOnLogin } from "./Data";
 
 function App() {
   useEffect(() => {
     adminUser();
   }, []);
+
   return (
     <div className="bg-dark" style={{ minHeight: "100vh" }}>
       <BrowserRouter>
         <NavBar />
+        <RedirectBasedOnLogin />
         <Routes>
           <Route path="/FriendlyBets" element={<Home />} />
           <Route path="/about" element={<About />} />

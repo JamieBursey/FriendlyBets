@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 
 const getAllUsers = () => {
@@ -207,6 +208,20 @@ const TeamDropdown = ({ teamSelect }) => {
     </div>
   );
 };
+
+const RedirectBasedOnLogin = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkIfLoggedInExists = localStorage.getItem(
+      LOCALSTORAGE.LOGGEDINUSER
+    );
+    if (!checkIfLoggedInExists || checkIfLoggedInExists === "null") {
+      navigate("/about");
+    }
+  }, []);
+};
+
 export {
   getAllUsers,
   checkUserPassword,
@@ -214,4 +229,5 @@ export {
   findUserByEmail,
   TeamDropdown,
   adminUser,
+  RedirectBasedOnLogin,
 };
