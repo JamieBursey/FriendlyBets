@@ -32,7 +32,7 @@ function Login() {
     <div className="d-flex justify-content-center align-items-center p-2 vh-100">
       <div className="bg-secondary bg-gradient card w-100 w-md-50 w-lg-25 p-4 shadow-lg">
         <div className="card-body">
-          <h3 className="card-title text-center mb-4" style={bannerTextStyles}>
+          <h3 className="card-title text-center mb-4 logo-text">
             Lets Get Betting!
           </h3>
           <div className="mb-3">

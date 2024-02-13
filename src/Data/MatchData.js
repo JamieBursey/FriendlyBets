@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 
 const TodaysGames = () => {
+  const LoggedInUser = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const navigate = useNavigate();
   const actionBtnOne = (
     game_ID,
@@ -28,7 +29,10 @@ const TodaysGames = () => {
       JSON.stringify(gameDetails)
     );
 
-    navigate("/betPage");
+    if (!LoggedInUser || LoggedInUser == null || LoggedInUser === "null") {
+      alert("Please Login to make a bet");
+      return;
+    } else navigate("/betPage");
   };
   const actionBtnTwo = () => {
     navigate("/fullSchedule");

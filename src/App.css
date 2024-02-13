@@ -7,16 +7,34 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 32px; /* Increase font size */
   font-weight: bold;
-  color: #ffffff; /* Use white or another light color for contrast */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Optional shadow for depth */
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   text-align: center;
-  margin-top: 20px; /* Adjust as needed */
+  margin-top: 20px; 
   margin-bottom: 20px;
   
 }
+.logo-text {
+  font-family: 'Montserrat', sans-serif; /* Modern, clean font */
+  color: #ADD8E6; /* Light blue; adjust to match your theme */
+  font-size: 2rem; /* Adjust as needed */
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+
+  border: 1px solid #ADD8E6; /* Adding a subtle border */
+  padding: 10px 20px;
+  border-radius: 10px; 
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.logo-text:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3); 
+}
 .logo {
-  height: 100px; 
-  width: 250px;
+  height: 150px; 
+  width: 600px;
   max-width: 600px; 
   border-radius: 5%;
   
@@ -95,6 +113,12 @@
   .set-bet-text {
     font-size: 1rem;
     
+  }
+  .logo{
+    height: 100px; 
+    width: 200px;
+    max-width: 600px; 
+    border-radius: 5%;
   }
   .set-bet-div{
     display: flex;
