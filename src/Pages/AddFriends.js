@@ -39,9 +39,6 @@ const AddFriends = () => {
     console.log("renderFriends", currentUser.friends);
     return (
       <>
-        <div className="text-center">
-          <p style={HeaderStyle}>Friends</p>
-        </div>
         <div className="">
           {currentUser ? renderFriendList(currentUser, setCurrentUser) : null}
         </div>
@@ -52,6 +49,9 @@ const AddFriends = () => {
   };
   return (
     <div>
+      <div className="text-center">
+        <p style={HeaderStyle}>Friends</p>
+      </div>
       <div className="input-group mb-3 mt-3 w-50 mx-auto">
         <input
           type="email"
@@ -66,7 +66,7 @@ const AddFriends = () => {
             onClick={() => handleSendFriendRequest(email, onSuccess)}
             type="button"
           >
-            Send
+            Add Friend
           </button>
         </div>
       </div>

@@ -47,56 +47,72 @@ const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
 const renderFriendList = (currentUser, setLoggedInUser) => {
   const allUsers = getAllUsers();
   return (
-    <div className="row">
-      {currentUser.friends.map((friendUsername) => {
+    <div className="container">
+      {currentUser.friends.map((friendUsername, index) => {
         let friendUser = allUsers.find(
           (user) => user.username === friendUsername
         );
         return friendUser ? (
           <div
             key={friendUser.email}
-            className="col-xs-4 col-sm-4 col-sm-4 col-md col-lg mb-3 ms-2"
+            className="row mb-3 align-items-center bg-white"
+            style={{ borderRadius: "5px" }}
           >
-            <div className="card bg-white h-100">
-              <div className="card-body text-center">
-                <h5 className="card-title fw-bold fst-italic">
-                  {friendUser.username}
-                </h5>
-                <p className="card-text">{friendUser.email}</p>
-                <div>
-                  <img
-                    src={friendUser.favoriteTeam}
-                    style={{ maxWidth: "40px", maxHeight: "40px" }}
-                  />
-                </div>
-                <div
-                  className="card text-center bg-gradient mx-auto mt-2 mb-3"
-                  style={{ maxWidth: "18rem", backgroundColor: "#d6d6d6" }}
-                >
-                  <div className="card-header">About</div>
-                  <div className="card-body bg-dark bg-gradient">
+            {/* Username and Email */}
+            <div className="col d-flex justify-content-start">
+              <div className="me-3">
+                <h5 className="fw-bold fst-italic">{friendUser.username}</h5>
+              </div>
+              <div>
+                <p>{friendUser.email}</p>
+              </div>
+            </div>
+
+            {/* Details*/}
+            <div className="col d-flex justify-content-end">
+              <button
+                className="btn btn-primary"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={`#collapseDetail${index}`}
+                aria-expanded="false"
+                aria-controls={`collapseDetail${index}`}
+              >
+                Details
+              </button>
+            </div>
+
+            {/* Dropdown*/}
+            <div className="col-12">
+              <div className="collapse" id={`collapseDetail${index}`}>
+                <div className="card card-body">
+                  <div className="mb-2 text-center">
+                    <img
+                      src={friendUser.favoriteTeam}
+                      style={{ maxWidth: "40px", maxHeight: "40px" }}
+                    />
+                  </div>
+                  <div className="mb-2">
                     <p
-                      className="card-text text-info"
-                      style={{ overFlow: "auto" }}
+                      className="text-info bg-secondary container w-50 text-center"
+                      style={{ overFlow: "auto", borderRadius: "5px" }}
                     >
                       {friendUser.aboutMe}
                     </p>
                   </div>
+                  <button
+                    onClick={() =>
+                      deleteFriend(
+                        friendUser.username,
+                        currentUser,
+                        setLoggedInUser
+                      )
+                    }
+                    className="btn btn-outline-danger"
+                  >
+                    Remove Friend
+                  </button>
                 </div>
-              </div>
-              <div className="text-center">
-                <button
-                  onClick={() =>
-                    deleteFriend(
-                      friendUser.username,
-                      currentUser,
-                      setLoggedInUser
-                    )
-                  }
-                  className="btn btn-outline-danger mb-2 w-50"
-                >
-                  Remove Friend
-                </button>
               </div>
             </div>
           </div>
@@ -105,6 +121,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
     </div>
   );
 };
+
 const editUser = (username, newUserObj) => {
   // TODO: search all functions that still work based on username and replace them with email
   let userFound = findUser(username);

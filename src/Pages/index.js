@@ -14,6 +14,7 @@ import { RenderRequests } from "./Notifications";
 import { UserManagement } from "./UserManagement";
 import { EditUserAsAdmin } from "./AdminUpdate";
 import { NflWeeklySchedulePage } from "./NflWeeklySchedulePage";
+import { LandingPage } from "./LandingPage";
 
 export {
   Home,
@@ -33,4 +34,5 @@ export {
   EditUserAsAdmin,
   NflWeeklySchedulePage,
   handleSendFriendRequest,
+  LandingPage,
 };

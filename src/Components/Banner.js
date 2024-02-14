@@ -18,7 +18,7 @@ function Banner() {
   return (
     <div className="text-center text-success text-bg-dark p-3">
       <img
-        src={process.env.PUBLIC_URL + "/logoblue.png"}
+        src={process.env.PUBLIC_URL + "/fblogo.png"}
         alt="blue logo"
         className="logo"
       ></img>
