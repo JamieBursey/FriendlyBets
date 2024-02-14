@@ -47,7 +47,10 @@ const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
 const renderFriendList = (currentUser, setLoggedInUser) => {
   const allUsers = getAllUsers();
   return (
-    <div className="container">
+    <div
+      className="container bg-secondary p-2"
+      style={{ borderRadius: "5px", height: "100vh" }}
+    >
       {currentUser.friends.map((friendUsername, index) => {
         let friendUser = allUsers.find(
           (user) => user.username === friendUsername
@@ -55,7 +58,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
         return friendUser ? (
           <div
             key={friendUser.email}
-            className="row mb-3 align-items-center bg-white"
+            className="row mb-3 align-items-center mx-auto bg-white w-90"
             style={{ borderRadius: "5px" }}
           >
             {/* Username and Email */}
@@ -92,13 +95,19 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                       style={{ maxWidth: "40px", maxHeight: "40px" }}
                     />
                   </div>
-                  <div className="mb-2">
-                    <p
-                      className="text-info bg-secondary container w-50 text-center"
-                      style={{ overFlow: "auto", borderRadius: "5px" }}
-                    >
-                      {friendUser.aboutMe}
-                    </p>
+                  <div
+                    className="card text-center bg-gradient w-50 mx-auto mt-2 mb-3"
+                    style={{ backgroundColor: "#d6d6d6" }}
+                  >
+                    <div className="card-header">About</div>
+                    <div className="card-body bg-secondary bg-gradient">
+                      <p
+                        className="card-text text-black"
+                        style={{ overFlow: "auto" }}
+                      >
+                        {friendUser.aboutMe}
+                      </p>
+                    </div>
                   </div>
                   <button
                     onClick={() =>
