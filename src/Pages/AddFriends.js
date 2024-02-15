@@ -56,7 +56,7 @@ const AddFriends = () => {
         <input
           type="email"
           className="form-control me-1"
-          placeholder="FriendRequest@email.com"
+          placeholder="AddFriend@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

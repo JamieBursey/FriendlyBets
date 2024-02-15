@@ -46,6 +46,16 @@ const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
 };
 const renderFriendList = (currentUser, setLoggedInUser) => {
   const allUsers = getAllUsers();
+  if (!currentUser.friends || currentUser.friends.length === 0) {
+    return (
+      <div
+        className="container bg-secondary p-2"
+        style={{ borderRadius: "5px", height: "100vh" }}
+      >
+        <h1 className="text-info text-center">Please Add Friends</h1>
+      </div>
+    );
+  }
   return (
     <div
       className="container bg-secondary p-2"
@@ -117,7 +127,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                         setLoggedInUser
                       )
                     }
-                    className="btn btn-outline-danger"
+                    className="btn btn-outline-danger w-25 mx-auto"
                   >
                     Remove Friend
                   </button>
@@ -179,6 +189,7 @@ const sendFriendRequest = (toUserName) => {
     LOCALSTORAGE.FRIENDREQUEST,
     JSON.stringify(friendRequests)
   );
+  alert("Friend request sent.");
 };
 const addUsersFriend = (username) => {
   const friendUserObj = findUser(username);
