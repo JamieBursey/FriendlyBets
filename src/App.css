@@ -108,6 +108,8 @@
 .friends-number{
   margin-left: 90%;
 }
+
+/* Friend Page*/
 @media (max-width: 768px) {
   .set-bet-text {
     font-size: 1rem;

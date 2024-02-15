@@ -1,6 +1,8 @@
 import { LOCALSTORAGE } from "../Config";
 import { useState } from "react";
 import { getAllUsers, sendFriendRequest, renderFriendList } from "../Data";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 const HeaderStyle = {
   fontSize: "3rem",
   fontWeight: "bold",
@@ -39,7 +41,10 @@ const AddFriends = () => {
     console.log("renderFriends", currentUser.friends);
     return (
       <>
-        <div className="">
+        <div>
+          <p className="container text-white fs-6">
+            <FontAwesomeIcon icon={faUserGroup} /> {currentUser.friends.length}
+          </p>
           {currentUser ? renderFriendList(currentUser, setCurrentUser) : null}
         </div>
 
@@ -52,7 +57,7 @@ const AddFriends = () => {
       <div className="text-center">
         <p style={HeaderStyle}>Friends</p>
       </div>
-      <div className="input-group mb-3 mt-3 w-50 mx-auto">
+      <div className="input-group mb-3 w-50 mx-auto">
         <input
           type="email"
           className="form-control me-1"

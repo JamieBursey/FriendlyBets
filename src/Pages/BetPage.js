@@ -50,7 +50,7 @@ const BetPage = () => {
       homeLogo: selectedGame.homeLogo,
       awayLogo: selectedGame.awayLogo,
       betDescripston: selectedBets,
-      betCreator: currentUser.username, // TODO: change it to maybe creator? owner?
+      betCreator: currentUser.username,
       wager: Wager,
       result: "Waiting",
       friends: [selectedFriends],
@@ -62,7 +62,7 @@ const BetPage = () => {
   };
   return (
     <div
-      className="container mt-4 text-center bg-secondary bg-gradient p-5 rounded"
+      className="container mt-2 text-center bg-secondary bg-gradient p-2 rounded"
       style={{ maxWidth: "90%" }}
     >
       <div className="set-bet-div text-center">
