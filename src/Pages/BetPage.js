@@ -63,7 +63,7 @@ const BetPage = () => {
   return (
     <div
       className="container mt-4 text-center bg-secondary bg-gradient p-5 rounded"
-      style={{ maxWidth: "1000px" }}
+      style={{ maxWidth: "90%" }}
     >
       <div className="set-bet-div text-center">
         <span className="straight-line"></span>
@@ -105,7 +105,7 @@ const BetPage = () => {
               style={{ backgroundColor: "#f2f2f2", borderColor: "gray" }}
               type="email"
               className="form-control me-1 custom-input"
-              placeholder="FriendRequest@email.com"
+              placeholder="AddFriend@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
