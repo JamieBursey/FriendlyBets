@@ -40,8 +40,8 @@ function Register() {
       <Banner />
       <div className="card bg-secondary bg-gradient w-100 w-md-50 w-lg-25 p-5 shadow-lg">
         <div className="card-body">
-          <h3 className="card-title text-center mb-4" style={bannerTextStyles}>
-            Time To Register!
+          <h3 className="card-title text-center mb-4 login-text mx-auto ">
+            Register Here!
           </h3>
           <input
             type="email"

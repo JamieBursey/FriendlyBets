@@ -29,11 +29,11 @@ function Login() {
     }
   };
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center p-2 vh-100">
+    <div className="d-flex flex-column align-items-center p-2 vh-100 w-75 mx-auto">
       <Banner />
       <div className="bg-secondary bg-gradient card w-100 w-md-50 w-lg-25 p-4 shadow-lg">
         <div className="card-body">
-          <h3 className="card-title text-center mb-4 logo-text">
+          <h3 className="card-title text-center mb-4 login-text mx-auto">
             Lets Get Betting!
           </h3>
           <div className="mb-3">
