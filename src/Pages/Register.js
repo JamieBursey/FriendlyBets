@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 import { TeamDropdown } from "../Data";
-import { bannerTextStyles } from "../Components";
+import { bannerTextStyles, Banner } from "../Components";
 
 function Register() {
   const navigate = useNavigate();
@@ -36,7 +36,8 @@ function Register() {
     }
   };
   return (
-    <div className=" d-flex justify-content-center align-items-center p-2 vh-100">
+    <div className=" d-flex flex-column justify-content-center align-items-center p-2 vh-100">
+      <Banner />
       <div className="card bg-secondary bg-gradient w-100 w-md-50 w-lg-25 p-5 shadow-lg">
         <div className="card-body">
           <h3 className="card-title text-center mb-4" style={bannerTextStyles}>

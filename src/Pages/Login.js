@@ -2,7 +2,7 @@ import { findUser, checkUserPassword, findUserByEmail } from "../Data";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
-import { bannerTextStyles } from "../Components";
+import { Banner } from "../Components";
 
 function Login() {
   const navigate = useNavigate();
@@ -29,7 +29,8 @@ function Login() {
     }
   };
   return (
-    <div className="d-flex justify-content-center align-items-center p-2 vh-100">
+    <div className="d-flex flex-column justify-content-center align-items-center p-2 vh-100">
+      <Banner />
       <div className="bg-secondary bg-gradient card w-100 w-md-50 w-lg-25 p-4 shadow-lg">
         <div className="card-body">
           <h3 className="card-title text-center mb-4 logo-text">

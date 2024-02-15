@@ -57,10 +57,23 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
     );
   }
   return (
-    <div
-      className="container bg-secondary p-2"
-      style={{ borderRadius: "5px", height: "100vh" }}
-    >
+    <div className="container bg-secondary p-2" style={{ borderRadius: "5px" }}>
+      {/* Header Row */}
+      <div
+        className="row mb-1 align-items-center mx-auto bg-white w-90"
+        style={{ borderRadius: "5px" }}
+      >
+        <div className="col d-flex justify-content-start">
+          <h6>Name</h6>
+        </div>
+        <div className="col d-flex justify-content-center">
+          <h6>Email</h6>
+        </div>
+        <div className="col d-flex justify-content-end">
+          <h6 className="me-1">Details</h6>
+        </div>
+      </div>
+
       {currentUser.friends.map((friendUsername, index) => {
         let friendUser = allUsers.find(
           (user) => user.username === friendUsername
@@ -68,23 +81,21 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
         return friendUser ? (
           <div
             key={friendUser.email}
-            className="row mb-3 align-items-center mx-auto bg-white w-90"
+            className="row mb-1 align-items-center mx-auto bg-white w-90"
             style={{ borderRadius: "5px" }}
           >
-            {/* Username and Email */}
             <div className="col d-flex justify-content-start">
-              <div className="me-3">
-                <h5 className="fw-bold fst-italic">{friendUser.username}</h5>
-              </div>
-              <div>
-                <p>{friendUser.email}</p>
-              </div>
+              <h6 className="fw-bold fst-italic">{friendUser.username}</h6>
+            </div>
+
+            <div className="col d-flex justify-content-center">
+              <p>{friendUser.email}</p>
             </div>
 
             {/* Details*/}
             <div className="col d-flex justify-content-end">
               <button
-                className="btn btn-primary"
+                className="btn btn-sm btn-outline-primary"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target={`#collapseDetail${index}`}
@@ -106,16 +117,30 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
                     />
                   </div>
                   <div
-                    className="card text-center bg-gradient w-50 mx-auto mt-2 mb-3"
-                    style={{ backgroundColor: "#d6d6d6" }}
+                    className="card text-center w-50 mx-auto mt-2 mb-3"
+                    style={{
+                      backgroundColor: "#F7F7F7",
+                      boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+                      borderRadius: "5px",
+                    }}
                   >
-                    <div className="card-header">About</div>
-                    <div className="card-body bg-secondary bg-gradient">
+                    <div
+                      className="card-header"
+                      style={{
+                        backgroundColor: "#EEEEEE",
+                        color: "#333333",
+                      }}
+                    >
+                      About
+                    </div>
+                    <div className="card-body">
                       <p
                         className="card-text text-black"
                         style={{ overFlow: "auto" }}
                       >
-                        {friendUser.aboutMe}
+                        {friendUser.aboutMe
+                          ? friendUser.aboutMe
+                          : `${friendUser.username} has not updated their about section.`}
                       </p>
                     </div>
                   </div>
