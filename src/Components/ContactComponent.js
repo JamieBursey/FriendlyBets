@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
 import { bannerTextStyles } from "./Banner";
 
+const backgroundGradient = {
+  background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
+  borderRadius: "1rem",
+};
 function RenderContact() {
   const [formInput, setFormInput] = useState({
     id: "",
@@ -171,47 +175,59 @@ const AdminMessages = () => {
     return;
   }
   return (
-    <div className="container">
-      {messages.length > 0 ? (
-        <div className="text-center">
-          {" "}
-          <h1 className="text-center" style={bannerTextStyles}>
-            Messages
-          </h1>
+    <div>
+      <div
+        style={{
+          borderTop: "1px solid #ccc",
+          width: "100%",
+          marginBottom: "10px",
+        }}
+      ></div>
+      <div>
+        <h1 className="text-center" style={bannerTextStyles}>
+          Messages
+        </h1>
+        <div className="container bg-secondary p-2" style={backgroundGradient}>
+          {messages.length > 0 ? (
+            <div className="row">
+              {messages.map((message, index) => (
+                <div className="col-md-6" key={index}>
+                  <div className="card text-center mt-1">
+                    <div className="card-header text-info fw-bold">
+                      {message.subject}
+                    </div>
+                    <div className="card-body">
+                      <h5 className="card-title">{message.Name}</h5>
+                      <h6 className="card-subtitle mb-2 text-body-secondary">
+                        {message.email}
+                      </h6>
+                      <p className="card-text">{message.message}</p>
+                      <a href="#" className="btn btn-primary">
+                        Home
+                      </a>
+                    </div>
+                    <div className="card-footer text-body-secondary">
+                      <a
+                        className="btn btn-outline-danger"
+                        onClick={() => deleteMessage(index)}
+                      >
+                        Delete Message
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <p className="text-center text-info mt-3">
+                No messages to display.
+              </p>
+            </div>
+          )}
         </div>
-      ) : null}
-      {messages.length > 0 ? (
-        messages.map((message, index) => (
-          <div className="card text-center mt-2" key={index}>
-            <div className="card-header text-info fw-bold">
-              {message.subject}
-            </div>
-            <div className="card-body">
-              <h5 className="card-title">{message.Name}</h5>
-              <h6 className="card-subtitle mb-2 text-body-secondary">
-                {message.email}
-              </h6>
-              <p className="card-text">{message.message}</p>
-              <a href="#" className="btn btn-primary">
-                Home
-              </a>
-            </div>
-            <div className="card-footer text-body-secondary">
-              <a
-                className="btn btn-outline-danger"
-                onClick={() => deleteMessage(index)}
-              >
-                Delete Message
-              </a>
-            </div>
-          </div>
-        ))
-      ) : (
-        <div>
-          <p className="text-center text-info mt-3">No messages to display.</p>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
-export { RenderContact, AdminMessages };
+export { RenderContact, AdminMessages, backgroundGradient };

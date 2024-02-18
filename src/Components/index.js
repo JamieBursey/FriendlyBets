@@ -21,7 +21,11 @@ import {
   RenderFavoriteTeam,
   UpdateFavTeam,
 } from "./MyAccData";
-import { RenderContact, AdminMessages } from "./ContactComponent";
+import {
+  RenderContact,
+  AdminMessages,
+  backgroundGradient,
+} from "./ContactComponent";
 import { FriendRequests } from "./NotificationComp";
 
 export {
@@ -50,5 +54,6 @@ export {
   NflWeeklySchedule,
   NflMatches,
   bannerTextStyles,
+  backgroundGradient,
   // liveGames,
 };

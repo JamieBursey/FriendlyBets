@@ -1,6 +1,10 @@
+import { backgroundGradient } from "../Components";
 import { LOCALSTORAGE } from "../Config";
 import { findUser, getAllUsers } from "./RegisteredUser";
-
+const friendsGradient = {
+  background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
+  borderRadius: "1rem",
+};
 const getFriend = (username) => {
   return { username: "", password: "" };
 };
@@ -57,11 +61,11 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
     );
   }
   return (
-    <div className="container bg-secondary p-2" style={{ borderRadius: "5px" }}>
+    <div className="container p-2" style={friendsGradient}>
       {/* Header Row */}
       <div
-        className="row mb-1 align-items-center mx-auto bg-white w-90"
-        style={{ borderRadius: "5px" }}
+        className="row mb-1 align-items-center mx-auto bg-white"
+        style={{ borderRadius: "5px", width: "90%" }}
       >
         <div className="col d-flex justify-content-start">
           <h6>Name</h6>
@@ -70,7 +74,7 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
           <h6>Email</h6>
         </div>
         <div className="col d-flex justify-content-end">
-          <h6 className="me-1">Details</h6>
+          <h6 className="me-2">Details</h6>
         </div>
       </div>
 
@@ -81,8 +85,8 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
         return friendUser ? (
           <div
             key={friendUser.email}
-            className="row mb-1 align-items-center mx-auto bg-white w-90"
-            style={{ borderRadius: "5px" }}
+            className="row mb-1 align-items-center mx-auto bg-white"
+            style={{ borderRadius: "5px", width: "90%" }}
           >
             <div className="col d-flex justify-content-start">
               <h6 className="fw-bold fst-italic">{friendUser.username}</h6>

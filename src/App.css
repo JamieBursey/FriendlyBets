@@ -14,6 +14,19 @@
   margin-bottom: 20px;
   
 }
+.btn-outline-orange {
+  color: orange;
+  border-color: orange;
+  border-radius: 5px;
+  width: 75%;
+  background-color: white;
+}
+
+.btn-outline-orange:hover {
+  color: white;
+  background-color: orange;
+  border-color: orange;
+}
 /* login/Register */
 @keyframes pulsate {
   0% {
@@ -120,6 +133,7 @@
 
 .friends-number{
   margin-left: 90%;
+  color: white;
 }
 
 /* Friend Page*/
@@ -149,6 +163,12 @@
 }
 
 /* about page */
+.line-divider{
+  width: 100%;
+  height: 1px;
+  background-color: white;
+}
+
 .video-container {
   position: relative;
   width: 100%;

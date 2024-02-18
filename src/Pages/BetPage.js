@@ -6,6 +6,10 @@ import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { handleSendFriendRequest } from "./AddFriends";
+const betsGradient = {
+  background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
+  borderRadius: "1rem",
+};
 
 const BetPage = () => {
   const gameInfo = localStorage.getItem(LOCALSTORAGE.SELECTEDGAME);
@@ -62,8 +66,8 @@ const BetPage = () => {
   };
   return (
     <div
-      className="container mt-2 text-center bg-secondary bg-gradient p-2 rounded"
-      style={{ maxWidth: "90%" }}
+      className="container mt-2 text-center p-2 rounded"
+      style={betsGradient}
     >
       <div className="set-bet-div text-center">
         <span className="straight-line"></span>
@@ -71,8 +75,10 @@ const BetPage = () => {
         <span className="straight-line"></span>
       </div>
       <div className="card-body">
-        <h5 className="card-title text-center">{selectedGame.gameTitle}</h5>
-        <p className="text-center">
+        <h5 className="card-title text-center text-info">
+          {selectedGame.gameTitle}
+        </h5>
+        <p className="text-center text-info">
           {new Date(selectedGame.gameTime).toLocaleTimeString()}
         </p>
         <div className="row">
@@ -80,7 +86,7 @@ const BetPage = () => {
             <img
               src={selectedGame.awayLogo}
               className="img-fluid"
-              style={{ width: "150px", height: "150px" }}
+              style={{ width: "100px", height: "100px" }}
             />
           </div>
           <div className="col d-flex justify-content-center align-items-center">
@@ -90,7 +96,7 @@ const BetPage = () => {
             <img
               src={selectedGame.homeLogo}
               className="img-fluid"
-              style={{ width: "150px", height: "150px" }}
+              style={{ width: "100px", height: "100px" }}
             />
           </div>
         </div>
@@ -136,7 +142,7 @@ const BetPage = () => {
         </div>
         <input
           style={{ backgroundColor: "#f2f2f2", borderColor: "gray" }}
-          className="mb-3 custom-input"
+          className="mb-3 custom-input w-50 text-center"
           type="text"
           placeholder="Type Your Wager"
           onChange={(event) => setWager(event.target.value)}

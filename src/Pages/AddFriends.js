@@ -42,7 +42,7 @@ const AddFriends = () => {
     return (
       <>
         <div>
-          <p className="container text-white fs-6">
+          <p className="container text-white fs-6 w-75">
             <FontAwesomeIcon icon={faUserGroup} /> {currentUser.friends.length}
           </p>
           {currentUser ? renderFriendList(currentUser, setCurrentUser) : null}
