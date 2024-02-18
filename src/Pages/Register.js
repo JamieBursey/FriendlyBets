@@ -36,7 +36,7 @@ function Register() {
     }
   };
   return (
-    <div className=" d-flex flex-column justify-content-center align-items-center p-2 vh-100">
+    <div className="d-flex flex-column align-items-center p-2 vh-100 w-75 mx-auto">
       <Banner />
       <div className="card bg-secondary bg-gradient w-100 w-md-50 w-lg-25 p-5 shadow-lg">
         <div className="card-body">
