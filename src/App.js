@@ -39,7 +39,7 @@ function App() {
         <RedirectBasedOnLogin />
         <Routes>
           <Route path="/FriendlyBets" element={<Home />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={<LandingPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

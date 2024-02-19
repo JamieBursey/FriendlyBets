@@ -11,13 +11,16 @@ function Register() {
   const [email, setEmail] = useState(null);
   const [favoriteTeam, setFavoriteTeam] = useState(null);
   const registerUser = () => {
+    if (!username || !password || !email || !favoriteTeam) {
+      alert("Please submit all fields");
+      return;
+    }
     const existingUsers =
       JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
-    const isUserExisting = existingUsers.some(
-      (user) => user.username === username
-    );
+
+    const isUserExisting = existingUsers.some((user) => user.email === email);
     if (isUserExisting) {
-      alert("username already exist");
+      alert("Email already in use");
     } else {
       const newUser = {
         username,
@@ -36,11 +39,14 @@ function Register() {
     }
   };
   return (
-    <div className="d-flex flex-column align-items-center p-2 vh-100 w-75 mx-auto">
+    <div
+      className="d-flex flex-column align-items-center p-2 vh-100 mx-auto"
+      style={{ width: "95%" }}
+    >
       <Banner />
       <div className="card bg-secondary bg-gradient w-100 w-md-50 w-lg-25 p-5 shadow-lg">
-        <div className="card-body">
-          <h3 className="card-title text-center mb-4 login-text mx-auto ">
+        <div className="card-body text-center">
+          <h3 className="card-title text-center mb-4 register-text mx-auto ">
             Register Here!
           </h3>
           <input
@@ -63,11 +69,11 @@ function Register() {
           />
           <TeamDropdown teamSelect={setFavoriteTeam} />
           <button
-            className="btn btn-primary mt-4 w-100"
+            className="btn btn-primary mt-4 w-75"
             type="button"
             onClick={registerUser}
           >
-            Register
+            Register and Login
           </button>
         </div>
       </div>
