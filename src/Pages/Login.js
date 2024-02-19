@@ -29,7 +29,10 @@ function Login() {
     }
   };
   return (
-    <div className="d-flex flex-column align-items-center p-2 vh-100 w-75 mx-auto">
+    <div
+      className="d-flex flex-column align-items-center p-2 vh-100 mx-auto"
+      style={{ width: "95%" }}
+    >
       <Banner />
       <div className="bg-secondary bg-gradient card w-100 w-md-50 w-lg-25 p-4 shadow-lg">
         <div className="card-body">
@@ -60,19 +63,23 @@ function Login() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <button
-            className="btn btn-primary mt-4 w-100"
-            type="button"
-            onClick={loginHandler}
-          >
-            Login
-          </button>
-          <Link
-            to="/register"
-            className="btn btn-success bg-gradient w-100 mt-2"
-          >
-            Register
-          </Link>
+          <div className="text-center">
+            <button
+              className="btn btn-primary mt-4 w-75"
+              type="button"
+              onClick={loginHandler}
+            >
+              Login
+            </button>
+          </div>
+          <div className="text-center">
+            <Link
+              to="/register"
+              className="btn btn-success bg-gradient w-75 mt-2"
+            >
+              New User
+            </Link>
+          </div>
         </div>
       </div>
     </div>

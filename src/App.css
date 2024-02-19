@@ -42,6 +42,10 @@
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
   }
 }
+@keyframes fadingEdge {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+  50% { box-shadow: 0 0 10px 5px rgba(255, 215, 0, 0.5); }
+}
 .login-text {
   font-family: 'Montserrat', sans-serif;
   color: #FFFFFF;
@@ -57,6 +61,26 @@
 
   animation: pulsate 1.5s ease-in-out infinite;
 }
+.register-text {
+  font-family: 'Montserrat', sans-serif;
+  color: #FFFFFF;
+  font-size: 2rem;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+  border: 1px solid #ADD8E6;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+}
+.favorite-team-btn{
+    outline: 2px solid #BF6437; 
+    box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    animation: fadingEdge 1.5s ease-in-out infinite;
+    
+  }
 
 .logo {
   height: 100px; 

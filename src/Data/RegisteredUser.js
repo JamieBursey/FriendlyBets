@@ -177,9 +177,9 @@ const TeamDropdown = ({ teamSelect }) => {
     teamSelect(logo);
   };
   return (
-    <div className="dropdown ">
+    <div className="dropdown mx-auto text-center ">
       <button
-        className="btn btn-outline-secondary dropdown-toggle"
+        className="btn favorite-team-btn dropdown-toggle text-white"
         type="button"
         data-bs-toggle="dropdown"
         aria-expanded="false"
