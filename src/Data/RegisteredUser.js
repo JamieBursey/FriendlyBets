@@ -147,64 +147,106 @@ const adminUser = () => {
 const TeamDropdown = ({ teamSelect }) => {
   const [team, setTeam] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState("");
+  const [league, setLeague] = useState("NHL");
 
   useEffect(() => {
+    const fetchMLBTeams = async () => {
+      //copy nhl fetch logic
+      // setTeams(mlbTeamLogos);
+    };
     const fetchTeam = async () => {
-      const response = await fetch(
-        "https://friendly-bets-back-end.vercel.app/api/now"
-      );
-      const teamData = await response.json();
-      const teamLogos = [];
+      if (league === "NHL") {
+        const response = await fetch(
+          "https://friendly-bets-back-end.vercel.app/api/now"
+        );
+        const teamData = await response.json();
+        const teamLogos = [];
 
-      teamData.gameWeek.forEach((week) => {
-        week.games.forEach((game) => {
-          const homeLogo = game.homeTeam.logo;
-          const awayLogo = game.awayTeam.logo;
-          if (!teamLogos.includes(homeLogo)) {
-            teamLogos.push(homeLogo);
-          }
-          if (!teamLogos.includes(awayLogo)) {
-            teamLogos.push(awayLogo);
-          }
+        teamData.gameWeek.forEach((week) => {
+          week.games.forEach((game) => {
+            const homeLogo = game.homeTeam.logo;
+            const awayLogo = game.awayTeam.logo;
+            if (!teamLogos.includes(homeLogo)) {
+              teamLogos.push(homeLogo);
+            }
+            if (!teamLogos.includes(awayLogo)) {
+              teamLogos.push(awayLogo);
+            }
+          });
         });
-      });
-      setTeam(teamLogos);
+        setTeam(teamLogos);
+      } else if (league === "MLB") {
+        // Future addition
+        await fetchMLBTeams();
+      }
     };
     fetchTeam();
-  }, []);
+  }, [league]);
   const handleSelectedTeam = (logo) => {
     setSelectedTeam(logo);
     teamSelect(logo);
   };
+  const handleLeagueChange = (event) => {
+    setLeague(event.target.value);
+    setSelectedTeam("");
+  };
   return (
-    <div className="dropdown mx-auto text-center ">
-      <button
-        className="btn favorite-team-btn dropdown-toggle text-white"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        {selectedTeam ? (
-          <img src={selectedTeam} style={{ width: "30px", height: "30px" }} />
-        ) : (
-          "Select Favorite Team"
-        )}
-      </button>
-      <ul className="dropdown-menu">
-        {team.map((logo, index) => {
-          return (
-            <li key={index}>
-              <a
-                className="dropdown-item"
-                href="#"
-                onClick={() => handleSelectedTeam(logo)}
-              >
-                <img src={logo} style={{ width: "30px", height: "30px" }} />
-              </a>
-            </li>
-          );
-        })}
-      </ul>
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex flex-column align-items-center">
+        <select
+          onChange={handleLeagueChange}
+          className="form-control mb-3 w-50 text-center"
+        >
+          <option value="NHL">NHL</option>
+          <option value="MLB">MLB</option>
+        </select>
+
+        <div className="dropdown">
+          {/* Dropdown button */}
+          <button
+            className="btn favorite-team-btn dropdown-toggle text-white"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {selectedTeam ? (
+              <img
+                src={selectedTeam}
+                style={{ width: "30px", height: "30px" }}
+                alt="Selected Team"
+              />
+            ) : (
+              "Select Favorite Team"
+            )}
+          </button>
+          {/* Dropdown menu */}
+          <ul className="dropdown-menu">
+            {league === "MLB" ? (
+              <li>
+                <span className="dropdown-item-text">
+                  MLB teams not available yet.
+                </span>
+              </li>
+            ) : (
+              team.map((logo, index) => (
+                <li key={index}>
+                  <button
+                    className="dropdown-item"
+                    type="button"
+                    onClick={() => handleSelectedTeam(logo)}
+                  >
+                    <img
+                      src={logo}
+                      style={{ width: "30px", height: "30px" }}
+                      alt="Team Logo"
+                    />
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
