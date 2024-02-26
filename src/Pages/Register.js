@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LOCALSTORAGE } from "../Config";
+import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { TeamDropdown } from "../Data";
 import { bannerTextStyles, Banner } from "../Components";
 
@@ -35,7 +35,7 @@ function Register() {
       existingUsers.push(newUser);
       localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(existingUsers));
       localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newUser));
-      navigate("/FriendlyBets");
+      navigate(NAVIGATION.ADDFRIENDS);
     }
   };
   return (
