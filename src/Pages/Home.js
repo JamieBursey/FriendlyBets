@@ -1,6 +1,7 @@
 import { Banner, Buttons, Matches, NflMatches } from "../Components";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { MlbSchedule } from "../Components/mlb.js";
 
 function Home() {
   const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
@@ -11,6 +12,9 @@ function Home() {
     }
     if (selectedMatchType == "Football") {
       return <NflMatches />;
+    }
+    if (selectedMatchType === "Baseball") {
+      return <MlbSchedule />;
     } else {
       return (
         <div className="text-center text-white">Feature not yet Added</div>
