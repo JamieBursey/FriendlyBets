@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 
 const MlbTodaysGames = () => {
   const [todaysGameArr, setTodaysGameArr] = useState([]);
+
   const todaysSchedule = async () => {
     const response = await fetch(
-      "https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1"
+      "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
     );
     const teamData = await response.json();
-    let gamesHtml = [];
-    const teamLogos = [];
     console.log(teamData);
 
-    setTodaysGameArr(teamData.dates[0].games);
+    setTodaysGameArr(teamData.events);
   };
   useEffect(() => {
     todaysSchedule();
@@ -29,14 +28,12 @@ const MlbTodaysGames = () => {
               style={{ width: "20rem" }}
             >
               <div className="card-body">
-                <h5 className="card-title">
-                  {game.teams.away.team.name} vs {game.teams.home.team.name}
-                </h5>
+                <h5 className="card-title">{game.name}</h5>
                 <div className="row">
                   <div className="col">
                     {/* <img
-                      src={game.awayTeam.logo}
-                      alt={`${game.awayTeam.abbrev} logo`}
+                      src={teamLogos[game.teams.away.team.id]}
+                      alt={`${game.teams.away.team.abbreviation} logo`}
                       className="img-fluid"
                     /> */}
                   </div>
