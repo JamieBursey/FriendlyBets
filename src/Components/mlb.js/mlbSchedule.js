@@ -31,18 +31,18 @@ const MlbTodaysGames = () => {
                 <h5 className="card-title">{game.name}</h5>
                 <div className="row">
                   <div className="col">
-                    {/* <img
-                      src={teamLogos[game.teams.away.team.id]}
-                      alt={`${game.teams.away.team.abbreviation} logo`}
+                    <img
+                      src={game.competitions[0].competitors[0].team.logo}
+                      alt={"logo"}
                       className="img-fluid"
-                    /> */}
+                    />
                   </div>
                   <div className="col">
-                    {/* <img
-                      src={game.homeTeam.logo}
-                      alt={`${game.homeTeam.abbrev} logo`}
+                    <img
+                      src={game.competitions[0].competitors[1].team.logo}
+                      alt={"logo"}
                       className="img-fluid"
-                    /> */}
+                    />
                   </div>
                 </div>
                 <div className="row"></div>
