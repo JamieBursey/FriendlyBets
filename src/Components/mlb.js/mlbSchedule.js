@@ -1,4 +1,18 @@
+import { useEffect } from "react";
+
 const MlbSchedule = () => {
+  const fetchSchedule = async () => {
+    const response = await fetch(
+      "https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1"
+    );
+    const teamData = await response.json();
+    const teamLogos = [];
+    console.log(teamData);
+    console.log(response, "response");
+  };
+  useEffect(() => {
+    fetchSchedule();
+  }, []);
   const createGameCard = () => {
     return (
       <div className="col-3 card m-1" style={{ width: "20rem" }}>
