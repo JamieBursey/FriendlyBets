@@ -11,27 +11,28 @@ const findPlayerName = (roster, playerId) => {
     ? `${player.firstName.default} ${player.lastName.default}`
     : "Unknown Player";
 };
-const generateBettingOptions = (roster, homeTeam, awayTeam) => {
+const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   const options = [];
   options.push(`${homeTeam} will win`);
   options.push(`${awayTeam} will win`);
+  if (sportType === "NHL") {
+    if (roster.length > 0) {
+      // Generate a separate option for each bet
+      const goalPlayerID = findPlayerID(roster);
+      const scoringPlayerName = findPlayerName(roster, goalPlayerID);
+      options.push(`${scoringPlayerName} will score the first goal`);
+      options.push(`${scoringPlayerName} will score anytime`);
 
-  if (roster.length > 0) {
-    // Generate a separate option for each bet
-    const goalPlayerID = findPlayerID(roster);
-    const scoringPlayerName = findPlayerName(roster, goalPlayerID);
-    options.push(`${scoringPlayerName} will score the first goal`);
-    options.push(`${scoringPlayerName} will score anytime`);
+      const shotsPlayerID = findPlayerID(roster);
+      const ShootingPlayerName = findPlayerName(roster, shotsPlayerID);
+      options.push(`${ShootingPlayerName} will get 2 shots on net`);
 
-    const shotsPlayerID = findPlayerID(roster);
-    const ShootingPlayerName = findPlayerName(roster, shotsPlayerID);
-    options.push(`${ShootingPlayerName} will get 2 shots on net`);
-
-    const assistPlayerID = findPlayerID(roster);
-    const assistPlayerName = findPlayerName(roster, assistPlayerID);
-    options.push(`${assistPlayerName} will make an assist`);
-  } else {
-    return options;
+      const assistPlayerID = findPlayerID(roster);
+      const assistPlayerName = findPlayerName(roster, assistPlayerID);
+      options.push(`${assistPlayerName} will make an assist`);
+    } else {
+      return options;
+    }
   }
 
   return options;
@@ -41,7 +42,7 @@ const handleCheckedBet = (option, updateCheckedBets) => {
   updateCheckedBets(option);
 };
 
-export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
+export const BettingOptions = ({ updateCheckedBets, sportType }) => {
   const [betOptions, setBetOptions] = useState([]);
   const [selectedBet, setSelectedBet] = useState("");
 
@@ -50,35 +51,38 @@ export const BettingOptions = ({ updateCheckedBets, selectedBets }) => {
       const gameID = localStorage.getItem(LOCALSTORAGE.SELECTEDGAME);
       const gameIDData = JSON.parse(gameID);
       const gameNumber = gameIDData.game_ID;
+      const sportType = gameIDData.sportType;
+      if (sportType === "NHL") {
+        try {
+          const response = await fetch(
+            `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
+          );
+          const liveGameData = await response.json();
+          const homeTeam = liveGameData.homeTeam.name.default;
+          const awayTeam = liveGameData.awayTeam.name.default;
+          console.log("livedata", liveGameData);
+          const roster = [
+            ...(Array.isArray(liveGameData.rosterSpots) &&
+            liveGameData.rosterSpots.length > 0
+              ? liveGameData.rosterSpots
+              : []),
+          ];
 
-      try {
-        const response = await fetch(
-          `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
-        );
-        const liveGameData = await response.json();
-        const homeTeam = liveGameData.homeTeam.name.default;
-        const awayTeam = liveGameData.awayTeam.name.default;
-        console.log("livedata", liveGameData);
-        const roster = [
-          ...(Array.isArray(liveGameData.rosterSpots) &&
-          liveGameData.rosterSpots.length > 0
-            ? liveGameData.rosterSpots
-            : []),
-        ];
-
-        const generatedOptions = generateBettingOptions(
-          roster,
-          homeTeam,
-          awayTeam
-        );
-        setBetOptions(generatedOptions);
-      } catch (error) {
-        console.log(error);
+          const generatedOptions = generateBettingOptions(
+            roster,
+            homeTeam,
+            awayTeam,
+            sportType
+          );
+          setBetOptions(generatedOptions);
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
 
     playByPlay();
-  }, []);
+  }, [sportType]);
 
   return (
     <div className="mb-3">

@@ -23,6 +23,7 @@ const TodaysGames = () => {
       gameDay,
       homeLogo,
       awayLogo,
+      sportType: "NHL",
     };
     localStorage.setItem(
       LOCALSTORAGE.SELECTEDGAME,
@@ -150,6 +151,7 @@ const LiveGames = () => {
       gameDay: game.startTimeUTC,
       homeLogo: game.homeTeam.logo,
       awayLogo: game.awayTeam.logo,
+      sportType: "NHL",
     };
     localStorage.setItem(
       LOCALSTORAGE.SELECTEDGAME,
