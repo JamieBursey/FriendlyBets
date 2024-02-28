@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { TeamDropdown } from "../Data";
-import { bannerTextStyles, Banner } from "../Components";
+import { Banner } from "../Components";
 
 function Register() {
   const navigate = useNavigate();
