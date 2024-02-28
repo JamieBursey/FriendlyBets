@@ -9,7 +9,7 @@ const MlbTodaysGames = () => {
     const gameDetails = {
       game_ID: game.id,
       gameTitle: game.shortName,
-      gameTime: new Date(game.competitions[0].date).toLocaleTimeString("en-US"),
+      gameTime: game.competitions[0].date,
       gameDay: new Date(game.competitions[0].date).toLocaleDateString("en-US", {
         weekday: "short",
       }),
@@ -73,7 +73,11 @@ const MlbTodaysGames = () => {
                     )}{" "}
                     at{" "}
                     {new Date(game.competitions[0].date).toLocaleTimeString(
-                      "en-US"
+                      "en-US",
+                      {
+                        hour: "numeric",
+                        minute: "2-digit",
+                      }
                     )}
                   </p>
                 </div>
@@ -99,6 +103,14 @@ const MlbTodaysGames = () => {
 };
 
 const MlbSchedule = () => {
-  return MlbTodaysGames();
+  const backgroundColor = {
+    background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
+    borderRadius: "1rem",
+  };
+  return (
+    <div style={backgroundColor} className="container text-center p-2">
+      {MlbTodaysGames()};
+    </div>
+  );
 };
 export { MlbTodaysGames, MlbSchedule };
