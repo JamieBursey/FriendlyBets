@@ -23,12 +23,12 @@ const MlbTodaysGames = () => {
         {todaysGameArr.length > 0 ? (
           todaysGameArr.map((game) => (
             <div
-              key={game.gamePk}
+              key={game.id}
               className="col-3 card m-1"
               style={{ width: "20rem" }}
             >
               <div className="card-body">
-                <h5 className="card-title">{game.name}</h5>
+                <h5 className="card-title">{game.shortName}</h5>
                 <div className="row">
                   <div className="col">
                     <img
@@ -46,6 +46,18 @@ const MlbTodaysGames = () => {
                   </div>
                 </div>
                 <div className="row"></div>
+                <div>
+                  <p>
+                    {new Date(game.competitions[0].date).toLocaleDateString(
+                      "en-US",
+                      { weekday: "short" }
+                    )}{" "}
+                    at{" "}
+                    {new Date(game.competitions[0].date).toLocaleTimeString(
+                      "en-US"
+                    )}
+                  </p>
+                </div>
                 <p>{game.gameDate}</p>
                 {/* <button
                   onClick={() => actionBtnOne(game)}
