@@ -34,6 +34,11 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
       return options;
     }
   }
+  if (sportType === "MLB") {
+    if (roster.length > 0) {
+      return options;
+    }
+  }
 
   return options;
 };
@@ -78,6 +83,31 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
         } catch (error) {
           console.log(error);
         }
+      }
+      if (sportType === "MLB") {
+        const rosterFetch =
+          await fetch(`https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/summary?event=${gameNumber}
+        `);
+        const rosterInfo = await rosterFetch.json();
+        const roster = [
+          ...(Array.isArray(rosterInfo.rosters) && rosterInfo.rosters.length > 0
+            ? rosterInfo.rosters
+            : []),
+        ];
+        const selectedGame = JSON.parse(
+          localStorage.getItem(LOCALSTORAGE.SELECTEDGAME)
+        );
+        const homeTeam = selectedGame.homeTeam;
+        const awayTeam = selectedGame.awayTeam;
+        console.log("roster", rosterInfo);
+        console.log("team", selectedGame);
+        const generatedOptions = generateBettingOptions(
+          roster,
+          homeTeam,
+          awayTeam,
+          sportType
+        );
+        setBetOptions(generatedOptions);
       }
     };
 
