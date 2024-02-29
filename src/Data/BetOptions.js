@@ -11,6 +11,22 @@ const findPlayerName = (roster, playerId) => {
     ? `${player.firstName.default} ${player.lastName.default}`
     : "Unknown Player";
 };
+
+//MLB info
+const findMLBPlayerID = (roster) => {
+  const randomIndex = Math.floor(Math.random() * roster.length);
+  return roster[randomIndex].athlete.id;
+};
+const findMLBPlayerName = (roster, playerId) => {
+  const player = roster.find((player) => player.athlete.id === playerId);
+  return player ? player.athlete.displayName : "Unknown Player";
+};
+const findPitcherID = (roster) => {
+  // Filter roster for pitchers and then select one randomly
+  const pitchers = roster.filter((player) => player.position === "Pitcher");
+  const randomIndex = Math.floor(Math.random() * pitchers.length);
+  return pitchers[randomIndex].playerId;
+};
 const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   const options = [];
   options.push(`${homeTeam} will win`);
@@ -36,7 +52,22 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   }
   if (sportType === "MLB") {
     if (roster.length > 0) {
-      return options;
+      const homeRunPlayerID = findMLBPlayerID(roster);
+      const homeRunPlayerName = findMLBPlayerName(roster, homeRunPlayerID);
+      options.push(`${homeRunPlayerName} will hit a home run`);
+
+      const rbiPlayerID = findMLBPlayerID(roster);
+      const rbiPlayerName = findMLBPlayerName(roster, rbiPlayerID);
+      options.push(`${rbiPlayerName} will get an RBI`);
+
+      // Player to steal a base
+      const stealBasePlayerID = findMLBPlayerID(roster);
+      const stealBasePlayerName = findPlayerName(roster, stealBasePlayerID);
+      options.push(`${stealBasePlayerName} will steal a base`);
+
+      const pitcherID = findPitcherID(roster);
+      const pitcherName = findPlayerName(roster, pitcherID);
+      options.push(`${pitcherName} will have over 5 strikeouts`);
     }
   }
 
@@ -89,18 +120,27 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
           await fetch(`https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/summary?event=${gameNumber}
         `);
         const rosterInfo = await rosterFetch.json();
-        const roster = [
-          ...(Array.isArray(rosterInfo.rosters) && rosterInfo.rosters.length > 0
-            ? rosterInfo.rosters
-            : []),
-        ];
+        const awayTeamID = rosterInfo.boxscore.teams[0].team.id;
+        console.log("awayTeamID", awayTeamID);
+        const homeTeamID = rosterInfo.boxscore.teams[1].team.id;
+        const teamID = awayTeamID;
+        const awayTeamFetch = await fetch(
+          `https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/${teamID}/roster`
+        );
+        const awayTeamInfo = await awayTeamFetch.json();
+        console.log("awayTeamf", awayTeamInfo);
+
+        const homeRoster = rosterInfo.rosters[0]?.roster ?? [];
+        const awayRoster = rosterInfo.rosters[1]?.roster ?? [];
+        const combinedRoster = [...homeRoster, ...awayRoster];
+
+        const roster = combinedRoster;
+        console.log("roster", roster);
         const selectedGame = JSON.parse(
           localStorage.getItem(LOCALSTORAGE.SELECTEDGAME)
         );
         const homeTeam = selectedGame.homeTeam;
         const awayTeam = selectedGame.awayTeam;
-        console.log("roster", rosterInfo);
-        console.log("team", selectedGame);
         const generatedOptions = generateBettingOptions(
           roster,
           homeTeam,
