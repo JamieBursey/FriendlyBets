@@ -6,6 +6,12 @@ const MlbTodaysGames = () => {
   const [todaysGameArr, setTodaysGameArr] = useState([]);
   const navigate = useNavigate();
   const actionBtnOne = (game) => {
+    const homeTeamData = game.competitions[0].competitors.find(
+      (team) => team.homeAway === "home"
+    ).team;
+    const awayTeamData = game.competitions[0].competitors.find(
+      (team) => team.homeAway === "away"
+    ).team;
     const gameDetails = {
       game_ID: game.id,
       gameTitle: game.shortName,
@@ -15,6 +21,9 @@ const MlbTodaysGames = () => {
       }),
       homeLogo: game.competitions[0].competitors[0].team.logo,
       awayLogo: game.competitions[0].competitors[1].team.logo,
+      homeTeam: homeTeamData.shortDisplayName,
+      awayTeam: awayTeamData.shortDisplayName,
+      sportType: "MLB",
     };
     localStorage.setItem(
       LOCALSTORAGE.SELECTEDGAME,
