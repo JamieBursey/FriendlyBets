@@ -1,19 +1,43 @@
 import React from "react";
 import Avatar from "react-avatar";
-function buttons(buttonsData, onClickCallback) {
+import { useState } from "react";
+
+function Button({ buttonData, onClickCallback }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const normalStyle = {
+    transition: "transform 0.3s ease",
+  };
+
+  const hoverStyle = {
+    transform: "scale(1.1)",
+    cursor: "pointer",
+  };
+
+  return (
+    <div
+      className="col"
+      style={isHovered ? hoverStyle : normalStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => onClickCallback(buttonData.text)}
+    >
+      <Avatar size="75" src={buttonData.imageURL} round={true} />
+    </div>
+  );
+}
+function buttons({ buttonsData, onClickCallback }) {
   return (
     <div className="App p-3 mb-3">
       <div className="container text-center">
         <div className="row">
           {buttonsData
             ? buttonsData.map((button, index) => (
-                <div
-                  className="col"
+                <Button
                   key={index}
-                  onClick={() => onClickCallback(button.text)}
-                >
-                  <Avatar size="100" src={button.imageURL} round={true} />
-                </div>
+                  buttonData={button}
+                  onClickCallback={onClickCallback}
+                />
               ))
             : null}
         </div>
@@ -53,7 +77,10 @@ function AddButtons({ setSelectMatchesType }) {
     <>
       <div style={ButtonsBackground} className="App p-3 mb-3">
         <div className="container text-center">
-          {buttons(sportButtons, setSelectMatchesType)}
+          {buttons({
+            buttonsData: sportButtons,
+            onClickCallback: setSelectMatchesType,
+          })}
         </div>
       </div>
     </>
