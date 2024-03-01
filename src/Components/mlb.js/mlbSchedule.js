@@ -2,27 +2,60 @@ import { useEffect, useState } from "react";
 import { LOCALSTORAGE } from "../../Config";
 import { useNavigate } from "react-router-dom";
 
+const normalizeTeamName = (name) => {
+  return name.toLowerCase();
+};
+
+const matchGamesWithLogos = (mlbGames, espnGames) => {
+  return mlbGames.map((mlbGame) => {
+    const homeTeamName = normalizeTeamName(mlbGame.teams.home.team.name);
+    const awayTeamName = normalizeTeamName(mlbGame.teams.away.team.name);
+
+    const matchedEspnGame = espnGames.find(
+      (espnGame) =>
+        normalizeTeamName(
+          espnGame.competitions[0].competitors.find(
+            (team) => team.homeAway === "home"
+          ).team.displayName
+        ) === homeTeamName &&
+        normalizeTeamName(
+          espnGame.competitions[0].competitors.find(
+            (team) => team.homeAway === "away"
+          ).team.displayName
+        ) === awayTeamName
+    );
+
+    if (matchedEspnGame) {
+      return {
+        ...mlbGame,
+        gameTitle: matchedEspnGame.shortName,
+        homeLogo: matchedEspnGame.competitions[0].competitors.find(
+          (team) => team.homeAway === "home"
+        ).team.logo,
+        awayLogo: matchedEspnGame.competitions[0].competitors.find(
+          (team) => team.homeAway === "away"
+        ).team.logo,
+      };
+    }
+
+    return mlbGame;
+  });
+};
 const MlbTodaysGames = () => {
   const [todaysGameArr, setTodaysGameArr] = useState([]);
   const navigate = useNavigate();
   const actionBtnOne = (game) => {
-    const homeTeamData = game.competitions[0].competitors.find(
-      (team) => team.homeAway === "home"
-    ).team;
-    const awayTeamData = game.competitions[0].competitors.find(
-      (team) => team.homeAway === "away"
-    ).team;
     const gameDetails = {
-      game_ID: game.id,
-      gameTitle: game.shortName,
-      gameTime: game.competitions[0].date,
-      gameDay: new Date(game.competitions[0].date).toLocaleDateString("en-US", {
+      game_ID: game.gamePk, // MLB API game ID
+      gameTitle: game.gameTitle,
+      gameTime: game.gameDate,
+      gameDay: new Date(game.gameDate).toLocaleDateString("en-US", {
         weekday: "short",
       }),
-      homeLogo: game.competitions[0].competitors[0].team.logo,
-      awayLogo: game.competitions[0].competitors[1].team.logo,
-      homeTeam: homeTeamData.shortDisplayName,
-      awayTeam: awayTeamData.shortDisplayName,
+      homeLogo: game.homeLogo, // Logo from ESPN API
+      awayLogo: game.awayLogo, // Logo from ESPN API
+      homeTeam: game.teams.home.team.name,
+      awayTeam: game.teams.away.team.name,
       sportType: "MLB",
     };
     localStorage.setItem(
@@ -32,14 +65,27 @@ const MlbTodaysGames = () => {
     navigate("/betPage");
   };
   const todaysSchedule = async () => {
-    const response = await fetch(
+    // Fetch data from ESPN API
+    const espnResponse = await fetch(
       "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
     );
-    const teamData = await response.json();
-    console.log(teamData);
+    const espnData = await espnResponse.json();
 
-    setTodaysGameArr(teamData.events);
+    // Fetch data from MLB Stats API
+    const mlbApiResponse = await fetch(
+      "https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1"
+    );
+    const mlbApiData = await mlbApiResponse.json();
+
+    // Match games and merge logos
+    const matchedGames = matchGamesWithLogos(
+      mlbApiData.dates[0].games,
+      espnData.events
+    );
+    console.log("mathedGames", matchedGames);
+    setTodaysGameArr(matchedGames);
   };
+
   useEffect(() => {
     todaysSchedule();
   }, []);
@@ -51,49 +97,35 @@ const MlbTodaysGames = () => {
         {todaysGameArr.length > 0 ? (
           todaysGameArr.map((game) => (
             <div
-              key={game.id}
+              key={game.gamePk}
               className="col-3 card m-1"
               style={{ width: "20rem" }}
             >
               <div className="card-body">
-                <h5 className="card-title">{game.shortName}</h5>
+                <h5 className="card-title">{game.gameTitle}</h5>
                 <div className="row">
                   <div className="col">
                     <img
-                      src={game.competitions[0].competitors[0].team.logo}
-                      alt={"logo"}
+                      src={game.homeLogo}
+                      alt={"Home Team Logo"}
                       className="img-fluid"
                     />
                   </div>
                   <div className="col">
                     <img
-                      src={game.competitions[0].competitors[1].team.logo}
-                      alt={"logo"}
+                      src={game.awayLogo}
+                      alt={"Away Team Logo"}
                       className="img-fluid"
                     />
                   </div>
                 </div>
-                <div className="row"></div>
-                <div>
-                  <p>
-                    {new Date(game.competitions[0].date).toLocaleDateString(
-                      "en-US",
-                      { weekday: "short" }
-                    )}{" "}
-                    at{" "}
-                    {new Date(game.competitions[0].date).toLocaleTimeString(
-                      "en-US",
-                      {
-                        hour: "numeric",
-                        minute: "2-digit",
-                      }
-                    )}
-                  </p>
-                </div>
-                <div>
-                  <p></p>
-                  <p>{game.status.type.detail}</p>
-                </div>
+                <p>
+                  {new Date(game.gameDate).toLocaleString("en-US", {
+                    weekday: "long",
+                    hour: "numeric",
+                    minute: "numeric",
+                  })}
+                </p>
                 <button
                   onClick={() => actionBtnOne(game)}
                   className="btn btn-primary w-100"
