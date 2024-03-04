@@ -202,16 +202,24 @@ const CheckBetResults = async (betId, callback) => {
               : `${betCreator} Lost`;
           }
         }
-        if (isGameFinished) {
-          const homeScore = gameInfo.liveData.linescore.teams.home.runs;
-          const awayScore = gameInfo.liveData.linescore.teams.away.runs;
 
-          if (betDescription === `${homeTeam.name} will win`) {
+        const homeScore = gameInfo.liveData.linescore.teams.home.runs;
+        const awayScore = gameInfo.liveData.linescore.teams.away.runs;
+
+        if (betDescription === `${homeTeam.name} will win`) {
+          if (!isGameFinished) {
+            bet.result = "Game Not Finished";
+          } else {
             bet.result =
               homeScore > awayScore
                 ? `${betCreator} Wins`
                 : `${betCreator} Lost`;
-          } else if (betDescription === `${awayTeam.name} will win`) {
+          }
+        }
+        if (betDescription === `${awayTeam.name} will win`) {
+          if (!isGameFinished) {
+            bet.result = "Game Not Finished";
+          } else {
             bet.result =
               awayScore > homeScore
                 ? `${betCreator} Wins`
