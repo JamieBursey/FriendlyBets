@@ -106,14 +106,14 @@ const MlbTodaysGames = () => {
                 <div className="row">
                   <div className="col">
                     <img
-                      src={game.homeLogo}
+                      src={game.awayLogo}
                       alt={"Home Team Logo"}
                       className="img-fluid"
                     />
                   </div>
                   <div className="col">
                     <img
-                      src={game.awayLogo}
+                      src={game.homeLogo}
                       alt={"Away Team Logo"}
                       className="img-fluid"
                     />
