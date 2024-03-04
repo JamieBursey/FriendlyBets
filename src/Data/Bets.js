@@ -27,4 +27,13 @@ const findPlayerIdByName = (playerName, rosterSpots) => {
   }
   return null;
 };
-export { getAllBets, findPlayerIdByName };
+const findMLBPlayerIdByName = (playerName, roster) => {
+  const [firstName, lastName] = playerName.split(" ");
+  for (const player of roster) {
+    if (player.firstName === firstName && player.lastName === lastName) {
+      return player.playerId;
+    }
+  }
+  return null;
+};
+export { getAllBets, findPlayerIdByName, findMLBPlayerIdByName };
