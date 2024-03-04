@@ -35,6 +35,7 @@ const matchGamesWithLogos = (mlbGames, espnGames) => {
         awayLogo: matchedEspnGame.competitions[0].competitors.find(
           (team) => team.homeAway === "away"
         ).team.logo,
+        inning: matchedEspnGame.competitions[0].status.type.detail,
       };
     }
 
@@ -70,7 +71,7 @@ const MlbTodaysGames = () => {
       "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
     );
     const espnData = await espnResponse.json();
-
+    console.log(espnData);
     // Fetch data from MLB Stats API
     const mlbApiResponse = await fetch(
       "https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1"
@@ -126,6 +127,7 @@ const MlbTodaysGames = () => {
                     minute: "numeric",
                   })}
                 </p>
+                <p>{`${game.inning}`}</p>
                 <button
                   onClick={() => actionBtnOne(game)}
                   className="btn btn-primary w-100"
