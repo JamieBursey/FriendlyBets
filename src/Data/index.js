@@ -17,8 +17,8 @@ import {
   adminUser,
   RedirectBasedOnLogin,
 } from "./RegisteredUser";
-import { BettingOptions } from "./BetOptions";
-import { getAllBets, findPlayerIdByName } from "./Bets";
+import { BettingOptions, findMLBPlayerName } from "./BetOptions";
+import { getAllBets, findPlayerIdByName, findMLBPlayerIdByName } from "./Bets";
 import { TodaysGames, LiveGames } from "./MatchData";
 // import {} from "./Matches"
 
@@ -43,4 +43,6 @@ export {
   TeamDropdown,
   adminUser,
   RedirectBasedOnLogin,
+  findMLBPlayerIdByName,
+  findMLBPlayerName,
 };

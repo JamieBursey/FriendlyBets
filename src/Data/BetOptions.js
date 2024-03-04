@@ -23,7 +23,7 @@ const findMLBPlayerID = (roster) => {
 };
 
 const findMLBPlayerName = (roster, playerId) => {
-  const player = roster.find((player) => player.id === playerId); // Use strict equality ===
+  const player = roster.find((player) => player.id === playerId);
   return player ? player.firstLastName : "Unknown Player";
 };
 
@@ -64,7 +64,6 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   if (sportType === "MLB") {
     if (roster.length > 0) {
       const homeRunPlayerID = findMLBPlayerID(roster);
-      console.log("hr", homeRunPlayerID);
       const homeRunPlayerName = findMLBPlayerName(roster, homeRunPlayerID);
       options.push(`${homeRunPlayerName} will hit a home run`);
 
@@ -133,11 +132,11 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
           await fetch(`https://statsapi.mlb.com/api/v1.1/game/${gameNumber}/feed/live
         `);
         const gameInfo = await selectedGameApi.json();
+        console.log("games info", gameInfo);
         const homeTeam = gameInfo.gameData.teams.home.name;
         const awayTeam = gameInfo.gameData.teams.away.name;
         const roster = [].concat(...Object.values(gameInfo.gameData.players));
         console.log(gameInfo);
-        console.log("roster", roster);
 
         const generatedOptions = generateBettingOptions(
           roster,
@@ -172,3 +171,5 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
     </div>
   );
 };
+
+export { findMLBPlayerName };

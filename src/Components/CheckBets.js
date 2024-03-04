@@ -1,5 +1,6 @@
 import { LOCALSTORAGE } from "../Config";
-import { findPlayerIdByName } from "../Data";
+import { findPlayerIdByName, findMLBPlayerIdByName } from "../Data";
+import { findMLBPlayerName } from "../Data";
 
 const CheckBetResults = async (betId, callback) => {
   let allBets = JSON.parse(localStorage.getItem(LOCALSTORAGE.BETS));
@@ -170,20 +171,40 @@ const CheckBetResults = async (betId, callback) => {
         `https://statsapi.mlb.com/api/v1.1/game/${gameNumber}/feed/live`
       );
       const gameInfo = await response.json();
-
+      const plays = gameInfo.liveData.plays.allPlays;
       const isGameFinished =
         gameInfo.gameData.status.abstractGameState === "Final";
-      const homeTeam = gameInfo.gameData.linescore.teams.home;
-      const awayTeam = gameInfo.gameData.linescore.teams.away;
+      const homeTeam = gameInfo.gameData.teams.home;
+      const awayTeam = gameInfo.gameData.teams.away;
 
       for (const [betDescription, isActive] of Object.entries(
         bet.betDescripston
       )) {
         if (!isActive) continue;
+        if (betDescription.includes("will hit a home run")) {
+          console.log("gameinfo", gameInfo);
+          console.log("plays", plays);
+          const roster = Object.values(gameInfo.gameData.players);
+          const playerName = betDescription.split(" will hit a home run")[0];
+          const playerID = findMLBPlayerIdByName(playerName, roster);
 
+          const playerHitHomeRun = plays.some(
+            (play) =>
+              play.result.event === "Home Run" &&
+              play.matchup.batter.id === playerID
+          );
+
+          if (!isGameFinished && !playerHitHomeRun) {
+            bet.result = "Game not Finished";
+          } else {
+            bet.result = playerHitHomeRun
+              ? `${betCreator} Wins`
+              : `${betCreator} Lost`;
+          }
+        }
         if (isGameFinished) {
-          const homeScore = homeTeam.runs;
-          const awayScore = awayTeam.runs;
+          const homeScore = gameInfo.liveData.linescore.teams.home.runs;
+          const awayScore = gameInfo.liveData.linescore.teams.away.runs;
 
           if (betDescription === `${homeTeam.name} will win`) {
             bet.result =
@@ -196,8 +217,6 @@ const CheckBetResults = async (betId, callback) => {
                 ? `${betCreator} Wins`
                 : `${betCreator} Lost`;
           }
-        } else {
-          bet.result = "Game not Finished";
         }
       }
 
