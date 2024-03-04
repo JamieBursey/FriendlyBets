@@ -59,6 +59,7 @@ const BetPage = () => {
       result: "Waiting",
       friends: [selectedFriends],
       betStatus: "pending",
+      sportType: selectedGame.sportType,
     };
     allBets.push(newBet);
     localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));

@@ -17,31 +17,26 @@ const findPlayerName = (roster, playerId, sportType) => {
 };
 
 //MLB info
-const findMLBPlayerID = (roster, sportType) => {
-  if (sportType === "MLB") {
-    const randomIndex = Math.floor(Math.random() * roster.length);
-    return roster[randomIndex].athlete.id;
-  }
+const findMLBPlayerID = (roster) => {
+  const randomIndex = Math.floor(Math.random() * roster.length);
+  return roster[randomIndex].id;
 };
-const findMLBPlayerName = (roster, playerId, sportType) => {
-  if (sportType === "MLB") {
-    const player = roster.find((player) => player.athlete.id === playerId);
-    return player ? player.athlete.displayName : "Unknown Player";
-  }
-};
-const findPitcherID = (roster, sportType) => {
-  // Filter roster for pitchers and then select one randomly
-  if (sportType === "MLB") {
-    const pitchers = roster.filter((player) => player.position === "Pitcher");
-    if (pitchers.length === 0) {
-      console.log("no pitchers");
-      return;
-    }
 
-    const randomIndex = Math.floor(Math.random() * pitchers.length);
-    console.log("random", pitchers);
-    return pitchers[randomIndex].playerId;
+const findMLBPlayerName = (roster, playerId) => {
+  const player = roster.find((player) => player.id === playerId); // Use strict equality ===
+  return player ? player.firstLastName : "Unknown Player";
+};
+
+const findPitcherID = (roster) => {
+  const pitchers = roster.filter(
+    (player) => player.primaryPosition.code == "1"
+  );
+  if (pitchers.length === 0) {
+    console.log("No pitchers found");
+    return null;
   }
+  const randomIndex = Math.floor(Math.random() * pitchers.length);
+  return pitchers[randomIndex].id;
 };
 const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   const options = [];
@@ -69,6 +64,7 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   if (sportType === "MLB") {
     if (roster.length > 0) {
       const homeRunPlayerID = findMLBPlayerID(roster);
+      console.log("hr", homeRunPlayerID);
       const homeRunPlayerName = findMLBPlayerName(roster, homeRunPlayerID);
       options.push(`${homeRunPlayerName} will hit a home run`);
 
@@ -78,11 +74,12 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
 
       // Player to steal a base
       const stealBasePlayerID = findMLBPlayerID(roster);
-      const stealBasePlayerName = findPlayerName(roster, stealBasePlayerID);
+      const stealBasePlayerName = findMLBPlayerName(roster, stealBasePlayerID);
       options.push(`${stealBasePlayerName} will steal a base`);
 
       const pitcherID = findPitcherID(roster);
-      const pitcherName = findPlayerName(roster, pitcherID);
+      const pitcherName = findMLBPlayerName(roster, pitcherID);
+      console.log(pitcherName);
       options.push(`${pitcherName} will have over 5 strikeouts`);
     }
   }
@@ -138,9 +135,9 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
         const gameInfo = await selectedGameApi.json();
         const homeTeam = gameInfo.gameData.teams.home.name;
         const awayTeam = gameInfo.gameData.teams.away.name;
-        const roster = gameInfo.gameData.players;
+        const roster = [].concat(...Object.values(gameInfo.gameData.players));
+        console.log(gameInfo);
         console.log("roster", roster);
-        console.log("gameInfo", gameInfo);
 
         const generatedOptions = generateBettingOptions(
           roster,
