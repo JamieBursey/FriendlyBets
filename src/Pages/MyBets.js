@@ -66,7 +66,7 @@ const MyBets = () => {
           {betDescriptions.map((desc, index) => (
             <p key={index}>{desc}</p>
           ))}
-          <p>Result:{result}</p>
+          <p>Result: {result}</p>
           <div className="row">
             {betStatus === "pending" && betCreator === loggedInUserUsername ? (
               <p>Awaiting {friends} Confirmation</p>
@@ -124,7 +124,7 @@ const MyBets = () => {
                       }}
                       className="btn btn-outline-danger w-100"
                     >
-                      Resind Bet
+                      Rescind Bet
                     </button>
                   </div>
                 )}

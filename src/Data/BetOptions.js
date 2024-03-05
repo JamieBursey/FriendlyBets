@@ -69,7 +69,7 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
 
       const rbiPlayerID = findMLBPlayerID(roster);
       const rbiPlayerName = findMLBPlayerName(roster, rbiPlayerID);
-      options.push(`${rbiPlayerName} will get an RBI`);
+      options.push(`${rbiPlayerName} will hit an RBI`);
 
       // Player to steal a base
       const stealBasePlayerID = findMLBPlayerID(roster);
