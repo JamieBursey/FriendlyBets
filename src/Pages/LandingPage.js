@@ -1,25 +1,5 @@
 import { useState } from "react";
 
-const ShowVideo = ({ video, setVideo }) => {
-  if (!video) return null;
-  return (
-    <div className="bg-info video-container">
-      <button className="video-close-button" onClick={() => setVideo(false)}>
-        Close Video
-      </button>
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/YLslsZuEaNE?si=GbKbdYL4kRO-J06p"
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullScreen
-      ></iframe>
-    </div>
-  );
-};
-
 const LandingPage = () => {
   return (
     <div className="mt-4">
@@ -39,15 +19,30 @@ const LandingPage = () => {
 
           <div className="col-md-6">
             <div className="video-container rounded bg-secondary">
-              <iframe
-                width="100%"
-                height="315"
-                src="https://www.youtube.com/embed/YLslsZuEaNE"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              <div
+                style={{
+                  position: "relative",
+                  paddingBottom: "45.625%",
+
+                  marginBottom: 25,
+                  marginTop: 25,
+                }}
+              >
+                <iframe
+                  src="https://www.loom.com/embed/ab91c2ac26ff4afcb57bc6fdf0355e76?sid=b6e0954e-c28c-4450-80f1-f3d3763a3c45"
+                  frameborder="0"
+                  webkitallowfullscreen
+                  mozallowFullScreen
+                  allowFullScreen
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "75%",
+                    height: "100%",
+                  }}
+                ></iframe>
+              </div>
             </div>
           </div>
         </div>

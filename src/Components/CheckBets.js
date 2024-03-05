@@ -1,6 +1,5 @@
 import { LOCALSTORAGE } from "../Config";
 import { findPlayerIdByName, findMLBPlayerIdByName } from "../Data";
-import { findMLBPlayerName } from "../Data";
 
 const CheckBetResults = async (betId, callback) => {
   let allBets = JSON.parse(localStorage.getItem(LOCALSTORAGE.BETS));
@@ -181,9 +180,28 @@ const CheckBetResults = async (betId, callback) => {
         bet.betDescripston
       )) {
         if (!isActive) continue;
+
+        if (betDescription.includes("will hit an RBI")) {
+          console.log(plays);
+          const roster = Object.values(gameInfo.gameData.players);
+          const playerName = betDescription.split(" will hit an RBI")[0];
+          const playerID = findMLBPlayerIdByName(playerName, roster);
+
+          const batterRbi = plays.some(
+            (play) => play.result.rbi > 0 && play.matchup.batter.id === playerID
+          );
+
+          if (batterRbi) {
+            bet.result = `${betCreator} Wins`;
+          } else if (!isGameFinished) {
+            bet.result = "Game not Finished";
+          } else {
+            bet.result = `${betCreator} Lost`;
+          }
+        }
         if (betDescription.includes("will hit a home run")) {
           console.log("gameinfo", gameInfo);
-          console.log("plays", plays);
+
           const roster = Object.values(gameInfo.gameData.players);
           const playerName = betDescription.split(" will hit a home run")[0];
           const playerID = findMLBPlayerIdByName(playerName, roster);
@@ -210,6 +228,7 @@ const CheckBetResults = async (betId, callback) => {
           if (!isGameFinished) {
             bet.result = "Game Not Finished";
           } else {
+            console.log("plays", plays);
             bet.result =
               homeScore > awayScore
                 ? `${betCreator} Wins`
