@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 import { Banner } from "../Components";
+import Logo from "../Components/Logo";
 
 function Login() {
   const navigate = useNavigate();
@@ -36,8 +37,9 @@ function Login() {
       className="d-flex flex-column align-items-center p-2 vh-100 mx-auto"
       style={backgroundColor}
     >
+      <Logo />
       <div
-        className="container p-3 mt-5"
+        className="container p-3 mt-2"
         style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
       >
         <div

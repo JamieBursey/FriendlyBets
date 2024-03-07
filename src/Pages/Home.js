@@ -2,6 +2,7 @@ import { Banner, Buttons, Matches, NflMatches } from "../Components";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { MlbSchedule } from "../Components/mlb.js";
+import Logo from "../Components/Logo.js";
 
 function Home() {
   const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
@@ -27,7 +28,8 @@ function Home() {
   return (
     <div style={backgroundColor}>
       {/* <Dropdown onChange={(e) => setSelectMatchesUI(e.target.value)} /> */}
-      <Banner />
+      {/* <Banner /> */}
+      <Logo />
       <Buttons setSelectMatchesType={setSelectMatchesUI} />
       {selectMatchesUI()}
     </div>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { TeamDropdown } from "../Data";
 import { Banner } from "../Components";
+import Logo from "../Components/Logo";
 
 function Register() {
   const navigate = useNavigate();
@@ -46,9 +47,9 @@ function Register() {
       className="d-flex flex-column align-items-center p-2 mx-auto vh-100"
       style={backgroundColor}
     >
-      {/* <Banner /> */}
+      <Logo />
       <div
-        className="container mx-auto mt-5 p-3"
+        className="container mx-auto mt-2 p-3"
         style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
       >
         <div className="card-body text-center">
