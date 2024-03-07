@@ -10,6 +10,9 @@ function Register() {
   const [password, setPassword] = useState(null);
   const [email, setEmail] = useState(null);
   const [favoriteTeam, setFavoriteTeam] = useState(null);
+  const backgroundColor = {
+    background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
+  };
   const registerUser = () => {
     if (!username || !password || !email || !favoriteTeam) {
       alert("Please submit all fields");
@@ -40,40 +43,43 @@ function Register() {
   };
   return (
     <div
-      className="d-flex flex-column align-items-center p-2 vh-100 mx-auto"
-      style={{ width: "95%" }}
+      className="d-flex flex-column align-items-center p-2 mx-auto vh-100"
+      style={backgroundColor}
     >
-      <Banner />
-      <div className="card bg-secondary bg-gradient w-100 w-md-50 w-lg-25 p-5 shadow-lg">
+      {/* <Banner /> */}
+      <div
+        className="container mx-auto mt-5 p-3"
+        style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
+      >
         <div className="card-body text-center">
-          <h3 className="card-title text-center mb-4 register-text mx-auto ">
+          <h3 className="card-title text-center w-50 mb-4 register-text mx-auto ">
             Register Here!
           </h3>
           <input
             type="email"
-            className="form-control mb-3"
+            className="form-control mb-3 w-75 mx-auto"
             placeholder="Enter Email"
             onChange={(event) => setEmail(event.target.value)}
           />
           <input
             type="text"
-            className="form-control mb-3"
+            className="form-control mb-3 w-75 mx-auto"
             placeholder="Display Name"
             onChange={(event) => setUserName(event.target.value)}
           />
           <input
             type="password"
-            className="form-control mb-3"
+            className="form-control mb-3 w-75 mx-auto"
             placeholder="Enter Password"
             onChange={(event) => setPassword(event.target.value)}
           />
           <TeamDropdown teamSelect={setFavoriteTeam} />
           <button
-            className="btn btn-primary mt-4 w-75"
+            className="btn btn-primary mt-4"
             type="button"
             onClick={registerUser}
           >
-            Register and Login
+            Register
           </button>
         </div>
       </div>

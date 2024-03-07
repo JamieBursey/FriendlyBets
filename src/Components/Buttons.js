@@ -75,8 +75,11 @@ function AddButtons({ setSelectMatchesType }) {
   };
   return (
     <>
-      <div style={ButtonsBackground} className="App p-3 mb-3">
-        <div className="container text-center">
+      <div
+        className="container p-2 mb-3"
+        style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
+      >
+        <div className="text-center">
           {buttons({
             buttonsData: sportButtons,
             onClickCallback: setSelectMatchesType,

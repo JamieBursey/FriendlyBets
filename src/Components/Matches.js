@@ -1,13 +1,11 @@
 import { TodaysGames, LiveGames } from "../Data";
 import { NflTodaySchedule, NflWeeklySchedule } from "./nfl.js/NflSchedule";
 function Matches() {
-  const backgroundColor = {
-    background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
-    borderRadius: "1rem",
-  };
-
   return (
-    <div style={backgroundColor} className="container text-center p-2 ">
+    <div
+      className="container text-center p-2"
+      style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
+    >
       {LiveGames()}
       {TodaysGames()}
     </div>
