@@ -11,7 +11,7 @@ function Register() {
   const [email, setEmail] = useState(null);
   const [favoriteTeam, setFavoriteTeam] = useState(null);
   const backgroundColor = {
-    background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
+    background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
   };
   const registerUser = () => {
     if (!username || !password || !email || !favoriteTeam) {

@@ -53,13 +53,10 @@
   text-align: center;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 
-  border: 1px solid #ADD8E6;
+  border: 1px solid #127b9e;
   padding: 10px 20px;
   border-radius: 10px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  animation: pulsate 1.5s ease-in-out infinite;
 }
 .register-text {
   font-family: 'Montserrat', sans-serif;

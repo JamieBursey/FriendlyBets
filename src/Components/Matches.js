@@ -7,6 +7,7 @@ function Matches() {
       style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
     >
       {LiveGames()}
+      <hr style={{ backgroundColor: "white", height: "2px" }} />
       {TodaysGames()}
     </div>
   );

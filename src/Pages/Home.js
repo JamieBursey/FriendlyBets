@@ -6,9 +6,9 @@ import { MlbSchedule } from "../Components/mlb.js";
 function Home() {
   const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
   const backgroundColor = {
-    background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
-    borderRadius: "1rem",
+    background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
   };
+
   const selectMatchesUI = () => {
     if (selectedMatchType == "Hockey") {
       return <Matches />;
