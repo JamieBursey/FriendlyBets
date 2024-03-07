@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/FriendlyBets/static/css/main.ae2485e3.css",
-    "main.js": "/FriendlyBets/static/js/main.79a5bdc9.js",
+    "main.css": "/FriendlyBets/static/css/main.a68fbbb1.css",
+    "main.js": "/FriendlyBets/static/js/main.db0ff85b.js",
     "static/js/787.3fe8aa13.chunk.js": "/FriendlyBets/static/js/787.3fe8aa13.chunk.js",
+    "static/media/Noize.ttf": "/FriendlyBets/static/media/Noize.c597c6c61cd5d9d0447e.ttf",
     "index.html": "/FriendlyBets/index.html",
-    "main.ae2485e3.css.map": "/FriendlyBets/static/css/main.ae2485e3.css.map",
-    "main.79a5bdc9.js.map": "/FriendlyBets/static/js/main.79a5bdc9.js.map",
+    "main.a68fbbb1.css.map": "/FriendlyBets/static/css/main.a68fbbb1.css.map",
+    "main.db0ff85b.js.map": "/FriendlyBets/static/js/main.db0ff85b.js.map",
     "787.3fe8aa13.chunk.js.map": "/FriendlyBets/static/js/787.3fe8aa13.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ae2485e3.css",
-    "static/js/main.79a5bdc9.js"
+    "static/css/main.a68fbbb1.css",
+    "static/js/main.db0ff85b.js"
   ]
 }
