@@ -186,25 +186,48 @@ const TeamDropdown = ({ teamSelect }) => {
     setSelectedTeam(logo);
     teamSelect(logo);
   };
-  const handleLeagueChange = (event) => {
-    setLeague(event.target.value);
+  const handleLeagueChange = (newLeague) => {
+    setLeague(newLeague);
     setSelectedTeam("");
   };
   return (
     <div className="d-flex justify-content-center align-items-center">
-      <div className="d-flex flex-column align-items-center">
-        <select
-          onChange={handleLeagueChange}
-          className="form-control mb-3 w-50 text-center"
-        >
-          <option value="NHL">NHL</option>
-          <option value="MLB">MLB</option>
-        </select>
+      <div className="d-flex flex-column align-items-center w-100">
+        <div className="dropdown w-75 mb-3">
+          <button
+            className="btn favorite-team-btn dropdown-toggle text-secondary"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {league ? league : "Select League"}
+          </button>
+          <ul className="dropdown-menu">
+            <li>
+              <button
+                className="dropdown-item"
+                type="button"
+                onClick={() => handleLeagueChange("NHL")}
+              >
+                NHL
+              </button>
+            </li>
+            <li>
+              <button
+                className="dropdown-item"
+                type="button"
+                onClick={() => handleLeagueChange("MLB")}
+              >
+                MLB
+              </button>
+            </li>
+          </ul>
+        </div>
 
-        <div className="dropdown">
+        <div className="dropdown w-75">
           {/* Dropdown button */}
           <button
-            className="btn favorite-team-btn dropdown-toggle text-white"
+            className="btn favorite-team-btn dropdown-toggle text-secondary"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"

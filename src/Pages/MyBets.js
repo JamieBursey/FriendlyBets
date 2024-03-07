@@ -17,6 +17,10 @@ const MyBets = () => {
   const [betsArr, setBetsArr] = useState([]);
   const [activeBetArr, setActiveBetArr] = useState([]);
 
+  const backgroundColor = {
+    background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
+  };
+
   //create Game Cards
   const creatBetCard = (
     betId,
@@ -216,17 +220,20 @@ const MyBets = () => {
   }, []);
 
   return (
-    <div className="text-center">
-      <h1 className="MyBets"> My Bets </h1>
-
-      <div className="container  bg-dark bg-gradient rounded">
-        <h3 className="text-white">Pending Bets</h3>
+    <div
+      className="d-flex justify-content-center align-items-center vh-100"
+      style={backgroundColor}
+    >
+      <div
+        className="container rounded p-3 text-center"
+        style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
+      >
+        <h1 className="login-text w-50 mx-auto">My Bets</h1>
+        <h3 className="text-white ">Pending Bets</h3>
         <div className="row justify-content-center">
           {betsArr.length === 0 ? "No Pending Bets" : betsArr}
         </div>
-      </div>
-
-      <div className="container bg-dark bg-gradient mt-5 rounded">
+        <hr style={{ backgroundColor: "white", height: "2px" }} />
         <h2 className="text-white">Active Bets</h2>
         <div className="row justify-content-center">
           {activeBetArr.length === 0 ? "No Active Bets" : activeBetArr}

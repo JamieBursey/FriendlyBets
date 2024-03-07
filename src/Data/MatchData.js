@@ -225,7 +225,7 @@ const LiveGames = () => {
                 </p>
                 <button
                   onClick={() => actionBtnOne(game)}
-                  className="btn btn-primary w-100"
+                  className="btn btn-outline-primary w-75"
                 >
                   Bet Friends
                 </button>
