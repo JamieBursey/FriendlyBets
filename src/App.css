@@ -28,28 +28,10 @@
   border-color: orange;
 }
 /* login/Register */
-@keyframes pulsate {
-  0% {
-    transform: scale(1);
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
-  }
-}
-@keyframes fadingEdge {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
-  50% { box-shadow: 0 0 10px 5px rgba(255, 215, 0, 0.5); }
-}
 .login-text {
   font-family: 'Montserrat', sans-serif;
   color: #FFFFFF;
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-align: center;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 
@@ -87,6 +69,62 @@
   width: 400px;
   max-width: 600px; 
   
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo-container {
+  text-align: center;
+}
+@font-face {
+  font-family: 'Noize';
+  src: local('TeamSpiritNF'), url('./fonts.js/Noize.ttf') format('truetype');
+}
+
+.text-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #E0E0E0;
+  text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.4);
+  font-family: 'Noize', sans-serif;
+  display: inline-block;
+  position: relative;
+  padding: 5px 10px;
+  animation: fadeIn 1s ease-out;
+}
+
+.logo-decorative {
+  padding: 0 10px;
+}
+
+.logo-line {
+  display: inline-block;
+  width: 20px; /* Length of the line */
+  height: 2px; /* Thickness of the line */
+  background-color: #E0E0E0;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.text-logo:hover {
+  animation: gentlePulse 1s infinite alternate;
 }
 
 .custom-input,

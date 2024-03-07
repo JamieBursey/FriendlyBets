@@ -61,7 +61,7 @@ function AddButtons({ setSelectMatchesType }) {
     {
       text: "Football",
       imageURL:
-        "https://static.vecteezy.com/system/resources/previews/000/246/904/original/american-football-emblems-vector.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/National_Football_League_logo.svg/380px-National_Football_League_logo.svg.png",
     },
     {
       text: "Baseball",
