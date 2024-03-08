@@ -11,6 +11,12 @@ function Register() {
   const [password, setPassword] = useState(null);
   const [email, setEmail] = useState(null);
   const [favoriteTeam, setFavoriteTeam] = useState(null);
+  const [hover, setHover] = useState(false);
+
+  const blueButtonStyle = {
+    backgroundColor: hover ? "blue" : "#010286",
+    color: "white",
+  };
   const backgroundColor = {
     background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
   };
@@ -76,9 +82,12 @@ function Register() {
           />
           <TeamDropdown teamSelect={setFavoriteTeam} />
           <button
-            className="btn btn-primary mt-4"
+            className="btn  mt-4"
             type="button"
             onClick={registerUser}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+            style={blueButtonStyle}
           >
             Register
           </button>

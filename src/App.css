@@ -14,19 +14,9 @@
   margin-bottom: 20px;
   
 }
-.btn-outline-orange {
-  color: orange;
-  border-color: orange;
-  border-radius: 5px;
-  width: 75%;
-  background-color: white;
-}
 
-.btn-outline-orange:hover {
-  color: white;
-  background-color: orange;
-  border-color: orange;
-}
+
+
 /* login/Register */
 .login-text {
   font-family: 'Montserrat', sans-serif;
@@ -40,6 +30,7 @@
   border-radius: 10px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
 }
+
 .register-text {
   font-family: 'Montserrat', sans-serif;
   color: #FFFFFF;
@@ -114,18 +105,8 @@
   margin: 0 5px;
 }
 
-@keyframes gentlePulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
 
-.text-logo:hover {
-  animation: gentlePulse 1s infinite alternate;
-}
+
 
 .custom-input,
 .custom-select {
