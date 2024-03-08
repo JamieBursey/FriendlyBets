@@ -1,7 +1,7 @@
 import { findUser, checkUserPassword, findUserByEmail } from "../Data";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LOCALSTORAGE } from "../Config";
+import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { Banner } from "../Components";
 import Logo from "../Components/Logo";
 
@@ -9,9 +9,22 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [loginHover, setLoginHover] = useState(false);
+  const [registerHover, setRegisterHover] = useState(false);
+  const blueButtonStyle = {
+    backgroundColor: loginHover ? "blue" : "#010286",
+    color: "white",
+  };
+  const registerBtn = {
+    backgroundColor: registerHover ? "#198754" : "#010286",
+    color: "white",
+  };
 
   const backgroundColor = {
     background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
+  };
+  const registerHandler = () => {
+    navigate(NAVIGATION.REGISTER);
   };
   const loginHandler = () => {
     const foundUser = findUserByEmail(email);
@@ -75,20 +88,27 @@ function Login() {
           </div>
           <div className="text-center">
             <button
-              className="btn btn-primary mt-3"
+              className="btn mt-3"
               type="button"
+              style={blueButtonStyle}
+              onMouseEnter={() => setLoginHover(true)}
+              onMouseLeave={() => setLoginHover(false)}
               onClick={loginHandler}
             >
               Login
             </button>
           </div>
           <div className="text-center">
-            <Link
-              to="/register"
-              className="btn btn-outline-success bg-gradient mt-2"
+            <button
+              className="btn mt-3"
+              type="button"
+              style={registerBtn}
+              onMouseEnter={() => setRegisterHover(true)}
+              onMouseLeave={() => setRegisterHover(false)}
+              onClick={registerHandler}
             >
               Register
-            </Link>
+            </button>
           </div>
         </div>
       </div>

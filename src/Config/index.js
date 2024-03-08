@@ -7,6 +7,7 @@ module.exports = {
     MYBETS: "/MyBets",
     ADDFRIENDS: "/addFriends",
     NOTIFICATIONS: "/Notifications",
+    REGISTER: "/register",
   },
   LOCALSTORAGE: {
     USERS: "ALL_USERS",
