@@ -26,14 +26,14 @@ import { adminUser } from "./Data";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { RedirectBasedOnLogin } from "./Data";
-
+import backgroundColor from "./Pages/Register";
 function App() {
   useEffect(() => {
     adminUser();
   }, []);
 
   return (
-    <div className="bg-dark" style={{ minHeight: "100vh" }}>
+    <div style={backgroundColor}>
       <BrowserRouter>
         <NavBar />
         <RedirectBasedOnLogin />
