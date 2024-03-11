@@ -63,7 +63,7 @@ function Login() {
             Sign In Here!
           </h3>
           <div className="mb-3 w-75 mx-auto">
-            <label htmlFor="userName" className="form-label">
+            <label htmlFor="userName" className="form-label text-white">
               Email address
             </label>
             <input
@@ -75,7 +75,7 @@ function Login() {
             />
           </div>
           <div className="mb-3 mb-3 w-75 mx-auto">
-            <label htmlFor="password" className="form-label">
+            <label htmlFor="password" className="form-label text-white">
               Password
             </label>
             <input
