@@ -1,6 +1,7 @@
 import { backgroundGradient } from "../Components";
 import { LOCALSTORAGE } from "../Config";
 import { findUser, getAllUsers } from "./RegisteredUser";
+import backgroundColor from "../Pages/Register";
 const friendsGradient = {
   background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
   borderRadius: "1rem",
@@ -53,15 +54,19 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
   if (!currentUser.friends || currentUser.friends.length === 0) {
     return (
       <div
-        className="container bg-secondary p-2"
-        style={{ borderRadius: "5px", height: "100vh" }}
+        className="container p-2"
+        style={{
+          borderRadius: "5px",
+          backgroundColor: "#1E1E1E",
+          height: "100vh",
+        }}
       >
         <h1 className="text-info text-center">Please Add Friends</h1>
       </div>
     );
   }
   return (
-    <div className="container p-2" style={friendsGradient}>
+    <div className="container p-2">
       {/* Header Row */}
       <div
         className="row mb-1 align-items-center mx-auto bg-white"

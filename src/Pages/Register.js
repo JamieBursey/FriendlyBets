@@ -5,6 +5,10 @@ import { TeamDropdown } from "../Data";
 import { Banner } from "../Components";
 import Logo from "../Components/Logo";
 
+const backgroundColor = {
+  background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
+  minHeight: "100vh",
+};
 function Register() {
   const navigate = useNavigate();
   const [username, setUserName] = useState(null);
@@ -98,3 +102,4 @@ function Register() {
 }
 
 export { Register };
+export default backgroundColor;
