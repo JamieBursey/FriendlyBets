@@ -1,6 +1,6 @@
-import { findUser, checkUserPassword, findUserByEmail } from "../Data";
+import { checkUserPassword, findUserByEmail } from "../Data";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { Banner } from "../Components";
 import Logo from "../Components/Logo";
@@ -46,10 +46,7 @@ function Login() {
     }
   };
   return (
-    <div
-      className="d-flex flex-column align-items-center p-2 vh-100 mx-auto"
-      style={backgroundColor}
-    >
+    <div>
       <Logo />
       <div
         className="container p-3 mt-2"

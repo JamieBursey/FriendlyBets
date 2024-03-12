@@ -282,7 +282,7 @@ const RedirectBasedOnLogin = () => {
       LOCALSTORAGE.LOGGEDINUSER
     );
     if (!checkIfLoggedInExists || checkIfLoggedInExists === "null") {
-      navigate("/about");
+      navigate("/LandingPage");
     }
   }, []);
 };

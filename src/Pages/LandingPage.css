@@ -1,0 +1,32 @@
+.horizontal-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: auto;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+    display: block;
+    height: 10px; 
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+/* Desktop */
+.horizontal-section {
+    flex: 0 0 50%; 
+    scroll-snap-align: start;
+}
+
+/* mobile*/
+@media (max-width: 767px) {
+    .horizontal-section {
+        flex: 0 0 100vw;
+    }
+}
