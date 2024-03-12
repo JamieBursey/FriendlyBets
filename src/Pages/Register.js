@@ -21,9 +21,6 @@ function Register() {
     backgroundColor: hover ? "blue" : "#010286",
     color: "white",
   };
-  const backgroundColor = {
-    background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
-  };
   const registerUser = () => {
     if (!username || !password || !email || !favoriteTeam) {
       alert("Please submit all fields");
@@ -53,10 +50,7 @@ function Register() {
     }
   };
   return (
-    <div
-      className="d-flex flex-column align-items-center p-2 mx-auto vh-100"
-      style={backgroundColor}
-    >
+    <div>
       <Logo />
       <div
         className="container mx-auto mt-2 p-3"

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { getAllUsers, sendFriendRequest, renderFriendList } from "../Data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
-import backgroundColor from "./Register";
 
 const HeaderStyle = {
   fontSize: "3rem",
