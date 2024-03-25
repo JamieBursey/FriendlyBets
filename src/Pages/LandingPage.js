@@ -1,8 +1,19 @@
 import "./LandingPage.css";
 import loginImage from "./images/LoginDisplay.png";
 import Logo from "../Components/Logo";
+import { useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAnglesRight, faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
 
 const LandingPage = () => {
+  const scrollContainerRef = useRef(null);
+
+  const scrollLeft = (scrollOffset) => {
+    scrollContainerRef.current.scrollLeft -= 300;
+  };
+  const scrollRight = () => {
+    scrollContainerRef.current.scrollLeft += 300;
+  };
   return (
     <div className="landing-page">
       <section className="hero-section text-center text-white p-5">
@@ -10,8 +21,17 @@ const LandingPage = () => {
           <Logo />
         </div>
       </section>
-
-      <div className="horizontal-scroll-container">
+      <div className="scroll-buttons left">
+        <button onClick={scrollLeft}>
+          <FontAwesomeIcon icon={faAnglesLeft} />
+        </button>
+      </div>
+      <div className="scroll-buttons right">
+        <button onClick={scrollRight}>
+          <FontAwesomeIcon icon={faAnglesRight} />
+        </button>
+      </div>
+      <div className="horizontal-scroll-container" ref={scrollContainerRef}>
         <section className="horizontal-section bg-primary text-white p-5">
           <div className="container">
             <h2>Register</h2>
@@ -46,7 +66,6 @@ const LandingPage = () => {
           </div>
         </section>
       </div>
-
       <footer className="footer bg-dark text-center text-white p-4">
         <div className="container">
           <p>&copy; 2024 Friendly Bets. All rights reserved.</p>

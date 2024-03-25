@@ -8,8 +8,8 @@ import {
   deleteBets,
 } from "../Components";
 const Loader = () => (
-  <div className="spinner-border text-success" role="status">
-    <span className="visually-hidden">Loading...</span>
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
   </div>
 );
 
@@ -242,4 +242,4 @@ const MyBets = () => {
     </div>
   );
 };
-export { MyBets };
+export { MyBets, Loader };

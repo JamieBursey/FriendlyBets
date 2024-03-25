@@ -8,7 +8,7 @@ import { AddFriends, handleSendFriendRequest } from "./AddFriends";
 // import { FetchFromAPI } from "./Tests/FetchFromAPI";
 import { FullSchedule } from "./FullSchedule";
 import { BetPage } from "./BetPage";
-import { MyBets } from "./MyBets";
+import { MyBets, Loader } from "./MyBets";
 import { UpdateMyAccount } from "./UpdateMyAcc";
 import { RenderRequests } from "./Notifications";
 import { UserManagement } from "./UserManagement";
@@ -35,4 +35,5 @@ export {
   NflWeeklySchedulePage,
   handleSendFriendRequest,
   LandingPage,
+  Loader,
 };
