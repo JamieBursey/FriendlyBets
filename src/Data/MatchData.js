@@ -4,10 +4,12 @@ import { Games } from "../Components";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
+import { Loader } from "../Pages";
 
 const TodaysGames = () => {
   const LoggedInUser = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const actionBtnOne = (
     game_ID,
     gameTitle,
@@ -89,6 +91,7 @@ const TodaysGames = () => {
 
   const [todaysGameArr, setTodaysGameArr] = useState([]);
   const fetchData = async () => {
+    setLoading(true);
     const apiUrl = `https://friendly-bets-back-end.vercel.app/api/now`;
     const finalUrl = apiUrl;
     try {
@@ -122,7 +125,7 @@ const TodaysGames = () => {
           )
         );
       });
-
+      setLoading(false);
       setTodaysGameArr(gamesHTMLObj);
     } catch (error) {
       alert("Fetch Data Error", error);
@@ -132,16 +135,22 @@ const TodaysGames = () => {
     // Whenever the page loads, then this is executed
     fetchData();
   }, []);
+
   return (
     <div className="text-white text-center">
       <h1>Todays Games</h1>
-      <div className="row justify-content-center">{todaysGameArr}</div>
+      {loading ? (
+        <div>{<Loader />}</div>
+      ) : (
+        <div className="row justify-content-center">{todaysGameArr}</div>
+      )}
     </div>
   );
 };
 
 const LiveGames = () => {
   const [liveGamesArr, setLiveGamesArr] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const actionBtnOne = (game) => {
     const gameDetails = {
@@ -161,6 +170,7 @@ const LiveGames = () => {
   };
 
   const fetchLiveGames = async () => {
+    setLoading(true);
     const apiUrl = `https://friendly-bets-back-end.vercel.app/api/score`;
     try {
       const response = await fetch(apiUrl);
@@ -172,7 +182,9 @@ const LiveGames = () => {
       if (liveGames.length > 0) {
         setLiveGamesArr(liveGames);
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error fetching live games:", error);
     }
   };
@@ -184,58 +196,62 @@ const LiveGames = () => {
   return (
     <div className="text-white text-center">
       <h1>Live Games</h1>
-      <div className="row justify-content-center">
-        {liveGamesArr.length > 0 ? (
-          liveGamesArr.map((game, index) => (
-            <div
-              key={index}
-              className="col-3 card m-1"
-              style={{ width: "20rem" }}
-            >
-              <div className="card-body">
-                <h5 className="card-title">
-                  {game.awayTeam.abbrev} vs {game.homeTeam.abbrev}
-                </h5>
-                <div className="row">
-                  <div className="col">
-                    <img
-                      src={game.awayTeam.logo}
-                      alt={`${game.awayTeam.abbrev} logo`}
-                      className="img-fluid"
-                    />
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="row justify-content-center">
+          {liveGamesArr.length > 0 ? (
+            liveGamesArr.map((game, index) => (
+              <div
+                key={index}
+                className="col-3 card m-1"
+                style={{ width: "20rem" }}
+              >
+                <div className="card-body">
+                  <h5 className="card-title">
+                    {game.awayTeam.abbrev} vs {game.homeTeam.abbrev}
+                  </h5>
+                  <div className="row">
+                    <div className="col">
+                      <img
+                        src={game.awayTeam.logo}
+                        alt={`${game.awayTeam.abbrev} logo`}
+                        className="img-fluid"
+                      />
+                    </div>
+                    <div className="col">
+                      <img
+                        src={game.homeTeam.logo}
+                        alt={`${game.homeTeam.abbrev} logo`}
+                        className="img-fluid"
+                      />
+                    </div>
                   </div>
-                  <div className="col">
-                    <img
-                      src={game.homeTeam.logo}
-                      alt={`${game.homeTeam.abbrev} logo`}
-                      className="img-fluid"
-                    />
+                  <div className="row">
+                    <div className="col">
+                      <p>{game.awayTeam.score}</p>
+                    </div>
+                    <div className="col">
+                      <p>{game.homeTeam.score}</p>
+                    </div>
                   </div>
+                  <p>
+                    {game.clock.timeRemaining} Period: {game.period}
+                  </p>
+                  <button
+                    onClick={() => actionBtnOne(game)}
+                    className="btn btn-outline-primary w-75"
+                  >
+                    Bet Friends
+                  </button>
                 </div>
-                <div className="row">
-                  <div className="col">
-                    <p>{game.awayTeam.score}</p>
-                  </div>
-                  <div className="col">
-                    <p>{game.homeTeam.score}</p>
-                  </div>
-                </div>
-                <p>
-                  {game.clock.timeRemaining} Period: {game.period}
-                </p>
-                <button
-                  onClick={() => actionBtnOne(game)}
-                  className="btn btn-outline-primary w-75"
-                >
-                  Bet Friends
-                </button>
               </div>
-            </div>
-          ))
-        ) : (
-          <p>No live games currently.</p>
-        )}
-      </div>
+            ))
+          ) : (
+            <p>No live games currently.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

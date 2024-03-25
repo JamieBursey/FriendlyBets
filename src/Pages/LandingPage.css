@@ -3,6 +3,7 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: auto;
+    position: relative;
 }
 
 .horizontal-scroll-container::-webkit-scrollbar {
@@ -24,6 +25,33 @@
     scroll-snap-align: start;
 }
 
+.scroll-buttons {
+    position: absolute;
+    top: 50%; 
+    transform: translateY(200%);
+    z-index: 10;
+    font-size: 40px;
+  }
+
+  .scroll-buttons.left {
+    left:0
+  }
+  .scroll-buttons.right {
+    right:0;
+    cursor: pointer;
+    
+  }
+
+  .scroll-buttons button {
+    color: white;
+    background-color: transparent;
+    border: none; 
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .scroll-buttons button:hover {
+    transform: scale(1.2);
+  }
 /* mobile*/
 @media (max-width: 767px) {
     .horizontal-section {
