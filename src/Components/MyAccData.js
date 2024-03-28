@@ -9,8 +9,6 @@ const dropDownScroll = {
   maxHeight: "200px",
   overflow: "scroll",
 };
-const loggedUser = JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER));
-const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS));
 const DisplayName = ({ user }) => {
   return (
     <div className="text-center">
@@ -91,8 +89,7 @@ const NavigateToUpdate = () => {
   );
 };
 
-const MyAccountChanges = () => {
-  const navigate = useNavigate();
+const MyAccountChanges = ({ userDetails, onUserDetailChange }) => {
   const loggedUser = JSON.parse(
     localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
   );
@@ -106,44 +103,6 @@ const MyAccountChanges = () => {
     loggedUser ? loggedUser.password : ""
   );
 
-  const emailChange = (event) => setEmail(event.target.value);
-  const displayNameChange = (event) => setDisplayName(event.target.value);
-  const passwordChange = (event) => setPassword(event.target.value);
-
-  const saveChanges = () => {
-    // Check if email is already in use
-    const emailAlreadyInUse = allUsers.some(
-      (user) => user.email === email && user.username !== loggedUser.username
-    );
-    if (emailAlreadyInUse) {
-      alert("Email in Use");
-      return;
-    }
-
-    // Update user info
-    const updatedUserInfo = {
-      ...loggedUser,
-      username: displayName,
-      email: email,
-      password: password,
-    };
-
-    // Update users list
-    const updatedUsers = allUsers.map((user) =>
-      user.username === loggedUser.username ? updatedUserInfo : user
-    );
-
-    // Save updated info in localStorage
-    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
-    localStorage.setItem(
-      LOCALSTORAGE.LOGGEDINUSER,
-      JSON.stringify(updatedUserInfo)
-    );
-
-    // Navigate to MyAccount page
-    navigate("/MyAccount");
-  };
-
   return (
     <>
       <div className="d-flex justify-content-center mt-3">
@@ -152,7 +111,7 @@ const MyAccountChanges = () => {
             type="text"
             className="form-control"
             placeholder={displayName}
-            onChange={displayNameChange}
+            onChange={(e) => onUserDetailChange("username", e.target.value)}
             aria-label="Recipient's username"
           />
         </div>
@@ -163,7 +122,7 @@ const MyAccountChanges = () => {
             type="text"
             className="form-control"
             placeholder={email}
-            onChange={emailChange}
+            onChange={(e) => onUserDetailChange("email", e.target.value)}
             aria-label="Recipient's email"
           />
         </div>
@@ -174,91 +133,32 @@ const MyAccountChanges = () => {
             type="text"
             className="form-control"
             placeholder={password}
-            onChange={passwordChange}
+            onChange={(e) => onUserDetailChange("password", e.target.value)}
             aria-label="Recipient's password"
           />
         </div>
-      </div>
-      <div className="d-flex justify-content-center mb-3">
-        <button
-          className="btn btn-outline-info"
-          type="button"
-          onClick={saveChanges}
-        >
-          Save Changes
-        </button>
       </div>
     </>
   );
 };
 
-const AboutMeComponent = () => {
-  const navigate = useNavigate();
-  const loggedUser = JSON.parse(
-    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-  );
-
-  const [aboutMe, setAboutMe] = useState(loggedUser ? loggedUser.aboutMe : "");
-
-  const addAboutMe = (event) => {
-    setAboutMe(event.target.value);
-  };
-
-  const updateAboutMe = () => {
-    const currentUser = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-    );
-    if (!currentUser) {
-      console.error("No logged-in user found");
-      return;
-    }
-
-    const updatedUserInfo = {
-      ...currentUser,
-      aboutMe: aboutMe,
-    };
-    localStorage.setItem(
-      LOCALSTORAGE.LOGGEDINUSER,
-      JSON.stringify(updatedUserInfo)
-    );
-
-    const allUsers = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE.USERS) || "[]"
-    );
-    const updatedUsers = allUsers.map((user) =>
-      user.username === currentUser.username ? updatedUserInfo : user
-    );
-    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
-
-    navigate("/MyAccount");
-  };
+const AboutMeComponent = ({ userDetails, onUserDetailChange }) => {
   return (
     <div className="d-flex justify-content-center my-3">
       <div className="w-25">
         <textarea
           className="form-control"
           placeholder={
-            loggedUser.aboutMe ? loggedUser.aboutMe : "Tell us about yourself"
+            userDetails.aboutMe ? userDetails.aboutMe : "Tell us about yourself"
           }
-          onChange={addAboutMe}
+          onChange={(e) => onUserDetailChange("aboutMe", e.target.value)}
         />
-        <div className="d-flex justify-content-center mt-2 mb-5">
-          <button className="btn btn-outline-info" onClick={updateAboutMe}>
-            Update About Me
-          </button>
-        </div>
       </div>
     </div>
   );
 };
 
-const UpdateFavTeam = () => {
-  const navigate = useNavigate();
-  const loggedUser = JSON.parse(
-    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-  );
-  const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
-  const [favTeam, setFavTeam] = useState(loggedUser.favoriteTeam || "");
+const UpdateFavTeam = ({ userDetails, onUserDetailChange }) => {
   const [teamLogos, setTeamLogos] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState("");
 
@@ -288,73 +188,46 @@ const UpdateFavTeam = () => {
     fetchTeam();
   }, []);
 
-  const newTeamChange = () => {
-    const ChangeTeam = {
-      ...loggedUser,
-      favoriteTeam: favTeam,
-    };
-    localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(ChangeTeam));
-    const updatedUsers = allUsers.map((user) =>
-      user.username === loggedUser.username ? ChangeTeam : user
-    );
-    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
-    navigate("/MyAccount");
-  };
   const handleSelectedTeam = (logo) => {
-    setFavTeam(logo);
+    onUserDetailChange("favoriteTeam", logo);
     setSelectedTeam(logo);
   };
 
   return (
     <div className="text-center">
-      <div
-        className="btn-group"
-        role="group"
-        aria-label="Button group with nested dropdown"
-      >
-        <div className="btn-group" role="group">
-          <button
-            type="button"
-            className="btn btn-secondary dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            {selectedTeam ? (
-              <img
-                src={selectedTeam}
-                alt="selected_Team"
-                style={{ width: "30px", height: "30px" }}
-              />
-            ) : (
-              "Select Favorite Team"
-            )}
-          </button>
-          <ul className="dropdown-menu" style={dropDownScroll}>
-            {teamLogos.map((logo, index) => (
-              <li key={index}>
-                <a
-                  className="dropdown-item"
-                  onClick={() => {
-                    handleSelectedTeam(logo);
-                  }}
-                >
-                  <img
-                    src={logo}
-                    alt={`Team ${index}`}
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="btn-group" role="group">
         <button
           type="button"
-          className="btn btn-outline-secondary text-info"
-          onClick={newTeamChange}
+          className="btn btn-secondary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
         >
-          Update Favorite Team
+          {selectedTeam ? (
+            <img
+              src={selectedTeam}
+              alt="selected_Team"
+              style={{ width: "30px", height: "30px" }}
+            />
+          ) : (
+            "Select Favorite Team"
+          )}
         </button>
+        <ul className="dropdown-menu" style={dropDownScroll}>
+          {teamLogos.map((logo, index) => (
+            <li key={index}>
+              <a
+                className="dropdown-item"
+                onClick={() => handleSelectedTeam(logo)}
+              >
+                <img
+                  src={logo}
+                  alt={`Team ${index}`}
+                  style={{ width: "30px", height: "30px" }}
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
