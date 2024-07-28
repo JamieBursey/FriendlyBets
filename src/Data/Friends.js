@@ -2,6 +2,7 @@ import { backgroundGradient } from "../Components";
 import { LOCALSTORAGE } from "../Config";
 import { findUser, getAllUsers } from "./RegisteredUser";
 import backgroundColor from "../Pages/Register";
+import { supabase } from "../supabaseClient";
 const friendsGradient = {
   background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
   borderRadius: "1rem",
@@ -9,48 +10,80 @@ const friendsGradient = {
 const getFriend = (username) => {
   return { username: "", password: "" };
 };
-const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
-  // Get all users
-  const allUsers = getAllUsers();
-  //fetch friend
-  let friendUser = allUsers.filter(
-    (user) => user.username === friendUsername
-  )[0];
+const deleteFriend = async (friendId, currentUser, setCurrentUser) => {
+  try {
+    // Fetch current user data
+    const { data: currentUserData, error: currentUserError } = await supabase
+      .from("users")
+      .select("friends")
+      .eq("id", currentUser.id)
+      .single();
 
-  // modify currentUser friend list
-  const updatedFriends = (currentUser.friends = currentUser.friends.filter(
-    (username) => username !== friendUser.username
-  ));
-  const currenUserUpdate = {
-    ...currentUser,
-    friends: updatedFriends,
-  };
+    if (currentUserError) {
+      console.error("Error fetching current user data:", currentUserError);
+      return;
+    }
 
-  // modify friendUser friend list
-  friendUser.friends = friendUser.friends.filter(
-    (username) => username !== currentUser.username
-  );
+    // Fetch the friend user data
+    const { data: friendUserData, error: friendUserError } = await supabase
+      .from("users")
+      .select("friends")
+      .eq("id", friendId)
+      .single();
 
-  // Get rid of the original currentUser and friendUser
-  let temporaryArrayUsers = allUsers.filter(
-    (user) =>
-      user.username !== currentUser.username &&
-      user.username !== friendUser.username
-  );
+    if (friendUserError) {
+      console.error("Error fetching friend user data:", friendUserError);
+      return;
+    }
 
-  //push back the new values
-  temporaryArrayUsers.push(currenUserUpdate);
-  temporaryArrayUsers.push(friendUser);
+    // Remove the friend from the current user's friends array
+    const updatedCurrentUserFriends = currentUserData.friends.filter(
+      (friend) => friend.id !== friendId
+    );
 
-  // Push the new array of users back to the local storage using localStorage.setItem(allUserKey, JSON.stringify(allUsers))
-  localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(temporaryArrayUsers));
-  localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(currentUser));
+    // Remove the current user from the friend's friends array
+    const updatedFriendUserFriends = friendUserData.friends.filter(
+      (friend) => friend.id !== currentUser.id
+    );
 
-  console.log("modifying LoggedInUser to rerender list of cards", currentUser);
-  setLoggedInUser(currenUserUpdate);
+    // Update the current user's friends array in the database
+    const { error: updateCurrentUserError } = await supabase
+      .from("users")
+      .update({ friends: updatedCurrentUserFriends })
+      .eq("id", currentUser.id);
+
+    if (updateCurrentUserError) {
+      console.error(
+        "Error updating current user's friends:",
+        updateCurrentUserError
+      );
+      return;
+    }
+
+    // Update the friend's friends array in the database
+    const { error: updateFriendUserError } = await supabase
+      .from("users")
+      .update({ friends: updatedFriendUserFriends })
+      .eq("id", friendId);
+
+    if (updateFriendUserError) {
+      console.error("Error updating friend's friends:", updateFriendUserError);
+      return;
+    }
+
+    // Update the local state
+    const updatedCurrentUser = {
+      ...currentUser,
+      friends: updatedCurrentUserFriends,
+    };
+    setCurrentUser(updatedCurrentUser);
+    alert("Friend removed");
+  } catch (error) {
+    console.error("Error deleting friend:", error);
+  }
 };
-const renderFriendList = (currentUser, setLoggedInUser) => {
-  const allUsers = getAllUsers();
+
+const RenderFriendList = ({ currentUser, setCurrentUser }) => {
   if (!currentUser.friends || currentUser.friends.length === 0) {
     return (
       <div
@@ -83,94 +116,85 @@ const renderFriendList = (currentUser, setLoggedInUser) => {
         </div>
       </div>
 
-      {currentUser.friends.map((friendUsername, index) => {
-        let friendUser = allUsers.find(
-          (user) => user.username === friendUsername
-        );
-        return friendUser ? (
-          <div
-            key={friendUser.email}
-            className="row mb-1 align-items-center mx-auto bg-white"
-            style={{ borderRadius: "5px", width: "90%" }}
-          >
-            <div className="col d-flex justify-content-start">
-              <h6 className="fw-bold fst-italic">{friendUser.username}</h6>
-            </div>
+      {currentUser.friends.map((friend) => (
+        <div
+          key={friend.public_user_id}
+          className="row mb-1 align-items-center mx-auto bg-white"
+          style={{ borderRadius: "5px", width: "90%" }}
+        >
+          <div className="col d-flex justify-content-start">
+            <h6 className="fw-bold fst-italic">{friend.username}</h6>
+          </div>
 
-            <div className="col d-flex justify-content-center">
-              <p>{friendUser.email}</p>
-            </div>
+          <div className="col d-flex justify-content-center">
+            <p>{friend.email}</p>
+          </div>
 
-            {/* Details*/}
-            <div className="col d-flex justify-content-end">
-              <button
-                className="btn btn-sm btn-outline-primary"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target={`#collapseDetail${index}`}
-                aria-expanded="false"
-                aria-controls={`collapseDetail${index}`}
-              >
-                Details
-              </button>
-            </div>
+          {/* Details */}
+          <div className="col d-flex justify-content-end">
+            <button
+              className="btn btn-sm btn-outline-primary"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target={`#collapseDetail${friend.id}`}
+              aria-expanded="false"
+              aria-controls={`collapseDetail${friend.id}`}
+            >
+              Details
+            </button>
+          </div>
 
-            {/* Dropdown*/}
-            <div className="col-12">
-              <div className="collapse" id={`collapseDetail${index}`}>
-                <div className="card card-body">
-                  <div className="mb-2 text-center">
-                    <img
-                      src={friendUser.favoriteTeam}
-                      style={{ maxWidth: "40px", maxHeight: "40px" }}
-                    />
-                  </div>
+          {/* Dropdown */}
+          <div className="col-12">
+            <div className="collapse" id={`collapseDetail${friend.id}`}>
+              <div className="card card-body">
+                <div className="mb-2 text-center">
+                  <img
+                    src={friend.favoriteTeam}
+                    style={{ maxWidth: "40px", maxHeight: "40px" }}
+                  />
+                </div>
+                <div
+                  className="card text-center w-50 mx-auto mt-2 mb-3"
+                  style={{
+                    backgroundColor: "#F7F7F7",
+                    boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+                    borderRadius: "5px",
+                  }}
+                >
                   <div
-                    className="card text-center w-50 mx-auto mt-2 mb-3"
+                    className="card-header"
                     style={{
-                      backgroundColor: "#F7F7F7",
-                      boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
-                      borderRadius: "5px",
+                      backgroundColor: "#EEEEEE",
+                      color: "#333333",
                     }}
                   >
-                    <div
-                      className="card-header"
-                      style={{
-                        backgroundColor: "#EEEEEE",
-                        color: "#333333",
-                      }}
-                    >
-                      About
-                    </div>
-                    <div className="card-body">
-                      <p
-                        className="card-text text-black"
-                        style={{ overFlow: "auto" }}
-                      >
-                        {friendUser.aboutMe
-                          ? friendUser.aboutMe
-                          : `${friendUser.username} has not updated their about section.`}
-                      </p>
-                    </div>
+                    About
                   </div>
-                  <button
-                    onClick={() =>
-                      deleteFriend(
-                        friendUser.username,
-                        currentUser,
-                        setLoggedInUser
-                      )
-                    }
-                    className="btn btn-outline-danger w-25 mx-auto"
-                  >
-                    Remove Friend
-                  </button>
+                  <div className="card-body">
+                    <p
+                      className="card-text text-black"
+                      style={{ overflow: "auto" }}
+                    >
+                      {friend.aboutMe
+                        ? friend.aboutMe
+                        : `${friend.username} has not updated their about section.`}
+                    </p>
+                  </div>
                 </div>
+                <button
+                  onClick={() =>
+                    deleteFriend(friend.id, currentUser, setCurrentUser)
+                  }
+                  className="btn btn-outline-danger w-25 mx-auto"
+                >
+                  Remove Friend
+                </button>
               </div>
             </div>
           </div>
-        ) : null;
-      })}
+        </div>
+      ))}
     </div>
   );
 };
@@ -187,127 +211,177 @@ const editUser = (username, newUserObj) => {
   // Push the new array of users back to the local storage using localStorage.setItem(allUserKey, JSON.stringify(allUsers))
   localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(temporaryArrayUsers));
 };
-const sendFriendRequest = (toUserName) => {
-  const loggedInUser = JSON.parse(
-    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-  );
-  const fromUserName = loggedInUser.username;
-  const fromUserEmail = loggedInUser.email;
-  const friendRequests =
-    JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
-  const existingRequest = friendRequests.find(
-    (request) => request.from === fromUserName && request.to === toUserName
-  );
-  if (existingRequest) {
-    alert("Friend request already sent.");
-    return;
-  }
-  if (loggedInUser.friends.includes(toUserName)) {
-    alert("Friend already added");
-    return;
-  }
-  if (loggedInUser.username === toUserName) {
-    alert("Can Not Add yourself");
+const sendFriendRequest = async (toUserName) => {
+  const { data: loggedInUser, error: currentUserError } =
+    await supabase.auth.getUser();
+
+  if (currentUserError) {
+    alert("Error fetching current user");
     return;
   }
 
-  const newRequest = {
-    id: `${fromUserName}_${toUserName}`,
-    from: fromUserName,
-    to: toUserName,
-    email: fromUserEmail,
-    status: "pending",
-  };
-  friendRequests.push(newRequest);
-  localStorage.setItem(
-    LOCALSTORAGE.FRIENDREQUEST,
-    JSON.stringify(friendRequests)
-  );
-  alert("Friend request sent.");
+  const { data: toUser, error: toUserError } = await supabase
+    .from("users")
+    .select("id")
+    .eq("username", toUserName)
+    .single();
+
+  if (toUserError) {
+    alert("User not found");
+    return;
+  }
+
+  const { error } = await supabase.from("friend_requests").insert([
+    {
+      from_user: loggedInUser.id,
+      to_user: toUser.id,
+      status: "pending",
+    },
+  ]);
+
+  if (error) {
+    alert("Error sending friend request");
+  } else {
+    alert("Friend request sent");
+  }
 };
+
 const addUsersFriend = (username) => {
   const friendUserObj = findUser(username);
   const loggedInUserStr = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
   const loggedInUserObj = JSON.parse(loggedInUserStr);
   sendFriendRequest(friendUserObj, loggedInUserObj);
 };
-const renderFriends = () => {
-  let allUsers = getAllUsers();
 
-  return allUsers.map((player) => (
-    <div key={player["username"]} className="col fs-4 text-danger ">
-      <div className="row">
-        <div className="col">{player["username"]}</div>
-        <div className="col">
-          <button onClick={() => addUsersFriend(player["username"])}>
-            Add Friend
-          </button>
-        </div>
-      </div>
-    </div>
-  ));
-};
+const acceptFriendRequest = async (requestId, callBack) => {
+  // Fetch the friend request details
+  const { data: friendRequest, error: requestError } = await supabase
+    .from("friend_requests")
+    .select("*")
+    .eq("id", requestId)
+    .single();
 
-const acceptFriendRequest = (requestId, callBack) => {
-  const friendRequests =
-    JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
-  const requestIndex = friendRequests.findIndex(
-    (request) => request.id === requestId
-  );
-
-  if (requestIndex !== -1) {
-    friendRequests[requestIndex].status = "accepted";
-
-    const currentUser = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-    );
-    const requestingUser = findUser(friendRequests[requestIndex].from);
-
-    if (
-      !currentUser.friends.some(
-        (friend) => friend.username === requestingUser.username
-      )
-    ) {
-      currentUser.friends.push(requestingUser.username);
-    }
-    if (
-      !requestingUser.friends.some(
-        (friend) => friend.username === currentUser.username
-      )
-    ) {
-      requestingUser.friends.push(currentUser.username);
-    }
-
-    editUser(currentUser.username, currentUser);
-    editUser(requestingUser.username, requestingUser);
-    friendRequests.splice(requestIndex, 1);
-    localStorage.setItem(
-      LOCALSTORAGE.FRIENDREQUEST,
-      JSON.stringify(friendRequests)
-    );
-    callBack(currentUser);
+  if (requestError) {
+    console.error("Error fetching friend request:", requestError);
+    return;
   }
+
+  // Update the friend request status to 'accepted'
+  const { error: updateError } = await supabase
+    .from("friend_requests")
+    .update({ status: "accepted" })
+    .eq("id", requestId);
+
+  if (updateError) {
+    console.error("Error accepting friend request:", updateError);
+    return;
+  }
+
+  // Fetch user details
+  const { data: fromUserData, error: fromUserError } = await supabase
+    .from("users")
+    .select("id, public_user_id, username, email, friends")
+    .eq("id", friendRequest.from_user)
+    .single();
+
+  const { data: toUserData, error: toUserError } = await supabase
+    .from("users")
+    .select("id, public_user_id, username, email, friends")
+    .eq("id", friendRequest.to_user)
+    .single();
+
+  if (fromUserError || toUserError) {
+    console.error("Error fetching user data:", fromUserError || toUserError);
+    return;
+  }
+
+  // Update the friends arrays for both users
+  const updatedFromUserFriends = [
+    ...(fromUserData.friends || []),
+    {
+      public_user_id: toUserData.public_user_id,
+      username: toUserData.username,
+      email: toUserData.email,
+    },
+  ];
+
+  const updatedToUserFriends = [
+    ...(toUserData.friends || []),
+    {
+      public_user_id: fromUserData.public_user_id,
+      username: fromUserData.username,
+      email: fromUserData.email,
+    },
+  ];
+
+  // Update the from_user with the new friends list
+  const { error: updateFromUserError } = await supabase
+    .from("users")
+    .update({ friends: updatedFromUserFriends })
+    .eq("id", fromUserData.id);
+
+  // Update the to_user with the new friends list
+  const { error: updateToUserError } = await supabase
+    .from("users")
+    .update({ friends: updatedToUserFriends })
+    .eq("id", toUserData.id);
+
+  if (updateFromUserError || updateToUserError) {
+    console.error(
+      "Error updating user friends:",
+      updateFromUserError || updateToUserError
+    );
+    return;
+  }
+
+  // Remove the friend request from the database
+  const { error: deleteError } = await supabase
+    .from("friend_requests")
+    .delete()
+    .eq("id", requestId);
+
+  if (deleteError) {
+    console.error("Error deleting friend request:", deleteError);
+    return;
+  }
+
+  callBack();
+  alert("Friend request accepted");
 };
 
-const rejectFriendRequest = (requestId) => {
-  const friendRequests =
-    JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
-  const updatedRequests = friendRequests.filter(
-    (request) => request.id !== requestId
-  );
+const rejectFriendRequest = async (requestId) => {
+  // Fetch the friend request details
+  const { data: friendRequest, error: requestError } = await supabase
+    .from("friend_requests")
+    .select("*")
+    .eq("id", requestId)
+    .single();
 
-  localStorage.setItem(
-    LOCALSTORAGE.FRIENDREQUEST,
-    JSON.stringify(updatedRequests)
-  );
+  if (requestError) {
+    console.error("Error fetching friend request:", requestError);
+    return;
+  }
+
+  // Delete the friend request from the database
+  const { error: deleteError } = await supabase
+    .from("friend_requests")
+    .delete()
+    .eq("id", requestId);
+
+  if (deleteError) {
+    console.error("Error rejecting friend request:", deleteError);
+    return;
+  }
+
+  // Call the callback function to update the state
+  alert("Friend request rejected");
 };
 
 export {
   getFriend,
-  renderFriends,
   sendFriendRequest,
   editUser,
   acceptFriendRequest,
   rejectFriendRequest,
-  renderFriendList,
+  RenderFriendList,
 };

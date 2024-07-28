@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
 
 const findPlayerID = (roster, sportType) => {
+  console.log("Sport type received:", sportType);
   if (sportType === "NHL") {
     const randomIndex = Math.floor(Math.random() * roster.length);
     return roster[randomIndex].playerId;
   }
 };
-const findPlayerName = (roster, playerId, sportType) => {
-  if (sportType === "NHL") {
-    const player = roster.find((player) => player.playerId === playerId);
-    return player
-      ? `${player.firstName.default} ${player.lastName.default}`
-      : "Unknown Player";
-  }
+const findPlayerName = (roster, playerId) => {
+  console.log("Searching for playerId:", playerId);
+  const player = roster.find((player) => player.playerId === playerId);
+  return player
+    ? `${player.firstName.default} ${player.lastName.default}`
+    : "Unknown Player";
 };
 
 //MLB info
@@ -45,16 +45,16 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   if (sportType === "NHL") {
     if (roster.length > 0) {
       // Generate a separate option for each bet
-      const goalPlayerID = findPlayerID(roster);
+      const goalPlayerID = findPlayerID(roster, sportType);
       const scoringPlayerName = findPlayerName(roster, goalPlayerID);
       options.push(`${scoringPlayerName} will score the first goal`);
       options.push(`${scoringPlayerName} will score anytime`);
 
-      const shotsPlayerID = findPlayerID(roster);
+      const shotsPlayerID = findPlayerID(roster, sportType);
       const ShootingPlayerName = findPlayerName(roster, shotsPlayerID);
       options.push(`${ShootingPlayerName} will get 2 shots on net`);
 
-      const assistPlayerID = findPlayerID(roster);
+      const assistPlayerID = findPlayerID(roster, sportType);
       const assistPlayerName = findPlayerName(roster, assistPlayerID);
       options.push(`${assistPlayerName} will make an assist`);
     } else {

@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { BettingOptions } from "../Data";
+import React, { useState, useEffect } from "react";
+import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
-import { getAllUsers, getAllBets } from "../Data";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { handleSendFriendRequest } from "./AddFriends";
+import { BettingOptions } from "../Data";
+
 const betsGradient = {
   background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
   borderRadius: "1rem",
@@ -16,55 +17,128 @@ const BetPage = () => {
   const selectedGame = JSON.parse(gameInfo);
 
   const navigate = useNavigate();
-  const [selectedFriends, setSelectedFriends] = useState("");
+  const [selectedFriend, setSelectedFriend] = useState("");
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [selectedBets, setSelectedBets] = useState({});
-  const [Wager, setWager] = useState("");
+  const [wager, setWager] = useState("");
   const [email, setEmail] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
-  const loggedInUserData = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
-  const loggedInUsr = loggedInUserData ? JSON.parse(loggedInUserData) : null;
   useEffect(() => {
-    setUsersFriendList(loggedInUsr.friends);
+    const fetchLoggedInUser = async () => {
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError) {
+        console.error("Error fetching session:", sessionError);
+        return;
+      }
+
+      if (sessionData && sessionData.session) {
+        const user = sessionData.session.user;
+        const { data: userData, error: userError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("public_user_id", user.id)
+          .single();
+
+        if (userError) {
+          console.error("Error fetching user data:", userError);
+        } else {
+          setLoggedInUser(userData);
+          setUsersFriendList(userData.friends || []);
+        }
+      }
+    };
+
+    fetchLoggedInUser();
   }, []);
+
   const onSuccess = () => {
     setEmail("");
   };
+
   const updateCheckedBets = (betOption) => {
-    setSelectedBets({ [betOption]: true }); //sets just one player to bet against.
+    setSelectedBets({ [betOption]: true });
   };
-  const placeBet = () => {
-    if (!selectedFriends || selectedFriends === "") {
+
+  const placeBet = async () => {
+    if (!selectedFriend) {
       alert("Please select a friend to bet with.");
       return;
     }
-    let allBets = getAllBets();
-    let currentUser = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-    );
 
-    const generateBetId = () => {
-      const randomId = new Date().getTime(); //uses a time stamp to generate a uniqe id.
-      return randomId;
-    };
+    if (!loggedInUser) {
+      alert("User not logged in.");
+      return;
+    }
+
+    let allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
+
+    if (!loggedInUser.hasDonated) {
+      let betTokenCount = loggedInUser.betToken
+        ? loggedInUser.betToken
+        : parseInt(loggedInUser.betToken);
+
+      if (betTokenCount > 0 || betTokenCount === "unlimited") {
+        console.log(betTokenCount);
+        if (betTokenCount !== "unlimited") {
+          betTokenCount -= 1;
+        }
+        loggedInUser.betToken = betTokenCount.toString();
+      } else {
+        alert(
+          "You do not have enough bet tokens to place a bet. Please wait 24 hours or donate for unlimited tokens."
+        );
+        return;
+      }
+    }
+
+    const userIndex = allUsers.findIndex(
+      (user) => user.email === loggedInUser.email
+    );
+    if (userIndex !== -1) {
+      allUsers[userIndex] = { ...allUsers[userIndex], ...loggedInUser };
+    }
+
+    // Debugging: Log selectedFriend to ensure it has the correct data
+    const selectedFriendData = usersFriendList.find(
+      (friend) => friend.public_user_id === selectedFriend
+    );
+    console.log("Selected Friend:", selectedFriendData);
+
     const newBet = {
-      betId: generateBetId(),
-      gameId: selectedGame.game_ID,
-      gameTitle: selectedGame.gameTitle,
-      homeLogo: selectedGame.homeLogo,
-      awayLogo: selectedGame.awayLogo,
-      betDescripston: selectedBets,
-      betCreator: currentUser.username,
-      wager: Wager,
+      betid: new Date().getTime().toString(),
+      gameid: selectedGame.game_ID,
+      gametitle: selectedGame.gameTitle,
+      homelogo: selectedGame.homeLogo,
+      awaylogo: selectedGame.awayLogo,
+      betdescription: selectedBets,
+      betcreator: loggedInUser.username,
+      creator_id: loggedInUser.public_user_id,
+      wager: wager,
       result: "Waiting",
-      friends: [selectedFriends],
-      betStatus: "pending",
-      sportType: selectedGame.sportType,
+      friends: selectedFriendData.username,
+      friend_id: selectedFriendData.public_user_id, // Ensure this is set correctly
+      betstatus: "pending",
+      sporttype: selectedGame.sportType,
     };
-    allBets.push(newBet);
-    localStorage.setItem(LOCALSTORAGE.BETS, JSON.stringify(allBets));
+
+    const { error } = await supabase.from("bets").insert([newBet]);
+    if (error) {
+      console.error("Error placing bet:", error);
+      alert("There was an error placing your bet. Please try again.");
+      return;
+    }
+
+    localStorage.setItem(
+      LOCALSTORAGE.LOGGEDINUSER,
+      JSON.stringify(loggedInUser)
+    );
+    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(allUsers));
     navigate(NAVIGATION.MYBETS);
   };
+
   return (
     <div
       className="container mt-2 text-center p-2 rounded"
@@ -107,7 +181,7 @@ const BetPage = () => {
             <FontAwesomeIcon icon={faUserGroup} /> {usersFriendList.length}
           </p>
         ) : (
-          <div className=" mb-3 mt-3 w-50 mx-auto d-flex align-items-center">
+          <div className="mb-3 mt-3 w-50 mx-auto d-flex align-items-center">
             <input
               style={{ backgroundColor: "#f2f2f2", borderColor: "gray" }}
               type="email"
@@ -130,13 +204,13 @@ const BetPage = () => {
         <div className="mb-3">
           <select
             className="form-select custom-select"
-            value={selectedFriends}
-            onChange={(e) => setSelectedFriends(e.target.value)}
+            value={selectedFriend}
+            onChange={(e) => setSelectedFriend(e.target.value)}
           >
             <option value="">Select a Friend</option>
             {usersFriendList.map((friend, index) => (
-              <option key={index} value={friend}>
-                {friend}
+              <option key={index} value={friend.public_user_id}>
+                {friend.username}
               </option>
             ))}
           </select>
@@ -170,85 +244,3 @@ const BetPage = () => {
 };
 
 export { BetPage };
-
-// const structor=[
-//   {
-//     "id": 2023020228,
-//     "season": 20232024,
-//     "gameType": 2,
-//     "gameDate": "2023-11-13",
-//     "venue": {
-//       "default": "Climate Pledge Arena"
-//     },
-//     "startTimeUTC": "2023-11-14T03:00:00Z",
-//     "easternUTCOffset": "-05:00",
-//     "venueUTCOffset": "-08:00",
-//     "tvBroadcasts": [
-//       {
-//         "id": 2,
-//         "market": "A",
-//         "countryCode": "US",
-//         "network": "ALT"
-//       }
-//       // ... more broadcasts
-//     ],
-//     "gameState": "LIVE",
-//     "gameScheduleState": "OK",
-//     "period": 1,
-//     "periodDescriptor": {
-//       "number": 1,
-//       "periodType": "REG"
-//     },
-//     "awayTeam": {
-//       "id": 21,
-//       "name": {
-//         "default": "Avalanche"
-//       },
-//       "abbrev": "COL",
-//       "score": 0,
-//       "sog": 1,
-//       "logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
-//       "onIce": [
-//         {
-//           "playerId": 8471677
-//         }
-//         // ... more players
-//       ],
-//       "radioLink": "https://d2igy0yla8zi0u.cloudfront.net/col/20232024/col-radio.m3u8"
-//     },
-//     "homeTeam": {
-//       // ... similar structure to awayTeam
-//     },
-//     "clock": {
-//       "timeRemaining": "09:16",
-//       "secondsRemaining": 556,
-//       "running": true,
-//       "inIntermission": false
-//     },
-//     "rosterSpots": [
-//       {
-//         "teamId": 21,
-//         "playerId": 8471677,
-//         "firstName": {
-//           "default": "Jack"
-//         },
-//         "lastName": {
-//           "default": "Johnson"
-//         },
-//         "sweaterNumber": 3,
-//         "positionCode": "D",
-//         "headshot": "https://assets.nhle.com/mugs/nhl/20232024/COL/8471677.png"
-//       }
-//       // ... more roster spots
-//     ],
-//     "displayPeriod": 1,
-//     "plays": [
-//       {
-//         "eventId": 102,
-//         "period": 1,
-//         // ... more details about the play
-//       }
-//       // ... more plays
-//     ]
-//   }
-// ]

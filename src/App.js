@@ -27,10 +27,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { RedirectBasedOnLogin } from "./Data";
 import backgroundColor from "./Pages/Register";
+import { supabase } from "./supabaseClient";
+import useAuthListener from "./Components/authRedirectHandler";
+
 function App() {
   useEffect(() => {
     adminUser();
   }, []);
+  <useAuthListener />;
 
   return (
     <div style={backgroundColor}>

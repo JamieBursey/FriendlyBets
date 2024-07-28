@@ -1,11 +1,10 @@
 import {
   getFriend,
-  renderFriends,
   sendFriendRequest,
   editUser,
   acceptFriendRequest,
   rejectFriendRequest,
-  renderFriendList,
+  RenderFriendList,
 } from "./Friends";
 import { PlayerData } from "./Players";
 import {
@@ -16,6 +15,7 @@ import {
   TeamDropdown,
   adminUser,
   RedirectBasedOnLogin,
+  updateBetTokens,
 } from "./RegisteredUser";
 import { BettingOptions, findMLBPlayerName } from "./BetOptions";
 import { getAllBets, findPlayerIdByName, findMLBPlayerIdByName } from "./Bets";
@@ -24,7 +24,6 @@ import { TodaysGames, LiveGames } from "./MatchData";
 
 export {
   getFriend,
-  renderFriends,
   PlayerData,
   getAllUsers,
   findUser,
@@ -37,7 +36,7 @@ export {
   acceptFriendRequest,
   rejectFriendRequest,
   findUserByEmail,
-  renderFriendList,
+  RenderFriendList,
   TodaysGames,
   LiveGames,
   TeamDropdown,
@@ -45,4 +44,5 @@ export {
   RedirectBasedOnLogin,
   findMLBPlayerIdByName,
   findMLBPlayerName,
+  updateBetTokens,
 };
