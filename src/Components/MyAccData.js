@@ -105,7 +105,7 @@ const MyAccountChanges = ({ userDetails, onUserDetailChange }) => {
           <input
             type="text"
             className="form-control"
-            placeholder={displayName}
+            placeholder={userDetails.email}
             onChange={(e) => onUserDetailChange("username", e.target.value)}
             aria-label="Recipient's username"
           />
@@ -116,7 +116,7 @@ const MyAccountChanges = ({ userDetails, onUserDetailChange }) => {
           <input
             type="text"
             className="form-control"
-            placeholder={email}
+            placeholder={userDetails.username}
             onChange={(e) => onUserDetailChange("email", e.target.value)}
             aria-label="Recipient's email"
           />
