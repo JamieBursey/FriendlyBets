@@ -1,50 +1,96 @@
 import { useEffect, useState } from "react";
-import { LOCALSTORAGE } from "../Config";
+import { supabase } from "../supabaseClient";
 import { acceptFriendRequest, rejectFriendRequest } from "../Data";
 
 const FriendRequests = () => {
   const [requests, setRequests] = useState([]);
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER))
-  );
+  const [currentUser, setCurrentUser] = useState(null);
+
   useEffect(() => {
-    const storedRequests =
-      JSON.parse(localStorage.getItem(LOCALSTORAGE.FRIENDREQUEST)) || [];
-    const loggedInUser = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-    );
-    const filteredRequests = storedRequests.filter(
-      (request) =>
-        request.to === loggedInUser.username && request.status === "pending"
-    );
-    setRequests(filteredRequests);
+    const fetchCurrentUser = async () => {
+      const { data: sessionData, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Error fetching session:", error);
+        return;
+      }
+      if (sessionData && sessionData.session) {
+        const authUser = sessionData.session.user;
+        console.log("Fetched auth user:", authUser);
+
+        const { data: userData, error: userError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("email", authUser.email)
+          .single();
+
+        if (userError) {
+          console.error("Error fetching user from users table:", userError);
+          return;
+        }
+
+        console.log("Fetched user from users table:", userData);
+        setCurrentUser(userData);
+        fetchFriendRequests(userData.id);
+      } else {
+        console.log("No active session found");
+      }
+    };
+
+    fetchCurrentUser();
   }, []);
 
-  const handleAccept = (requestId) => {
-    acceptFriendRequest(requestId, (updatedCurrentUser) => {
-      setCurrentUser(updatedCurrentUser);
-      localStorage.setItem(
-        LOCALSTORAGE.LOGGEDINUSER,
-        JSON.stringify(updatedCurrentUser)
-      );
+  const fetchFriendRequests = async (userId) => {
+    console.log("Fetching friend requests for user:", userId);
+    const { data: friendRequests, error } = await supabase
+      .from("friend_requests")
+      .select(
+        `
+        id,
+        from_user,
+        to_user,
+        status,
+        users!friend_requests_from_user_fkey (username)
+      `
+      )
+      .eq("to_user", userId)
+      .eq("status", "pending");
 
+    if (error) {
+      console.error("Error fetching friend requests:", error);
+    } else {
+      console.log("Fetched friend requests:", friendRequests);
+      setRequests(friendRequests);
+    }
+  };
+
+  const handleAccept = async (requestId) => {
+    await acceptFriendRequest(requestId, async () => {
       setRequests(requests.filter((request) => request.id !== requestId));
+      const { data: updatedUser, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error("Error fetching updated user:", error);
+      } else {
+        setCurrentUser(updatedUser.user);
+      }
     });
   };
-  const handleRejectFriend = (requestId) => {
-    rejectFriendRequest(requestId);
+
+  const handleRejectFriend = async (requestId) => {
+    await rejectFriendRequest(requestId);
     setRequests(requests.filter((request) => request.id !== requestId));
   };
 
   return (
     <div className="container mt-3">
       <div className="row">
-        {requests.length >= 1 ? (
+        {requests.length > 0 ? (
           requests.map((request) => (
             <div key={request.id} className="col-md-4 mb-3">
               <div className="card text-center">
                 <div className="card-body">
-                  <h5 className="card-title text-info">{request.from}</h5>
+                  <h5 className="card-title text-info">
+                    {request.users.username}
+                  </h5>
                   <p className="card-text">Would like to be your friend</p>
                   <button
                     onClick={() => handleAccept(request.id)}

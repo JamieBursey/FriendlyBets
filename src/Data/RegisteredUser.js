@@ -10,8 +10,26 @@ const getAllUsers = () => {
   }
   return allUsers;
 };
+
+const updateBetTokens = (user) => {
+  const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
+  const now = Date.now();
+  const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS));
+
+  const userIndex = allUsers.findIndex((u) => u.email === user.email);
+  if (userIndex !== -1) {
+    allUsers[userIndex] = { ...allUsers[userIndex], ...user };
+  }
+
+  if (user.hasDonated) {
+    user.betToken = "Unlimited";
+  } else if (now - user.lastTokenUpdate > oneDay) {
+    user.betToken = 3; // reset to 3 tokens every day
+    user.lastTokenUpdate = now;
+  }
+};
 const findUser = (username) => {
-  const allUsers = getAllUsers(); // [{id: "", ....} , {}]
+  const allUsers = getAllUsers();
   const foundUser = allUsers.find((user) => user.username === username);
   if (foundUser == null) {
     return null;
@@ -20,7 +38,7 @@ const findUser = (username) => {
   }
 };
 const findUserByEmail = (email) => {
-  const allUsers = getAllUsers(); // [{id: "", ....} , {}]
+  const allUsers = getAllUsers();
   const foundUser = allUsers.find((user) => user.email === email);
   if (foundUser == null) {
     return null;
@@ -46,7 +64,9 @@ const adminUser = () => {
       password: "admin",
       email: "admin@email.com",
       favoriteTeam: "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
-      bets: [],
+      betToken: "unlimited",
+      hasDonated: true,
+      lastTokenUpdate: Date.now(),
       friends: [],
       avatar: [],
       messages: [],
@@ -295,4 +315,5 @@ export {
   TeamDropdown,
   adminUser,
   RedirectBasedOnLogin,
+  updateBetTokens,
 };

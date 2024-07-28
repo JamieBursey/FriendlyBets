@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { LOCALSTORAGE } from "../Config";
+import { supabase } from "../supabaseClient";
 import { getAllBets } from "../Data";
-import {
-  CheckBetResults,
-  acceptBets,
-  bannerTextStyles,
-  deleteBets,
-} from "../Components";
+import { CheckBetResults, acceptBets, deleteBets } from "../Components";
+
 const Loader = () => (
-  <div class="spinner-border text-primary" role="status">
-    <span class="sr-only">Loading...</span>
+  <div className="spinner-border text-primary" role="status">
+    <span className="sr-only">Loading...</span>
   </div>
 );
 
 const MyBets = () => {
   const [betsArr, setBetsArr] = useState([]);
   const [activeBetArr, setActiveBetArr] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const backgroundColor = {
     background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
   };
 
-  //create Game Cards
-  const creatBetCard = (
+  // Create Bet Cards
+  const createBetCard = (
     betId,
     game_ID,
     gameTitle,
@@ -31,14 +29,17 @@ const MyBets = () => {
     awayLogo,
     wager,
     betDes,
-    betCreator, // TODO: change to betCreator
+    betcreator,
     loggedInUserUsername,
     betStatus,
     result
   ) => {
-    const betDescriptions = Object.entries(betDes)
-      .filter(([key, value]) => value)
-      .map(([key, value]) => key);
+    const betDescriptions = betDes
+      ? Object.entries(betDes)
+          .filter(([key, value]) => value)
+          .map(([key, value]) => key)
+      : [];
+
     return (
       <div key={betId} className="col-3 card m-1" style={{ width: "18rem" }}>
         <div className="card-body">
@@ -65,22 +66,26 @@ const MyBets = () => {
             </div>
           </div>
           <p>
-            {betCreator} bets {friends}: {wager}
+            {betcreator} bets{" "}
+            {Array.isArray(friends) ? friends.join(", ") : friends}: {wager}
           </p>
           {betDescriptions.map((desc, index) => (
             <p key={index}>{desc}</p>
           ))}
           <p>Result: {result}</p>
           <div className="row">
-            {betStatus === "pending" && betCreator === loggedInUserUsername ? (
-              <p>Awaiting {friends} Confirmation</p>
+            {betStatus === "pending" && betcreator === loggedInUserUsername ? (
+              <p>
+                Awaiting {Array.isArray(friends) ? friends.join(", ") : friends}{" "}
+                Confirmation
+              </p>
             ) : null}
-            {betStatus === "pending" && betCreator !== loggedInUserUsername ? (
+            {betStatus === "pending" && betcreator !== loggedInUserUsername ? (
               <>
                 <div className="col">
                   <button
                     className="btn btn-primary w-100 mb-1"
-                    onClick={() => acceptBets(betId, betCreator, fetchBetData)}
+                    onClick={() => acceptBets(betId, fetchBetData)}
                   >
                     Accept
                   </button>
@@ -96,7 +101,7 @@ const MyBets = () => {
               </>
             ) : (
               <div className="row">
-                {betCreator !== loggedInUserUsername ||
+                {betcreator !== loggedInUserUsername ||
                 betStatus !== "pending" ? (
                   <>
                     <div className="col">
@@ -140,82 +145,113 @@ const MyBets = () => {
     );
   };
 
-  const fetchBetData = () => {
-    let betsArrString = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
-    let allBets = getAllBets();
-    let userBets = betsArrString ? JSON.parse(betsArrString) : [];
-    let betsArr = userBets.bets;
-    let currentUser = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-    );
-    let pendingBets = allBets.filter(
-      (bet) =>
-        (bet.betCreator === currentUser.username ||
-          bet.friends.includes(currentUser.username)) &&
-        bet.betStatus === "pending"
-    );
-    let activeBets = allBets.filter(
-      (bet) =>
-        (bet.betCreator === currentUser.username ||
-          bet.friends.includes(currentUser.username)) &&
-        bet.betStatus === "active"
-    );
+  const fetchBetData = async () => {
+    setLoading(true);
+    const allBets = await getAllBets();
+    console.log("allbets", allBets);
 
-    let pendingBetsCard = pendingBets.map((b) => {
-      const betId = b.betId;
-      const gameTitle = b.gameTitle;
-      const game_ID = b.game_ID;
-      const friends = b.friends;
-      const homeLogo = b.homeLogo;
-      const awayLogo = b.awayLogo;
-      const wager = b.wager;
-      const betDes = b.betDescripston;
-      const betStatus = b.betStatus;
-      return creatBetCard(
-        betId,
-        game_ID,
-        gameTitle,
-        friends,
-        awayLogo,
-        homeLogo,
-        wager,
-        betDes,
-        b.betCreator,
-        currentUser.username,
-        betStatus,
-        b.result
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+    if (sessionError) {
+      console.error("Error fetching session:", sessionError);
+      setLoading(false);
+      return;
+    }
+
+    if (sessionData && sessionData.session) {
+      const user = sessionData.session.user;
+      const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("public_user_id", user.id)
+        .single();
+
+      if (userError) {
+        console.error("Error fetching user data:", userError);
+        setLoading(false);
+        return;
+      }
+
+      console.log("Current user data:", userData);
+      setCurrentUser(userData);
+
+      let pendingBets = allBets.filter(
+        (bet) =>
+          (bet.creator_id === userData.public_user_id ||
+            bet.friend_id === userData.public_user_id) &&
+          bet.betstatus === "pending"
       );
-    });
-    let activeBetsCard = activeBets.map((b) => {
-      const betId = b.betId;
-      const gameTitle = b.gameTitle;
-      const game_ID = b.game_ID;
-      const friends = b.friends;
-      const homeLogo = b.homeLogo;
-      const awayLogo = b.awayLogo;
-      const wager = b.wager;
-      const betDes = b.betDescripston;
-      const betStatus = b.betStatus;
-      return creatBetCard(
-        betId,
-        game_ID,
-        gameTitle,
-        friends,
-        awayLogo,
-        homeLogo,
-        wager,
-        betDes,
-        b.betCreator,
-        currentUser.username,
-        betStatus,
-        b.result
+
+      let activeBets = allBets.filter(
+        (bet) =>
+          (bet.creator_id === userData.public_user_id ||
+            bet.friend_id === userData.public_user_id) &&
+          bet.betstatus === "active"
       );
-    });
-    setBetsArr(pendingBetsCard);
-    setActiveBetArr(activeBetsCard);
+
+      console.log("Pending bets:", pendingBets);
+      console.log("Active bets:", activeBets);
+
+      let pendingBetsCard = pendingBets.map((b) => {
+        const betId = b.betid;
+        const gameTitle = b.gametitle;
+        const game_ID = b.gameid;
+        const friends = b.friends || [];
+        const homeLogo = b.homelogo;
+        const awayLogo = b.awaylogo;
+        const wager = b.wager;
+        const betDes = b.betdescription || {}; // Ensure betDes is an object
+        const betStatus = b.betstatus;
+        return createBetCard(
+          betId,
+          game_ID,
+          gameTitle,
+          friends,
+          awayLogo,
+          homeLogo,
+          wager,
+          betDes,
+          b.betcreator,
+          userData.username,
+          betStatus,
+          b.result
+        );
+      });
+
+      let activeBetsCard = activeBets.map((b) => {
+        const betId = b.betid;
+        const gameTitle = b.gametitle;
+        const game_ID = b.gameid;
+        const friends = b.friends || [];
+        const homeLogo = b.homelogo;
+        const awayLogo = b.awaylogo;
+        const wager = b.wager;
+        const betDes = b.betdescription || {}; // Ensure betDes is an object
+        const betStatus = b.betstatus;
+        return createBetCard(
+          betId,
+          game_ID,
+          gameTitle,
+          friends,
+          awayLogo,
+          homeLogo,
+          wager,
+          betDes,
+          b.betcreator,
+          userData.username,
+          betStatus,
+          b.result
+        );
+      });
+
+      setBetsArr(pendingBetsCard);
+      setActiveBetArr(activeBetsCard);
+    }
+
+    setLoading(false);
   };
+
   useEffect(() => {
-    // Whenever the page loads, then this is executed
     fetchBetData();
   }, []);
 
@@ -231,15 +267,28 @@ const MyBets = () => {
         <h1 className="login-text w-50 mx-auto">My Bets</h1>
         <h3 className="text-white ">Pending Bets</h3>
         <div className="row justify-content-center">
-          {betsArr.length === 0 ? "No Pending Bets" : betsArr}
+          {loading ? (
+            <Loader />
+          ) : betsArr.length === 0 ? (
+            "No Pending Bets"
+          ) : (
+            betsArr
+          )}
         </div>
         <hr style={{ backgroundColor: "white", height: "2px" }} />
         <h2 className="text-white">Active Bets</h2>
         <div className="row justify-content-center">
-          {activeBetArr.length === 0 ? "No Active Bets" : activeBetArr}
+          {loading ? (
+            <Loader />
+          ) : activeBetArr.length === 0 ? (
+            "No Active Bets"
+          ) : (
+            activeBetArr
+          )}
         </div>
       </div>
     </div>
   );
 };
+
 export { MyBets, Loader };

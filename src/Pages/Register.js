@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { TeamDropdown } from "../Data";
-import { Banner } from "../Components";
+import { supabase } from "../supabaseClient";
 import Logo from "../Components/Logo";
 
 const backgroundColor = {
   background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
   minHeight: "100vh",
 };
+
 function Register() {
   const navigate = useNavigate();
   const [username, setUserName] = useState(null);
@@ -16,39 +17,52 @@ function Register() {
   const [email, setEmail] = useState(null);
   const [favoriteTeam, setFavoriteTeam] = useState(null);
   const [hover, setHover] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const blueButtonStyle = {
     backgroundColor: hover ? "blue" : "#010286",
     color: "white",
   };
-  const registerUser = () => {
+  const registerUser = async () => {
     if (!username || !password || !email || !favoriteTeam) {
-      alert("Please submit all fields");
+      alert("Please fill in all fields");
       return;
     }
-    const existingUsers =
-      JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
+    setLoading(true);
 
-    const isUserExisting = existingUsers.some((user) => user.email === email);
-    if (isUserExisting) {
-      alert("Email already in use");
-    } else {
-      const newUser = {
-        username,
-        password,
+    try {
+      const { user, error } = await supabase.auth.signUp({
         email,
-        favoriteTeam,
-        bets: [],
-        friends: [],
-        avatar: [],
-        isAdmin: false,
-      };
-      existingUsers.push(newUser);
-      localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(existingUsers));
-      localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(newUser));
-      navigate(NAVIGATION.ADDFRIENDS);
+        password,
+        options: {
+          data: {
+            username,
+            favoriteTeam,
+            betToken: 3,
+            hasDonated: false,
+            friends: JSON.stringify([]),
+            avatar: JSON.stringify([]),
+            bets: JSON.stringify([]),
+          },
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (user) {
+        console.log("User registered:", user);
+        // Optionally, handle navigation or additional setup here
+      }
+    } catch (error) {
+      console.error("Signup error:", error.message);
+      alert(error.message);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div>
       <Logo />

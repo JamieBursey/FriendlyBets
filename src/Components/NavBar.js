@@ -1,18 +1,68 @@
-import { React } from "react";
-import Avatar from "react-avatar";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
+import Avatar from "react-avatar";
+import { Link } from "react-router-dom";
+import { supabase } from "../supabaseClient";
 
 function NavBar() {
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, null);
-    navigate("/Login");
-  };
+  const [loggedUser, setLoggedUser] = useState(null);
+  const [userDetails, setUserDetails] = useState({});
 
-  const loggedUser = JSON.parse(
-    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-  );
+  async function fetchUserDetails(userId) {
+    if (!userId) {
+      console.log("No user ID provided, skipping fetch");
+      return; // Skip fetching if no userId is provided
+    }
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("public_user_id", userId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching user details:", error);
+    } else {
+      setUserDetails(data);
+    }
+  }
+
+  useEffect(() => {
+    const init = async () => {
+      const user = await supabase.auth.getUser();
+      if (user.data) {
+        setLoggedUser(user.data);
+        fetchUserDetails(user.data.id);
+      } else {
+        setLoggedUser(null);
+        setUserDetails({});
+      }
+    };
+
+    init();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session) {
+          setLoggedUser(session.user);
+          fetchUserDetails(session.user.id);
+        } else {
+          setLoggedUser(null);
+          setUserDetails({});
+        }
+      }
+    );
+
+    return () => authListener.subscription.unsubscribe();
+  }, []);
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setLoggedUser(null);
+    setUserDetails({});
+    navigate("/login");
+  };
   return (
     <nav className="navbar navbar-expand-sm bg-body-tertiary">
       <div className="container-fluid">
@@ -98,7 +148,7 @@ function NavBar() {
                 aria-expanded="false"
                 href="/#"
               >
-                <Avatar round={true} size="40" name={loggedUser.username} />
+                <Avatar round={true} size="40" name={userDetails.username} />
               </a>
               <ul className="dropdown-menu dropdown-menu-end">
                 <li>
@@ -109,7 +159,7 @@ function NavBar() {
                     My Account
                   </button>
                 </li>
-                {loggedUser.isAdmin ? (
+                {userDetails.is_admin ? (
                   <li>
                     <button
                       className="dropdown-item"

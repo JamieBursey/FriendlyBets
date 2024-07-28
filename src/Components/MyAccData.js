@@ -1,14 +1,14 @@
 import React from "react";
 import Avatar from "react-avatar";
-import { LOCALSTORAGE } from "../Config";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { bannerTextStyles } from "./Banner";
+import { supabase } from "../supabaseClient";
 
 const dropDownScroll = {
   maxHeight: "200px",
   overflow: "scroll",
 };
+
 const DisplayName = ({ user }) => {
   return (
     <div className="text-center">
@@ -16,6 +16,7 @@ const DisplayName = ({ user }) => {
     </div>
   );
 };
+
 const AvatarComponent = ({ user }) => {
   const textSize = {
     fontSize: "100px",
@@ -33,7 +34,7 @@ const AvatarComponent = ({ user }) => {
         />
       </div>
       <div className="col d-flex justify-content-start">
-        {RenderFavoriteTeam({ user })}
+        <RenderFavoriteTeam user={user} />
       </div>
     </div>
   );
@@ -42,8 +43,9 @@ const AvatarComponent = ({ user }) => {
 const MyAccEmail = ({ user }) => {
   return <div className="text-center text-info fs-2">Email: {user.email}</div>;
 };
+
 const RenderAboutMe = ({ user }) => {
-  if (user.aboutMe)
+  if (user.about_me)
     return (
       <div
         className="card text-center mx-auto mt-5 text-bg-secondary mb-3"
@@ -51,17 +53,18 @@ const RenderAboutMe = ({ user }) => {
       >
         <div className="card-header">About</div>
         <div className="card-body">
-          <p className="card-text">{user.aboutMe}</p>
+          <p className="card-text">{user.about_me}</p>
         </div>
       </div>
     );
 };
+
 const RenderFavoriteTeam = ({ user }) => {
   return (
     <div className="text-center text-info fs-2">
-      {user.favoriteTeam ? (
+      {user.favorite_team ? (
         <img
-          src={user.favoriteTeam}
+          src={user.favorite_team}
           alt="favorite_Team"
           style={{ width: "100px", height: "100px" }}
         />
@@ -71,6 +74,7 @@ const RenderFavoriteTeam = ({ user }) => {
     </div>
   );
 };
+
 const NavigateToUpdate = () => {
   const navigate = useNavigate();
   const handleButtonClick = () => {
@@ -90,18 +94,9 @@ const NavigateToUpdate = () => {
 };
 
 const MyAccountChanges = ({ userDetails, onUserDetailChange }) => {
-  const loggedUser = JSON.parse(
-    localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-  );
-  const allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS) || "[]");
-
-  const [email, setEmail] = useState(loggedUser ? loggedUser.email : "");
-  const [displayName, setDisplayName] = useState(
-    loggedUser ? loggedUser.username : ""
-  );
-  const [password, setPassword] = useState(
-    loggedUser ? loggedUser.password : ""
-  );
+  const [email, setEmail] = useState(userDetails.email);
+  const [displayName, setDisplayName] = useState(userDetails.username);
+  const [password, setPassword] = useState("");
 
   return (
     <>
@@ -130,9 +125,9 @@ const MyAccountChanges = ({ userDetails, onUserDetailChange }) => {
       <div className="d-flex justify-content-center">
         <div className="input-group mb-3 w-50">
           <input
-            type="text"
+            type="password"
             className="form-control"
-            placeholder={password}
+            placeholder="Password"
             onChange={(e) => onUserDetailChange("password", e.target.value)}
             aria-label="Recipient's password"
           />
@@ -149,9 +144,11 @@ const AboutMeComponent = ({ userDetails, onUserDetailChange }) => {
         <textarea
           className="form-control"
           placeholder={
-            userDetails.aboutMe ? userDetails.aboutMe : "Tell us about yourself"
+            userDetails.about_me
+              ? userDetails.about_me
+              : "Tell us about yourself"
           }
-          onChange={(e) => onUserDetailChange("aboutMe", e.target.value)}
+          onChange={(e) => onUserDetailChange("about_me", e.target.value)}
         />
       </div>
     </div>
@@ -160,7 +157,7 @@ const AboutMeComponent = ({ userDetails, onUserDetailChange }) => {
 
 const UpdateFavTeam = ({ userDetails, onUserDetailChange }) => {
   const [teamLogos, setTeamLogos] = useState([]);
-  const [selectedTeam, setSelectedTeam] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState(userDetails.favorite_team);
 
   useEffect(() => {
     const fetchTeam = async () => {
@@ -189,7 +186,7 @@ const UpdateFavTeam = ({ userDetails, onUserDetailChange }) => {
   }, []);
 
   const handleSelectedTeam = (logo) => {
-    onUserDetailChange("favoriteTeam", logo);
+    onUserDetailChange("favorite_team", logo);
     setSelectedTeam(logo);
   };
 
@@ -232,8 +229,6 @@ const UpdateFavTeam = ({ userDetails, onUserDetailChange }) => {
     </div>
   );
 };
-
-export default UpdateFavTeam;
 
 export {
   AvatarComponent,

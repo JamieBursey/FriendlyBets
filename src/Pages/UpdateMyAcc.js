@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LOCALSTORAGE } from "../Config";
+import { supabase } from "../supabaseClient";
 import {
   AvatarComponent,
   MyAccountChanges,
@@ -15,24 +15,44 @@ function UpdateMyAccount() {
     username: "",
     email: "",
     password: "",
-    aboutMe: "",
-    favoriteTeam: "",
+    about_me: "",
+    favorite_team: "",
   });
 
   useEffect(() => {
-    const currentLoggedUser = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER)
-    );
-    if (currentLoggedUser) {
-      setLoggedUser(currentLoggedUser);
-      setUserDetails({
-        username: currentLoggedUser.username || "",
-        email: currentLoggedUser.email || "",
-        password: currentLoggedUser.password || "",
-        aboutMe: currentLoggedUser.aboutMe || "",
-        favoriteTeam: currentLoggedUser.favoriteTeam || "",
-      });
-    }
+    const fetchUserData = async () => {
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError) {
+        console.error("Error fetching session:", sessionError);
+        return;
+      }
+
+      if (sessionData && sessionData.session) {
+        const user = sessionData.session.user;
+        const { data: userData, error: userError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("public_user_id", user.id)
+          .single();
+
+        if (userError) {
+          console.error("Error fetching user data:", userError);
+        } else {
+          setLoggedUser(userData);
+          setUserDetails({
+            username: userData.username || "",
+            email: userData.email || "",
+            password: "", // Passwords should not be prefilled
+            about_me: userData.about_me || "",
+            favorite_team: userData.favorite_team || "",
+          });
+        }
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   const handleUserDetailChange = (field, value) => {
@@ -42,29 +62,58 @@ function UpdateMyAccount() {
     }));
   };
 
-  const handleUpdateAll = () => {
+  const handleUpdateAll = async () => {
     const updatedDetails = {
       username: userDetails.username || loggedUser.username,
       email: userDetails.email || loggedUser.email,
-      password: userDetails.password || loggedUser.password,
-      aboutMe: userDetails.aboutMe || loggedUser.aboutMe,
-      favoriteTeam: userDetails.favoriteTeam || loggedUser.favoriteTeam,
+      password: userDetails.password,
+      about_me: userDetails.about_me || loggedUser.about_me,
+      favorite_team: userDetails.favorite_team || loggedUser.favorite_team,
     };
 
-    // Update LOCALSTORAGE LOGGEDINUSER
-    localStorage.setItem(
-      LOCALSTORAGE.LOGGEDINUSER,
-      JSON.stringify(updatedDetails)
-    );
+    // Update Supabase user details
+    const { error: updateUserError } = await supabase
+      .from("users")
+      .update({
+        username: updatedDetails.username,
+        email: updatedDetails.email,
+        about_me: updatedDetails.about_me,
+        favorite_team: updatedDetails.favorite_team,
+      })
+      .eq("public_user_id", loggedUser.public_user_id);
 
-    // Update LOCALSTORAGE all users
-    const allUsers = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE.USERS) || "[]"
-    );
-    const updatedUsers = allUsers.map((user) =>
-      user.username === updatedDetails.username ? updatedDetails : user
-    );
-    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(updatedUsers));
+    if (updateUserError) {
+      console.error("Error updating user details:", updateUserError);
+      alert("There was an error updating your details. Please try again.");
+      return;
+    }
+
+    // Update password if it was changed
+    if (updatedDetails.password) {
+      const { error: updatePasswordError } = await supabase.auth.updateUser({
+        password: updatedDetails.password,
+      });
+
+      if (updatePasswordError) {
+        console.error("Error updating password:", updatePasswordError);
+        alert("There was an error updating your password. Please try again.");
+        return;
+      }
+    }
+
+    // Fetch the updated user data
+    const { data: updatedUser, error: fetchUserError } = await supabase
+      .from("users")
+      .select("*")
+      .eq("public_user_id", loggedUser.public_user_id)
+      .single();
+
+    if (fetchUserError) {
+      console.error("Error fetching updated user data:", fetchUserError);
+    } else {
+      setLoggedUser(updatedUser);
+      alert("Your account has been updated successfully!");
+    }
 
     // Navigate to MyAccount page
     navigate("/MyAccount");
@@ -79,7 +128,7 @@ function UpdateMyAccount() {
           onUserDetailChange={handleUserDetailChange}
         />
         <UpdateFavTeam
-          favoriteTeam={userDetails}
+          userDetails={userDetails}
           onUserDetailChange={handleUserDetailChange}
         />
         <AboutMeComponent

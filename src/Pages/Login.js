@@ -2,7 +2,8 @@ import { checkUserPassword, findUserByEmail } from "../Data";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOCALSTORAGE, NAVIGATION } from "../Config";
-import { Banner } from "../Components";
+import { supabase } from "../supabaseClient";
+import { updateBetTokens } from "../Data";
 import Logo from "../Components/Logo";
 
 function Login() {
@@ -26,25 +27,38 @@ function Login() {
   const registerHandler = () => {
     navigate(NAVIGATION.REGISTER);
   };
-  const loginHandler = () => {
-    const foundUser = findUserByEmail(email);
+  const loginHandler = async () => {
+    if (!email || !password) {
+      alert("Please fill in both email and password");
+      return;
+    }
 
-    // Check if foundUser is not null before trying to access its properties
-    if (foundUser != null) {
-      const passwordMatches = checkUserPassword(foundUser.password, password);
-      if (passwordMatches) {
-        localStorage.setItem(
-          LOCALSTORAGE.LOGGEDINUSER,
-          JSON.stringify(foundUser)
-        );
-        navigate("/FriendlyBets");
-      } else {
-        alert("Incorrect password");
-      }
+    const { user, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    // Check if the user data is available
+    if (user) {
+      console.log("Logged in user:", user);
+      navigate("/FriendlyBets");
     } else {
-      alert("User does not exist");
+      console.log("Login successful, but no user object returned");
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      console.log("Session after login:", session);
+      if (session && session.user) {
+        navigate("/FriendlyBets");
+      }
     }
   };
+
   return (
     <div>
       <Logo />
