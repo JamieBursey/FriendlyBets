@@ -128,7 +128,8 @@ const TodaysGames = () => {
       setLoading(false);
       setTodaysGameArr(gamesHTMLObj);
     } catch (error) {
-      alert("Fetch Data Error", error);
+      setLoading(false);
+      console.error("Error fetching live games:", error);
     }
   };
   useEffect(() => {
