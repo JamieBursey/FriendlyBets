@@ -172,7 +172,6 @@ const MyBets = () => {
         return;
       }
 
-      console.log("Current user data:", userData);
       setCurrentUser(userData);
 
       let pendingBets = allBets.filter(
