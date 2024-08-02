@@ -63,6 +63,14 @@ function NavBar() {
     setUserDetails({});
     navigate("/login");
   };
+  const handleNavLinkClick = () => {
+    const navbarCollapse = document.getElementById("navbarSupportedContent");
+    if (navbarCollapse.classList.contains("show")) {
+      // Manually remove the 'show' class to collapse the navbar
+      navbarCollapse.classList.remove("show");
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-sm bg-body-tertiary">
       <div className="container-fluid">
@@ -84,17 +92,26 @@ function NavBar() {
                 className="nav-link active"
                 aria-current="page"
                 to={NAVIGATION.HOME}
+                onClick={handleNavLinkClick}
               >
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={NAVIGATION.ABOUT}>
+              <Link
+                className="nav-link"
+                to={NAVIGATION.ABOUT}
+                onClick={handleNavLinkClick}
+              >
                 About
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={NAVIGATION.CONTACT}>
+              <Link
+                className="nav-link"
+                to={NAVIGATION.CONTACT}
+                onClick={handleNavLinkClick}
+              >
                 Contact
               </Link>
             </li>
@@ -104,6 +121,7 @@ function NavBar() {
                   <Link
                     className="nav-link text-success"
                     to={NAVIGATION.MYBETS}
+                    onClick={handleNavLinkClick}
                   >
                     MyBets
                   </Link>
@@ -112,6 +130,7 @@ function NavBar() {
                   <Link
                     className="nav-link text-success"
                     to={NAVIGATION.ADDFRIENDS}
+                    onClick={handleNavLinkClick}
                   >
                     Friends
                   </Link>
@@ -120,6 +139,7 @@ function NavBar() {
                   <Link
                     className="nav-link text-success"
                     to={NAVIGATION.NOTIFICATIONS}
+                    onClick={handleNavLinkClick}
                   >
                     Notifications
                   </Link>
