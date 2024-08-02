@@ -29,7 +29,11 @@ const RegisterSuccess = ({ message, onClose }) => {
         }}
       >
         <h4>{message}</h4>
-        <button onClick={onClose} style={{ marginTop: "10px" }}>
+        <button
+          className="btn mt-4"
+          onClick={onClose}
+          style={{ marginTop: "10px", backgroundColor: "blue", color: "white" }}
+        >
           Close
         </button>
       </div>

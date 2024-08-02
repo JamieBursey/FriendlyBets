@@ -98,7 +98,7 @@ function NavBar() {
                 Contact
               </Link>
             </li>
-            {loggedUser ? (
+            {loggedUser && (
               <>
                 <li className="nav-item">
                   <Link
@@ -108,7 +108,6 @@ function NavBar() {
                     MyBets
                   </Link>
                 </li>
-
                 <li className="nav-item">
                   <Link
                     className="nav-link text-success"
@@ -117,7 +116,6 @@ function NavBar() {
                     Friends
                   </Link>
                 </li>
-
                 <li className="nav-item">
                   <Link
                     className="nav-link text-success"
@@ -126,27 +124,20 @@ function NavBar() {
                     Notifications
                   </Link>
                 </li>
-                {/* <li className="nav-item">
-                  <Link
-                    className="nav-link text-success"
-                    to="https://paypal.me/FriendlyBets?country.x=CA&locale.x=en_US"
-                  >
-                    Donate
-                  </Link>
-                </li> */}
               </>
-            ) : null}
+            )}
           </ul>
         </div>
-        <div className="d-flex align-items-center">
+
+        <div className="d-flex align-items-center ms-auto">
           {loggedUser ? (
-            <div className="dropdown justify-content-between">
+            <div className="dropdown">
               <a
                 className="dropdown-toggle"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                href="/#"
+                href="#"
               >
                 <Avatar round={true} size="40" name={userDetails.username} />
               </a>
@@ -159,7 +150,7 @@ function NavBar() {
                     My Account
                   </button>
                 </li>
-                {userDetails.is_admin ? (
+                {userDetails.is_admin && (
                   <li>
                     <button
                       className="dropdown-item"
@@ -168,7 +159,7 @@ function NavBar() {
                       Update Users
                     </button>
                   </li>
-                ) : null}
+                )}
                 <li>
                   <button
                     className="dropdown-item"
@@ -185,11 +176,9 @@ function NavBar() {
               </ul>
             </div>
           ) : (
-            <form className="d-flex justify-content-between">
-              <Link className="btn btn-success" to={NAVIGATION.LOGIN}>
-                Login
-              </Link>
-            </form>
+            <Link className="btn btn-success ms-2" to={NAVIGATION.LOGIN}>
+              Login
+            </Link>
           )}
         </div>
       </div>
