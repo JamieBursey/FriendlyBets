@@ -1,9 +1,41 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LOCALSTORAGE, NAVIGATION } from "../Config";
-import { TeamDropdown } from "../Data";
 import { supabase } from "../supabaseClient";
 import Logo from "../Components/Logo";
+import { TeamDropdown } from "../Data";
+
+const RegisterSuccess = ({ message, onClose }) => {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "20px",
+          borderRadius: "10px",
+          textAlign: "center",
+        }}
+      >
+        <h4>{message}</h4>
+        <button onClick={onClose} style={{ marginTop: "10px" }}>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const backgroundColor = {
   background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
@@ -18,11 +50,13 @@ function Register() {
   const [favoriteTeam, setFavoriteTeam] = useState(null);
   const [hover, setHover] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const blueButtonStyle = {
     backgroundColor: hover ? "blue" : "#010286",
     color: "white",
   };
+
   const registerUser = async () => {
     if (!username || !password || !email || !favoriteTeam) {
       alert("Please fill in all fields");
@@ -52,19 +86,20 @@ function Register() {
       }
 
       if (user) {
-        console.log("User registered:", user);
-        // Optionally, handle navigation or additional setup here
+        // Show the custom popup
+        console.log(user);
       }
     } catch (error) {
       console.error("Signup error:", error.message);
       alert(error.message);
     } finally {
       setLoading(false);
+      setShowPopup(true);
     }
   };
 
   return (
-    <div>
+    <div style={backgroundColor}>
       <Logo />
       <div
         className="container mx-auto mt-2 p-3"
@@ -94,17 +129,27 @@ function Register() {
           />
           <TeamDropdown teamSelect={setFavoriteTeam} />
           <button
-            className="btn  mt-4"
+            className="btn mt-4"
             type="button"
             onClick={registerUser}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             style={blueButtonStyle}
+            disabled={loading} // Disable button when loading
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </div>
       </div>
+      {showPopup && (
+        <RegisterSuccess
+          message="Registration Successful! Please check Email for Verification."
+          onClose={() => {
+            setShowPopup(false);
+            navigate("/login");
+          }}
+        />
+      )}
     </div>
   );
 }
