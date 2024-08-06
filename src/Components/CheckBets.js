@@ -9,14 +9,13 @@ const CheckBetResults = async (betId, callback) => {
       .select("*")
       .eq("betid", betId)
       .single();
-
     if (betError || !bet) {
       console.error("Error fetching bet:", betError);
       return;
     }
-
-    const betCreator = bet.betCreator;
-    const gameNumber = bet.gameId;
+    const betCreator = bet.betcreator;
+    const gameNumber = bet.gameid;
+    console.log("Bet Data:", bet);
 
     if (bet.sportType === "NHL") {
       const checkShotsOnNet = (playerId, plays, isGameFinished) => {
@@ -74,7 +73,7 @@ const CheckBetResults = async (betId, callback) => {
           resultsData.period === 3);
 
       for (const [betDescription, isActive] of Object.entries(
-        bet.betDescripston
+        bet.betdescription
       )) {
         if (!isActive) continue;
 
@@ -169,11 +168,12 @@ const CheckBetResults = async (betId, callback) => {
         }
       }
     }
-    if (bet.sportType === "MLB") {
+    if (bet.sporttype === "MLB") {
       const response = await fetch(
         `https://statsapi.mlb.com/api/v1.1/game/${gameNumber}/feed/live`
       );
       const gameInfo = await response.json();
+      console.log("gameinfo", gameInfo);
       const plays = gameInfo.liveData.plays.allPlays;
       const isGameFinished =
         gameInfo.gameData.status.abstractGameState === "Final";
@@ -181,12 +181,13 @@ const CheckBetResults = async (betId, callback) => {
       const awayTeam = gameInfo.gameData.teams.away;
 
       for (const [betDescription, isActive] of Object.entries(
-        bet.betDescripston
+        bet.betdescription
       )) {
         if (!isActive) continue;
 
+        const roster = Object.values(gameInfo.gameData.players);
+
         if (betDescription.includes("will hit an RBI")) {
-          const roster = Object.values(gameInfo.gameData.players);
           const playerName = betDescription.split(" will hit an RBI")[0];
           const playerID = findMLBPlayerIdByName(playerName, roster);
 
@@ -203,7 +204,6 @@ const CheckBetResults = async (betId, callback) => {
           }
         }
         if (betDescription.includes("will hit a home run")) {
-          const roster = Object.values(gameInfo.gameData.players);
           const playerName = betDescription.split(" will hit a home run")[0];
           const playerID = findMLBPlayerIdByName(playerName, roster);
 

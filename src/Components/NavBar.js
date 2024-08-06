@@ -63,6 +63,14 @@ function NavBar() {
     setUserDetails({});
     navigate("/login");
   };
+  const handleNavLinkClick = () => {
+    const navbarCollapse = document.getElementById("navbarSupportedContent");
+    if (navbarCollapse.classList.contains("show")) {
+      // Manually remove the 'show' class to collapse the navbar
+      navbarCollapse.classList.remove("show");
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-sm bg-body-tertiary">
       <div className="container-fluid">
@@ -84,69 +92,72 @@ function NavBar() {
                 className="nav-link active"
                 aria-current="page"
                 to={NAVIGATION.HOME}
+                onClick={handleNavLinkClick}
               >
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={NAVIGATION.ABOUT}>
+              <Link
+                className="nav-link"
+                to={NAVIGATION.ABOUT}
+                onClick={handleNavLinkClick}
+              >
                 About
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={NAVIGATION.CONTACT}>
+              <Link
+                className="nav-link"
+                to={NAVIGATION.CONTACT}
+                onClick={handleNavLinkClick}
+              >
                 Contact
               </Link>
             </li>
-            {loggedUser ? (
+            {loggedUser && (
               <>
                 <li className="nav-item">
                   <Link
                     className="nav-link text-success"
                     to={NAVIGATION.MYBETS}
+                    onClick={handleNavLinkClick}
                   >
                     MyBets
                   </Link>
                 </li>
-
                 <li className="nav-item">
                   <Link
                     className="nav-link text-success"
                     to={NAVIGATION.ADDFRIENDS}
+                    onClick={handleNavLinkClick}
                   >
                     Friends
                   </Link>
                 </li>
-
                 <li className="nav-item">
                   <Link
                     className="nav-link text-success"
                     to={NAVIGATION.NOTIFICATIONS}
+                    onClick={handleNavLinkClick}
                   >
                     Notifications
                   </Link>
                 </li>
-                {/* <li className="nav-item">
-                  <Link
-                    className="nav-link text-success"
-                    to="https://paypal.me/FriendlyBets?country.x=CA&locale.x=en_US"
-                  >
-                    Donate
-                  </Link>
-                </li> */}
               </>
-            ) : null}
+            )}
           </ul>
         </div>
-        <div className="d-flex align-items-center">
+
+        <div className="d-flex align-items-center ms-auto">
           {loggedUser ? (
-            <div className="dropdown justify-content-between">
+            <div className="dropdown">
               <a
                 className="dropdown-toggle"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                href="/#"
+                href="#"
               >
                 <Avatar round={true} size="40" name={userDetails.username} />
               </a>
@@ -159,7 +170,7 @@ function NavBar() {
                     My Account
                   </button>
                 </li>
-                {userDetails.is_admin ? (
+                {userDetails.is_admin && (
                   <li>
                     <button
                       className="dropdown-item"
@@ -168,7 +179,7 @@ function NavBar() {
                       Update Users
                     </button>
                   </li>
-                ) : null}
+                )}
                 <li>
                   <button
                     className="dropdown-item"
@@ -185,11 +196,9 @@ function NavBar() {
               </ul>
             </div>
           ) : (
-            <form className="d-flex justify-content-between">
-              <Link className="btn btn-success" to={NAVIGATION.LOGIN}>
-                Login
-              </Link>
-            </form>
+            <Link className="btn btn-success ms-2" to={NAVIGATION.LOGIN}>
+              Login
+            </Link>
           )}
         </div>
       </div>

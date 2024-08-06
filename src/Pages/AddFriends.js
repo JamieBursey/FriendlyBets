@@ -183,19 +183,21 @@ const AddFriends = () => {
       <div className="text-center">
         <p style={HeaderStyle}>Friends</p>
       </div>
-      <div className="input-group mb-3 w-50 mx-auto">
+      <div className="input-group mb-3 mx-auto" style={{ maxWidth: "90%" }}>
         <input
           type="email"
-          className="form-control me-1"
-          placeholder="AddFriend@email.com"
+          className="form-control form-control-sm"
+          placeholder="Friends Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          style={{ flex: "1 1 auto" }}
         />
         <div className="input-group-append">
           <button
-            className="btn btn-outline-success"
+            className="btn btn-outline-success btn-sm"
             onClick={() => handleSendFriendRequest(email, onSuccess)}
             type="button"
+            style={{ flex: "0 0 auto" }}
           >
             Add Friend
           </button>

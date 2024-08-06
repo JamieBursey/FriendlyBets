@@ -17,7 +17,7 @@ const BetPage = () => {
   const selectedGame = JSON.parse(gameInfo);
 
   const navigate = useNavigate();
-  const [selectedFriend, setSelectedFriend] = useState("");
+  const [selectedFriend, setSelectedFriend] = useState(null);
   const [usersFriendList, setUsersFriendList] = useState([]);
   const [selectedBets, setSelectedBets] = useState({});
   const [wager, setWager] = useState("");
@@ -102,10 +102,7 @@ const BetPage = () => {
     }
 
     // Debugging: Log selectedFriend to ensure it has the correct data
-    const selectedFriendData = usersFriendList.find(
-      (friend) => friend.public_user_id === selectedFriend
-    );
-    console.log("Selected Friend:", selectedFriendData);
+    console.log("Selected Friend:", selectedFriend);
 
     const newBet = {
       betid: new Date().getTime().toString(),
@@ -118,8 +115,8 @@ const BetPage = () => {
       creator_id: loggedInUser.public_user_id,
       wager: wager,
       result: "Waiting",
-      friends: selectedFriendData.username,
-      friend_id: selectedFriendData.public_user_id, // Ensure this is set correctly
+      friends: selectedFriend.username,
+      friend_id: selectedFriend.public_user_id,
       betstatus: "pending",
       sporttype: selectedGame.sportType,
     };
@@ -131,10 +128,6 @@ const BetPage = () => {
       return;
     }
 
-    localStorage.setItem(
-      LOCALSTORAGE.LOGGEDINUSER,
-      JSON.stringify(loggedInUser)
-    );
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(allUsers));
     navigate(NAVIGATION.MYBETS);
   };
@@ -204,8 +197,13 @@ const BetPage = () => {
         <div className="mb-3">
           <select
             className="form-select custom-select"
-            value={selectedFriend}
-            onChange={(e) => setSelectedFriend(e.target.value)}
+            value={selectedFriend ? selectedFriend.public_user_id : ""}
+            onChange={(e) => {
+              const friend = usersFriendList.find(
+                (friend) => friend.public_user_id === e.target.value
+              );
+              setSelectedFriend(friend);
+            }}
           >
             <option value="">Select a Friend</option>
             {usersFriendList.map((friend, index) => (
