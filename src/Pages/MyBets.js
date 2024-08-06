@@ -256,7 +256,7 @@ const MyBets = () => {
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center vh-100"
+      className="d-flex justify-content-center align-items-center "
       style={backgroundColor}
     >
       <div
