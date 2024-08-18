@@ -11,19 +11,19 @@ const matchGamesWithLogos = (mlbGames, espnGames) => {
     const homeTeamName = normalizeTeamName(mlbGame.teams.home.team.name);
     const awayTeamName = normalizeTeamName(mlbGame.teams.away.team.name);
 
-    const matchedEspnGame = espnGames.find(
-      (espnGame) =>
-        normalizeTeamName(
-          espnGame.competitions[0].competitors.find(
-            (team) => team.homeAway === "home"
-          ).team.displayName
-        ) === homeTeamName &&
-        normalizeTeamName(
-          espnGame.competitions[0].competitors.find(
-            (team) => team.homeAway === "away"
-          ).team.displayName
-        ) === awayTeamName
-    );
+    const matchedEspnGame = espnGames.find((espnGame) => {
+      const espnHomeTeam = espnGame.competitions[0].competitors.find(
+        (team) => team.homeAway === "home"
+      ).team.displayName;
+      const espnAwayTeam = espnGame.competitions[0].competitors.find(
+        (team) => team.homeAway === "away"
+      ).team.displayName;
+
+      return (
+        normalizeTeamName(espnHomeTeam) === homeTeamName &&
+        normalizeTeamName(espnAwayTeam) === awayTeamName
+      );
+    });
 
     if (matchedEspnGame) {
       return {
@@ -39,22 +39,30 @@ const matchGamesWithLogos = (mlbGames, espnGames) => {
       };
     }
 
-    return mlbGame;
+    return {
+      ...mlbGame,
+      gameTitle: `${mlbGame.teams.away.team.name} vs ${mlbGame.teams.home.team.name}`,
+      homeLogo: null, // Set to null if not found
+      awayLogo: null, // Set to null if not found
+      inning: mlbGame.status.detailedState, // Fallback to MLB's game state
+    };
   });
 };
+
 const MlbTodaysGames = () => {
   const [todaysGameArr, setTodaysGameArr] = useState([]);
   const navigate = useNavigate();
+
   const actionBtnOne = (game) => {
     const gameDetails = {
-      game_ID: game.gamePk, // MLB API game ID
+      game_ID: game.gamePk,
       gameTitle: game.gameTitle,
       gameTime: game.gameDate,
       gameDay: new Date(game.gameDate).toLocaleDateString("en-US", {
         weekday: "short",
       }),
-      homeLogo: game.homeLogo, // Logo from ESPN API
-      awayLogo: game.awayLogo, // Logo from ESPN API
+      homeLogo: game.homeLogo,
+      awayLogo: game.awayLogo,
       homeTeam: game.teams.home.team.name,
       awayTeam: game.teams.away.team.name,
       sportType: "MLB",
@@ -65,25 +73,30 @@ const MlbTodaysGames = () => {
     );
     navigate("/betPage");
   };
+
   const todaysSchedule = async () => {
+    // Get the current date in the correct format
+    const today = new Date();
+    const currentDate = today.toISOString().split("T")[0];
+
     // Fetch data from ESPN API
     const espnResponse = await fetch(
       "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
     );
     const espnData = await espnResponse.json();
-    console.log(espnData);
+
     // Fetch data from MLB Stats API
     const mlbApiResponse = await fetch(
-      "https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1"
+      `https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&date=${currentDate}`
     );
     const mlbApiData = await mlbApiResponse.json();
 
     // Match games and merge logos
     const matchedGames = matchGamesWithLogos(
-      mlbApiData.dates[0].games,
-      espnData.events
+      mlbApiData.dates[0]?.games || [],
+      espnData.events || []
     );
-    console.log("mathedGames", matchedGames);
+
     setTodaysGameArr(matchedGames);
   };
 
@@ -106,18 +119,26 @@ const MlbTodaysGames = () => {
                 <h5 className="card-title">{game.gameTitle}</h5>
                 <div className="row">
                   <div className="col">
-                    <img
-                      src={game.awayLogo}
-                      alt={"Home Team Logo"}
-                      className="img-fluid"
-                    />
+                    {game.awayLogo ? (
+                      <img
+                        src={game.awayLogo}
+                        alt="Away Team Logo"
+                        className="img-fluid"
+                      />
+                    ) : (
+                      <p>{game.teams.away.team.name}</p>
+                    )}
                   </div>
                   <div className="col">
-                    <img
-                      src={game.homeLogo}
-                      alt={"Away Team Logo"}
-                      className="img-fluid"
-                    />
+                    {game.homeLogo ? (
+                      <img
+                        src={game.homeLogo}
+                        alt="Home Team Logo"
+                        className="img-fluid"
+                      />
+                    ) : (
+                      <p>{game.teams.home.team.name}</p>
+                    )}
                   </div>
                 </div>
                 <p>
@@ -127,7 +148,7 @@ const MlbTodaysGames = () => {
                     minute: "numeric",
                   })}
                 </p>
-                <p>{`${game.inning}`}</p>
+                <p>{game.inning}</p>
                 <button
                   onClick={() => actionBtnOne(game)}
                   className="btn btn-outline-primary w-75"

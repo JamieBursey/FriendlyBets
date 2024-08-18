@@ -189,8 +189,9 @@ const CheckBetResults = async (betId, callback) => {
 
         if (betDescription.includes("will hit an RBI")) {
           const playerName = betDescription.split(" will hit an RBI")[0];
+          console.log("playerName", playerName);
           const playerID = findMLBPlayerIdByName(playerName, roster);
-
+          console.log("playerID", playerID);
           const batterRbi = plays.some(
             (play) => play.result.rbi > 0 && play.matchup.batter.id === playerID
           );
@@ -205,6 +206,7 @@ const CheckBetResults = async (betId, callback) => {
         }
         if (betDescription.includes("will hit a home run")) {
           const playerName = betDescription.split(" will hit a home run")[0];
+          console.log("roster", roster);
           const playerID = findMLBPlayerIdByName(playerName, roster);
 
           const playerHitHomeRun = plays.some(
