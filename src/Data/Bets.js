@@ -63,8 +63,8 @@ const findMLBPlayerIdByName = (playerName, roster) => {
   const [firstName, lastName] = playerName.split(" ");
   for (const player of roster) {
     if (
-      player.person.fullName.includes(firstName) &&
-      player.person.fullName.includes(lastName)
+      player.fullName.includes(firstName) &&
+      player.fullName.includes(lastName)
     ) {
       return player.id;
     }
