@@ -1,7 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./App.css";
 import {
   Home,
@@ -27,20 +26,19 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { RedirectBasedOnLogin } from "./Data";
 import backgroundColor from "./Pages/Register";
-import { supabase } from "./supabaseClient";
-import useAuthListener from "./Components/authRedirectHandler";
+import UseAuthListener from "./Components/authRedirectHandler";
 
 function App() {
   useEffect(() => {
     adminUser();
   }, []);
-  <useAuthListener />;
 
   return (
     <div style={backgroundColor}>
       <BrowserRouter>
         <NavBar />
         <RedirectBasedOnLogin />
+        <UseAuthListener />
         <Routes>
           <Route path="/FriendlyBets" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -54,7 +52,6 @@ function App() {
           <Route path="/betPage" element={<BetPage />} />
           <Route path="/MyBets" element={<MyBets />} />
           <Route path="/Notifications" element={<RenderRequests />} />
-          <Route path="/UpdateMyAccount" element={<UpdateMyAccount />} />
           <Route path="/UpdateMyAccount" element={<UpdateMyAccount />} />
           <Route path="/UserManagement" element={<UserManagement />} />
           <Route path="/EditUserAsAdmin" element={<EditUserAsAdmin />} />

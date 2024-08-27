@@ -29,6 +29,7 @@ const RegisterSuccess = ({ message, onClose }) => {
         }}
       >
         <h4>{message}</h4>
+        <p>Please check spam folders</p>
         <button
           className="btn mt-4"
           onClick={onClose}
@@ -82,6 +83,7 @@ function Register() {
             avatar: JSON.stringify([]),
             bets: JSON.stringify([]),
           },
+          redirectTo: "https://jamiebursey.github.io/FriendlyBets/#/login",
         },
       });
 
