@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
-function useAuthListener() {
+function UseAuthListener() {
   const navigate = useNavigate();
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("Auth state changed:", event, session);
         if (event === "SIGNED_IN" && session) {
           navigate("/FriendlyBets");
         } else if (event === "SIGNED_OUT") {
@@ -15,9 +16,12 @@ function useAuthListener() {
         }
       }
     );
-  }, [navigate]);
 
-  // Optionally, this custom hook can return auth state or user info if needed elsewhere
+    // Cleanup the listener when the component unmounts
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [navigate]);
 }
 
-export default useAuthListener;
+export default UseAuthListener;
