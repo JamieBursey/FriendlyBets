@@ -209,8 +209,6 @@ const AddFriends = () => {
             <FontAwesomeIcon icon={faUserGroup} /> {friends.length}
           </p>
           <div className="container p-2">
-            {/* Header Row */}
-
             <RenderFriendList
               currentUser={currentUser}
               setCurrentUser={setCurrentUser}
