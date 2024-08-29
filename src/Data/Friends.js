@@ -1,7 +1,5 @@
-import { backgroundGradient } from "../Components";
 import { LOCALSTORAGE } from "../Config";
 import { findUser, getAllUsers } from "./RegisteredUser";
-import backgroundColor from "../Pages/Register";
 import { supabase } from "../supabaseClient";
 const friendsGradient = {
   background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
