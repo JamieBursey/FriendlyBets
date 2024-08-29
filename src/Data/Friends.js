@@ -1,7 +1,5 @@
-import { backgroundGradient } from "../Components";
 import { LOCALSTORAGE } from "../Config";
 import { findUser, getAllUsers } from "./RegisteredUser";
-import backgroundColor from "../Pages/Register";
 import { supabase } from "../supabaseClient";
 const friendsGradient = {
   background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
@@ -106,20 +104,6 @@ const RenderFriendList = ({ currentUser, setCurrentUser }) => {
   return (
     <div className="container p-2">
       {/* Header Row */}
-      <div
-        className="row mb-1 align-items-center mx-auto bg-white"
-        style={{ borderRadius: "5px", width: "90%" }}
-      >
-        <div className="col d-flex justify-content-start">
-          <h6>Name</h6>
-        </div>
-        <div className="col d-flex justify-content-center">
-          <h6>Email</h6>
-        </div>
-        <div className="col d-flex justify-content-end">
-          <h6 className="me-2">Details</h6>
-        </div>
-      </div>
 
       {currentUser.friends.map((friend) => (
         <div
