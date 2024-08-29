@@ -11,9 +11,6 @@ const getFriend = (username) => {
   return { username: "", password: "" };
 };
 const deleteFriend = async (friendId, currentUser, setCurrentUser) => {
-  console.log("Attempting to delete friend with ID:", friendId); // Debugging line
-  console.log("Current user:", currentUser); // Debugging line
-
   if (!friendId || !currentUser.public_user_id) {
     console.error("friendId or currentUser.public_user_id is missing!");
     return;
@@ -36,7 +33,7 @@ const deleteFriend = async (friendId, currentUser, setCurrentUser) => {
     const { data: friendUserData, error: friendUserError } = await supabase
       .from("users")
       .select("friends")
-      .eq("public_user_id", friendId) // Ensure you are using the correct column
+      .eq("public_user_id", friendId)
       .single();
 
     if (friendUserError) {
