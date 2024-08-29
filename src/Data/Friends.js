@@ -11,12 +11,20 @@ const getFriend = (username) => {
   return { username: "", password: "" };
 };
 const deleteFriend = async (friendId, currentUser, setCurrentUser) => {
+  console.log("Attempting to delete friend with ID:", friendId); // Debugging line
+  console.log("Current user:", currentUser); // Debugging line
+
+  if (!friendId || !currentUser.public_user_id) {
+    console.error("friendId or currentUser.public_user_id is missing!");
+    return;
+  }
+
   try {
     // Fetch current user data
     const { data: currentUserData, error: currentUserError } = await supabase
       .from("users")
       .select("friends")
-      .eq("id", currentUser.id)
+      .eq("public_user_id", currentUser.public_user_id)
       .single();
 
     if (currentUserError) {
@@ -28,7 +36,7 @@ const deleteFriend = async (friendId, currentUser, setCurrentUser) => {
     const { data: friendUserData, error: friendUserError } = await supabase
       .from("users")
       .select("friends")
-      .eq("id", friendId)
+      .eq("public_user_id", friendId) // Ensure you are using the correct column
       .single();
 
     if (friendUserError) {
@@ -38,19 +46,19 @@ const deleteFriend = async (friendId, currentUser, setCurrentUser) => {
 
     // Remove the friend from the current user's friends array
     const updatedCurrentUserFriends = currentUserData.friends.filter(
-      (friend) => friend.id !== friendId
+      (friend) => friend.public_user_id !== friendId
     );
 
     // Remove the current user from the friend's friends array
     const updatedFriendUserFriends = friendUserData.friends.filter(
-      (friend) => friend.id !== currentUser.id
+      (friend) => friend.public_user_id !== currentUser.public_user_id
     );
 
     // Update the current user's friends array in the database
     const { error: updateCurrentUserError } = await supabase
       .from("users")
       .update({ friends: updatedCurrentUserFriends })
-      .eq("id", currentUser.id);
+      .eq("public_user_id", currentUser.public_user_id);
 
     if (updateCurrentUserError) {
       console.error(
@@ -64,7 +72,7 @@ const deleteFriend = async (friendId, currentUser, setCurrentUser) => {
     const { error: updateFriendUserError } = await supabase
       .from("users")
       .update({ friends: updatedFriendUserFriends })
-      .eq("id", friendId);
+      .eq("public_user_id", friendId);
 
     if (updateFriendUserError) {
       console.error("Error updating friend's friends:", updateFriendUserError);
@@ -136,9 +144,9 @@ const RenderFriendList = ({ currentUser, setCurrentUser }) => {
               className="btn btn-sm btn-outline-primary"
               type="button"
               data-bs-toggle="collapse"
-              data-bs-target={`#collapseDetail${friend.id}`}
+              data-bs-target={`#collapseDetail${friend.public_user_id}`}
               aria-expanded="false"
-              aria-controls={`collapseDetail${friend.id}`}
+              aria-controls={`collapseDetail${friend.public_user_id}`}
             >
               Details
             </button>
@@ -146,7 +154,10 @@ const RenderFriendList = ({ currentUser, setCurrentUser }) => {
 
           {/* Dropdown */}
           <div className="col-12">
-            <div className="collapse" id={`collapseDetail${friend.id}`}>
+            <div
+              className="collapse"
+              id={`collapseDetail${friend.public_user_id}`}
+            >
               <div className="card card-body">
                 <div className="mb-2 text-center">
                   <img
@@ -155,7 +166,7 @@ const RenderFriendList = ({ currentUser, setCurrentUser }) => {
                   />
                 </div>
                 <div
-                  className="card text-center w-50 mx-auto mt-2 mb-3"
+                  className="card text-center w-100 mx-auto mt-2 mb-3"
                   style={{
                     backgroundColor: "#F7F7F7",
                     boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
@@ -182,14 +193,20 @@ const RenderFriendList = ({ currentUser, setCurrentUser }) => {
                     </p>
                   </div>
                 </div>
-                <button
-                  onClick={() =>
-                    deleteFriend(friend.id, currentUser, setCurrentUser)
-                  }
-                  className="btn btn-outline-danger w-25 mx-auto"
-                >
-                  Remove Friend
-                </button>
+                <div className="col-12 col-md-4 mx-auto">
+                  <button
+                    onClick={() =>
+                      deleteFriend(
+                        friend.public_user_id,
+                        currentUser,
+                        setCurrentUser
+                      )
+                    }
+                    className="btn btn-outline-danger w-100"
+                  >
+                    Remove Friend
+                  </button>
+                </div>
               </div>
             </div>
           </div>
