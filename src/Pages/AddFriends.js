@@ -18,7 +18,6 @@ const HeaderStyle = {
 };
 
 const handleSendFriendRequest = async (email, onSuccess) => {
-  console.log("Searching for user with email:", email);
   const { data: userToRequest, error: userError } = await supabase
     .from("users")
     .select("*")
@@ -78,6 +77,33 @@ const handleSendFriendRequest = async (email, onSuccess) => {
     alert("Error sending friend request");
   } else {
     alert("Friend request sent");
+    try {
+      const response = await fetch(
+        "https://friendly-bets-back-end.vercel.app/api/friendRequest",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            toUserEmail: email, // Corrected to match the expected key
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Friend request sent and notification email sent successfully");
+        onSuccess();
+      } else {
+        console.error("Error:", result.message);
+        alert("Failed to send friend request: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error sending friend request:", error);
+      alert("Failed to send friend request");
+    }
     onSuccess();
   }
 };

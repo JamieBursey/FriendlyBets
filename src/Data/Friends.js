@@ -224,7 +224,6 @@ const editUser = (username, newUserObj) => {
   localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(temporaryArrayUsers));
 };
 const sendFriendRequest = async (toUserName) => {
-  // Fetch the current logged-in user
   const { data: loggedInUser, error: currentUserError } =
     await supabase.auth.getUser();
 
@@ -233,10 +232,9 @@ const sendFriendRequest = async (toUserName) => {
     return;
   }
 
-  // Fetch the target user's information
   const { data: toUser, error: toUserError } = await supabase
     .from("users")
-    .select("id, email") // Fetch the email as well for the notification
+    .select("id")
     .eq("username", toUserName)
     .single();
 
@@ -245,7 +243,6 @@ const sendFriendRequest = async (toUserName) => {
     return;
   }
 
-  // Insert the friend request into the database
   const { error } = await supabase.from("friend_requests").insert([
     {
       from_user: loggedInUser.id,
@@ -257,38 +254,8 @@ const sendFriendRequest = async (toUserName) => {
   if (error) {
     alert("Error sending friend request");
   } else {
-    // Send the notification via the serverless function
-    try {
-      const response = await fetch(
-        "https://friendly-bets-back-end.vercel.app/api/friendRequest",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ toUserEmail: toUser.email }),
-        }
-      );
-
-      const result = await response.json();
-      if (response.ok) {
-        alert("Friend request sent and notification triggered");
-      } else {
-        console.error("Failed to send notification:", result.message);
-        alert("Friend request sent, but failed to send notification");
-      }
-    } catch (err) {
-      console.error("Error sending notification:", err);
-      alert("Friend request sent, but failed to send notification");
-    }
+    alert("Friend request sent");
   }
-};
-
-const addUsersFriend = (username) => {
-  const friendUserObj = findUser(username);
-  const loggedInUserStr = localStorage.getItem(LOCALSTORAGE.LOGGEDINUSER);
-  const loggedInUserObj = JSON.parse(loggedInUserStr);
-  sendFriendRequest(friendUserObj, loggedInUserObj);
 };
 
 const acceptFriendRequest = async (requestId, callBack) => {
