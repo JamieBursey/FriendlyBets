@@ -98,11 +98,9 @@ const handleSendFriendRequest = async (email, onSuccess) => {
         onSuccess();
       } else {
         console.error("Error:", result.message);
-        alert("Failed to send friend request: " + result.message);
       }
     } catch (error) {
-      console.error("Error sending friend request:", error);
-      alert("Failed to send friend request");
+      return;
     }
     onSuccess();
   }
