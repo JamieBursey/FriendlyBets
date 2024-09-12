@@ -86,7 +86,7 @@ const handleSendFriendRequest = async (email, onSuccess) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            toUserEmail: email, // Corrected to match the expected key
+            toUserEmail: email,
           }),
         }
       );
