@@ -125,11 +125,6 @@ function RenderContact() {
             </li>
 
             <li>
-              <i className="fas fa-phone mt-4 fa-2x"></i>
-              <p>+ 709 683 2925</p>
-            </li>
-
-            <li>
               <i className="fas fa-envelope mt-4 fa-2x"></i>
               <p>Jamie4551@gmail.com</p>
             </li>

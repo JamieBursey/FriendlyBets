@@ -8,7 +8,6 @@ function UseAuthListener() {
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log("Auth state changed:", event, session);
         if (event === "SIGNED_IN" && session) {
           navigate("/FriendlyBets");
         } else if (event === "SIGNED_OUT") {
