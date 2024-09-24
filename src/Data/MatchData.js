@@ -40,17 +40,15 @@ const TodaysGames = () => {
       awayLogo,
       sportType: "NHL",
     };
-    localStorage.setItem("selectedGame", JSON.stringify(gameDetails));
+    localStorage.setItem(
+      LOCALSTORAGE.SELECTEDGAME,
+      JSON.stringify(gameDetails)
+    );
 
-    if (!user) {
-      alert("Please Login to make a bet");
-      return;
-    } else navigate("/betPage");
+navigate("/betPage");
   };
 
-  const actionBtnTwo = () => {
-    navigate("/fullSchedule");
-  };
+
 
   // Create Game Cards
   const createGameCard = (
