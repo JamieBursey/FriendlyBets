@@ -10,17 +10,7 @@ const TodaysGames = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [todaysGameArr, setTodaysGameArr] = useState([]);
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (sessionData?.session?.user) {
-        setUser(sessionData.session.user);
-      }
-    };
-    fetchUser();
-  }, []);
 
   const actionBtnOne = (
     game_ID,
@@ -43,8 +33,15 @@ const TodaysGames = () => {
       LOCALSTORAGE.SELECTEDGAME,
       JSON.stringify(gameDetails)
     );
+    const fetchUser = async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (sessionData?.session?.user) {
+        navigate("/betPage");
+      }
+      else{alert("Please login to bet")}
+    };
+    fetchUser();
 
-navigate("/betPage");
   };
 
 
