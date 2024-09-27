@@ -1,4 +1,4 @@
-import { LOCALSTORAGE } from "../Config";
+
 import { supabase } from "../supabaseClient";
 
 const getAllBets = async () => {
