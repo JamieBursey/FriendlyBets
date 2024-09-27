@@ -1,5 +1,4 @@
 // here will be where sports matches will be collected through the api.
-import { Games } from "../Components";
 import { supabase } from "../supabaseClient";
 
 import React, { useEffect, useState } from "react";
@@ -11,17 +10,7 @@ const TodaysGames = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [todaysGameArr, setTodaysGameArr] = useState([]);
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (sessionData?.session?.user) {
-        setUser(sessionData.session.user);
-      }
-    };
-    fetchUser();
-  }, []);
 
   const actionBtnOne = (
     game_ID,
@@ -44,8 +33,15 @@ const TodaysGames = () => {
       LOCALSTORAGE.SELECTEDGAME,
       JSON.stringify(gameDetails)
     );
+    const fetchUser = async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (sessionData?.session?.user) {
+        navigate("/betPage");
+      }
+      else{alert("Please login to bet")}
+    };
+    fetchUser();
 
-navigate("/betPage");
   };
 
 
@@ -65,10 +61,11 @@ navigate("/betPage");
           <h5 className="card-title">{gameTitle}</h5>
           <div className="row">
             <div className="col">
-              <img src={awayLogo} alt="Away Team Logo"></img>
+              <img src={awayLogo} alt="Away Team Logo"
+              className="img-fluid"></img>
             </div>
             <div className="col">
-              <img src={homeLogo} alt="Home Team Logo" />
+              <img src={homeLogo} alt="Home Team Logo"  className="img-fluid"/>
             </div>
           </div>
           <p>
