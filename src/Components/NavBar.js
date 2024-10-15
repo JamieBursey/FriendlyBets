@@ -12,7 +12,7 @@ function NavBar() {
 
   async function fetchUserDetails(userId) {
     if (!userId) {
-      console.log("No user ID provided, skipping fetch");
+
       return; // Skip fetching if no userId is provided
     }
     const { data, error } = await supabase

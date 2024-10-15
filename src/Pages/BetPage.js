@@ -81,7 +81,7 @@ const BetPage = () => {
         : parseInt(loggedInUser.betToken);
 
       if (betTokenCount > 0 || betTokenCount === "unlimited") {
-        console.log(betTokenCount);
+
         if (betTokenCount !== "unlimited") {
           betTokenCount -= 1;
         }
@@ -101,8 +101,6 @@ const BetPage = () => {
       allUsers[userIndex] = { ...allUsers[userIndex], ...loggedInUser };
     }
 
-    // Debugging: Log selectedFriend to ensure it has the correct data
-    console.log("Selected Friend:", selectedFriend);
 
     const newBet = {
       betid: new Date().getTime().toString(),

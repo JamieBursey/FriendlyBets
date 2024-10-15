@@ -18,11 +18,11 @@ function ConfirmSignup() {
         });
 
         if (error) {
-          console.error("Error confirming signup:", error.message);
-          navigate("/login"); // Redirect to login on error
+
+          navigate("/login"); 
         } else {
-          console.log("User confirmed successfully!");
-          navigate("/login"); // Redirect to login on success
+
+          navigate("/login");
         }
       } else {
         console.error("Confirmation token is missing!");

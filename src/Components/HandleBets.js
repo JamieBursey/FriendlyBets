@@ -27,9 +27,6 @@ const acceptBets = async (betId, callback) => {
       return;
     }
 
-    // Log the updated bet data for debugging purposes
-    console.log("Updated Bet:", updatedBet);
-
     // Call the callback function if provided
     if (callback) {
       callback();

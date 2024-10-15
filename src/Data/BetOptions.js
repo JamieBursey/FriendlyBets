@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
 
 const findPlayerID = (roster, sportType) => {
-  console.log("Sport type received:", sportType);
+
   if (sportType === "NHL") {
     const randomIndex = Math.floor(Math.random() * roster.length);
     return roster[randomIndex].playerId;
   }
 };
 const findPlayerName = (roster, playerId) => {
-  console.log("Searching for playerId:", playerId);
+
   const player = roster.find((player) => player.playerId === playerId);
   return player
     ? `${player.firstName.default} ${player.lastName.default}`
@@ -78,7 +78,7 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
 
       const pitcherID = findPitcherID(roster);
       const pitcherName = findMLBPlayerName(roster, pitcherID);
-      console.log(pitcherName);
+
       options.push(`${pitcherName} will have over 5 strikeouts`);
     }
   }
@@ -108,7 +108,7 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
           const liveGameData = await response.json();
           const homeTeam = liveGameData.homeTeam.name.default;
           const awayTeam = liveGameData.awayTeam.name.default;
-          console.log("livedata", liveGameData);
+
           const roster = [
             ...(Array.isArray(liveGameData.rosterSpots) &&
             liveGameData.rosterSpots.length > 0
@@ -132,12 +132,11 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
           await fetch(`https://statsapi.mlb.com/api/v1.1/game/${gameNumber}/feed/live
         `);
         const gameInfo = await selectedGameApi.json();
-        console.log("games info", gameInfo);
+
         const homeTeam = gameInfo.gameData.teams.home.name;
         const awayTeam = gameInfo.gameData.teams.away.name;
         const roster = [].concat(...Object.values(gameInfo.gameData.players));
         console.log(gameInfo);
-
         const generatedOptions = generateBettingOptions(
           roster,
           homeTeam,

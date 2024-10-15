@@ -15,9 +15,10 @@ const CheckBetResults = async (betId, callback) => {
     }
     const betCreator = bet.betcreator;
     const gameNumber = bet.gameid;
-    console.log("Bet Data:", bet);
+ 
 
-    if (bet.sportType === "NHL") {
+    if (bet.sporttype === "NHL") {
+
       const checkShotsOnNet = (playerId, plays, isGameFinished) => {
         if (isGameFinished) {
           return "Waiting";
@@ -66,7 +67,7 @@ const CheckBetResults = async (betId, callback) => {
         `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
       );
       const resultsData = await response.json();
-
+      
       const isGameFinished =
         resultsData.gameState === "OFF" ||
         (resultsData.clock.timeRemaining === "00:00" &&
@@ -173,7 +174,6 @@ const CheckBetResults = async (betId, callback) => {
         `https://statsapi.mlb.com/api/v1.1/game/${gameNumber}/feed/live`
       );
       const gameInfo = await response.json();
-      console.log("gameinfo", gameInfo);
       const plays = gameInfo.liveData.plays.allPlays;
       const isGameFinished =
         gameInfo.gameData.status.abstractGameState === "Final";
@@ -189,9 +189,9 @@ const CheckBetResults = async (betId, callback) => {
 
         if (betDescription.includes("will hit an RBI")) {
           const playerName = betDescription.split(" will hit an RBI")[0];
-          console.log("playerName", playerName);
+
           const playerID = findMLBPlayerIdByName(playerName, roster);
-          console.log("playerID", playerID);
+
           const batterRbi = plays.some(
             (play) => play.result.rbi > 0 && play.matchup.batter.id === playerID
           );
@@ -206,7 +206,7 @@ const CheckBetResults = async (betId, callback) => {
         }
         if (betDescription.includes("will hit a home run")) {
           const playerName = betDescription.split(" will hit a home run")[0];
-          console.log("roster", roster);
+
           const playerID = findMLBPlayerIdByName(playerName, roster);
 
           const playerHitHomeRun = plays.some(

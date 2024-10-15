@@ -59,10 +59,11 @@ const MyBets = () => {
               <img
                 src={homeLogo}
                 style={{ width: "100px", height: "100px" }}
+                alt="Home Team"
               ></img>
             </div>
             <div className="col">
-              <img src={awayLogo} style={{ width: "100px", height: "100px" }} />
+              <img src={awayLogo} alt="Away Team" style={{ width: "100px", height: "100px" }} />
             </div>
           </div>
           <p>
@@ -148,7 +149,7 @@ const MyBets = () => {
   const fetchBetData = async () => {
     setLoading(true);
     const allBets = await getAllBets();
-    console.log("allbets", allBets);
+
 
     const { data: sessionData, error: sessionError } =
       await supabase.auth.getSession();
@@ -187,9 +188,7 @@ const MyBets = () => {
             bet.friend_id === userData.public_user_id) &&
           bet.betstatus === "active"
       );
-
-      console.log("Pending bets:", pendingBets);
-      console.log("Active bets:", activeBets);
+ 
 
       let pendingBetsCard = pendingBets.map((b) => {
         const betId = b.betid;
@@ -225,7 +224,7 @@ const MyBets = () => {
         const homeLogo = b.homelogo;
         const awayLogo = b.awaylogo;
         const wager = b.wager;
-        const betDes = b.betdescription || {}; // Ensure betDes is an object
+        const betDes = b.betdescription || {};
         const betStatus = b.betstatus;
         return createBetCard(
           betId,
