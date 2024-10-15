@@ -125,7 +125,54 @@ const BetPage = () => {
       alert("There was an error placing your bet. Please try again.");
       return;
     }
+    try {
+      const response = await fetch(
+        "https://friendly-bets-back-end.vercel.app/api/newbet",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            toUserEmail: selectedFriend.email, // Use selected friend's email
+          }),
+        }
+      );
 
+      const result = await response.json();
+      if (response.ok) {
+        alert("Bet placed and notification sent successfully");
+      } else {
+        console.error("Error:", result.message);
+      }
+    } catch (error) {
+      console.error("Error sending notification:", error);
+    }
+    try {
+      const response = await fetch(
+        "https://friendly-bets-back-end.vercel.app/api/newBet",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            toUserEmail: selectedFriend.email
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Friend request sent and notification email sent successfully");
+        onSuccess();
+      } else {
+        console.error("Error:", result.message);
+      }
+    } catch (error) {
+      return;
+    }
     localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(allUsers));
     navigate(NAVIGATION.MYBETS);
   };
@@ -151,6 +198,7 @@ const BetPage = () => {
           <div className="col d-flex justify-content-center align-items-center">
             <img
               src={selectedGame.awayLogo}
+              alt="away logo"
               className="img-fluid"
               style={{ width: "100px", height: "100px" }}
             />
@@ -161,6 +209,7 @@ const BetPage = () => {
           <div className="col d-flex justify-content-center align-items-center">
             <img
               src={selectedGame.homeLogo}
+              alt="home logo"
               className="img-fluid"
               style={{ width: "100px", height: "100px" }}
             />
