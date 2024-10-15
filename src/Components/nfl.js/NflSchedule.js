@@ -92,7 +92,6 @@ const NflTodaySchedule = () => {
     try {
       const response = await fetch(url, options);
       const result = await response.json();
-      console.log("result", result);
       if (result && result.body) {
         let gamesHTMLObj = result.body.map((game) => {
           return createGameCard(
@@ -107,7 +106,7 @@ const NflTodaySchedule = () => {
 
         setTodaysGameArr(gamesHTMLObj);
       } else {
-        console.log("No game data found");
+
       }
     } catch (error) {
       console.error("Fetch Data Error:", error);
@@ -207,7 +206,6 @@ const NflWeeklySchedule = () => {
     try {
       const response = await fetch(url, options);
       const result = await response.json();
-      console.log("result", result);
       if (result && result.body) {
         let gamesHTMLObj = result.body.map((game) => {
           return createGameCard(
@@ -222,7 +220,7 @@ const NflWeeklySchedule = () => {
 
         setTodaysGameArr(gamesHTMLObj);
       } else {
-        console.log("No game data found");
+        return
       }
     } catch (error) {
       console.error("Fetch Data Error:", error);

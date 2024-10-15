@@ -55,12 +55,8 @@ const handleSendFriendRequest = async (email, onSuccess) => {
     return;
   }
 
-  console.log("Current User Data from users table:", currentUserData);
 
   const userId = currentUserData.id;
-
-  console.log("Current User ID:", userId);
-  console.log("User to request ID:", userToRequest.id);
 
   const { error: friendRequestError } = await supabase
     .from("friend_requests")
@@ -140,7 +136,7 @@ const AddFriends = () => {
       }
       if (sessionData && sessionData.session) {
         const user = sessionData.session.user;
-        console.log("Fetched session user:", user);
+
 
         const { data: userData, error: userError } = await supabase
           .from("users")
@@ -151,7 +147,7 @@ const AddFriends = () => {
         if (userError) {
           console.error("Error fetching user data:", userError);
         } else {
-          console.log("Fetched user:", userData);
+
           setCurrentUser(userData);
           fetchFriends(userData.id, setFriends);
         }
@@ -163,7 +159,7 @@ const AddFriends = () => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (session && session.user) {
-          console.log("Auth state change detected, updating user data");
+
           const fetchUserData = async () => {
             const { data: userData, error: userError } = await supabase
               .from("users")
@@ -174,7 +170,7 @@ const AddFriends = () => {
             if (userError) {
               console.error("Error fetching user data:", userError);
             } else {
-              console.log("Fetched user on auth change:", userData);
+
               setCurrentUser(userData);
               fetchFriends(userData.id, setFriends);
             }

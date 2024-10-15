@@ -45,14 +45,14 @@ function Login() {
 
     // Check if the user data is available
     if (user) {
-      console.log("Logged in user:", user);
+
       navigate("/FriendlyBets");
     } else {
-      console.log("Login successful, but no user object returned");
+
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      console.log("Session after login:", session);
+
       if (session && session.user) {
         navigate("/FriendlyBets");
       }

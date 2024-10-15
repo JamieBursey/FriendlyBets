@@ -29,8 +29,6 @@ function RenderContact() {
       JSON.stringify(newMessage)
     );
 
-    console.log(adminMessages);
-    console.log("input", formInput);
   };
   return (
     <section className="text-info mb-4">

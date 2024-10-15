@@ -15,7 +15,6 @@ const FriendRequests = () => {
       }
       if (sessionData && sessionData.session) {
         const authUser = sessionData.session.user;
-        console.log("Fetched auth user:", authUser);
 
         const { data: userData, error: userError } = await supabase
           .from("users")
@@ -28,11 +27,11 @@ const FriendRequests = () => {
           return;
         }
 
-        console.log("Fetched user from users table:", userData);
+
         setCurrentUser(userData);
         fetchFriendRequests(userData.id);
       } else {
-        console.log("No active session found");
+       return
       }
     };
 
@@ -40,7 +39,7 @@ const FriendRequests = () => {
   }, []);
 
   const fetchFriendRequests = async (userId) => {
-    console.log("Fetching friend requests for user:", userId);
+
     const { data: friendRequests, error } = await supabase
       .from("friend_requests")
       .select(
@@ -58,7 +57,7 @@ const FriendRequests = () => {
     if (error) {
       console.error("Error fetching friend requests:", error);
     } else {
-      console.log("Fetched friend requests:", friendRequests);
+
       setRequests(friendRequests);
     }
   };
