@@ -1,98 +1,126 @@
 import React, { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
 
-const findPlayerID = (roster, sportType) => {
+// const findPlayerID = (roster, sportType) => {
 
-  if (sportType === "NHL") {
-    const randomIndex = Math.floor(Math.random() * roster.length);
-    return roster[randomIndex].playerId;
-  }
-};
-const findPlayerName = (roster, playerId) => {
+//   if (sportType === "NHL") {
+//     const randomIndex = Math.floor(Math.random() * roster.length);
+//     return roster[randomIndex].playerId;
+//   }
+// };
+// const findPlayerName = (roster, playerId) => {
 
-  const player = roster.find((player) => player.playerId === playerId);
-  return player
-    ? `${player.firstName.default} ${player.lastName.default}`
-    : "Unknown Player";
-};
+//   const player = roster.find((player) => player.playerId === playerId);
+//   return player
+//     ? `${player.firstName.default} ${player.lastName.default}`
+//     : "Unknown Player";
+// };
 
-//MLB info
-const findMLBPlayerID = (roster) => {
-  const randomIndex = Math.floor(Math.random() * roster.length);
-  return roster[randomIndex].id;
-};
+// //MLB info
+// const findMLBPlayerID = (roster) => {
+//   const randomIndex = Math.floor(Math.random() * roster.length);
+//   return roster[randomIndex].id;
+// };
 
 const findMLBPlayerName = (roster, playerId) => {
   const player = roster.find((player) => player.id === playerId);
   return player ? player.firstLastName : "Unknown Player";
 };
 
-const findPitcherID = (roster) => {
-  const pitchers = roster.filter(
-    (player) => player.primaryPosition.code == "1"
-  );
-  if (pitchers.length === 0) {
-    console.log("No pitchers found");
-    return null;
-  }
-  const randomIndex = Math.floor(Math.random() * pitchers.length);
-  return pitchers[randomIndex].id;
-};
+// const findPitcherID = (roster) => {
+//   const pitchers = roster.filter(
+//     (player) => player.primaryPosition.code == "1"
+//   );
+//   if (pitchers.length === 0) {
+//     console.log("No pitchers found");
+//     return null;
+//   }
+//   const randomIndex = Math.floor(Math.random() * pitchers.length);
+//   return pitchers[randomIndex].id;
+// };
 const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
-  const options = [];
-  options.push(`${homeTeam} will win`);
-  options.push(`${awayTeam} will win`);
+  const options = {
+    gameOutcome: [],
+    playerGoals: [],
+    playerShots: [],
+    playerAssists: [],
+    homeRuns: [],
+    RBIs: [],
+    strikeouts: [],
+  };
+
+  // Add common game outcome options
+  options.gameOutcome.push(`${homeTeam} will win`);
+  options.gameOutcome.push(`${awayTeam} will win`);
+
+  const selectRandomPlayers = (players, limit) => {
+    const selectedPlayers = [];
+    const shuffledPlayers = [...players].sort(() => 0.5 - Math.random());
+
+    for (let i = 0; i < Math.min(limit, shuffledPlayers.length); i++) {
+      selectedPlayers.push(shuffledPlayers[i]);
+    }
+    return selectedPlayers;
+  };
+
   if (sportType === "NHL") {
-    if (roster.length > 0) {
-      // Generate a separate option for each bet
-      const goalPlayerID = findPlayerID(roster, sportType);
-      const scoringPlayerName = findPlayerName(roster, goalPlayerID);
-      options.push(`${scoringPlayerName} will score the first goal`);
-      options.push(`${scoringPlayerName} will score anytime`);
+    const goalPlayers = selectRandomPlayers(roster, 5);
+    goalPlayers.forEach(player => {
+      const playerName = `${player.firstName.default} ${player.lastName.default}`;
+      options.playerGoals.push(`${playerName} will score the first goal`);
+      options.playerGoals.push(`${playerName} will score anytime`);
+    });
 
-      const shotsPlayerID = findPlayerID(roster, sportType);
-      const ShootingPlayerName = findPlayerName(roster, shotsPlayerID);
-      options.push(`${ShootingPlayerName} will get 2 shots on net`);
+    const shotPlayers = selectRandomPlayers(roster, 5);
+    shotPlayers.forEach(player => {
+      const playerName = `${player.firstName.default} ${player.lastName.default}`;
+      options.playerShots.push(`${playerName} will get 2 shots on net`);
+    });
 
-      const assistPlayerID = findPlayerID(roster, sportType);
-      const assistPlayerName = findPlayerName(roster, assistPlayerID);
-      options.push(`${assistPlayerName} will make an assist`);
-    } else {
-      return options;
-    }
+    const assistPlayers = selectRandomPlayers(roster, 5);
+    assistPlayers.forEach(player => {
+      const playerName = `${player.firstName.default} ${player.lastName.default}`;
+      options.playerAssists.push(`${playerName} will make an assist`);
+    });
   }
+
   if (sportType === "MLB") {
-    if (roster.length > 0) {
-      const homeRunPlayerID = findMLBPlayerID(roster);
-      const homeRunPlayerName = findMLBPlayerName(roster, homeRunPlayerID);
-      options.push(`${homeRunPlayerName} will hit a home run`);
+    const homeRunPlayers = selectRandomPlayers(roster, 5);
+    homeRunPlayers.forEach(player => {
+      const playerName = `${player.firstLastName}`;
+      options.homeRuns.push(`${playerName} will hit a home run`);
+    });
 
-      const rbiPlayerID = findMLBPlayerID(roster);
-      const rbiPlayerName = findMLBPlayerName(roster, rbiPlayerID);
-      options.push(`${rbiPlayerName} will hit an RBI`);
+    const rbiPlayers = selectRandomPlayers(roster, 5);
+    rbiPlayers.forEach(player => {
+      const playerName = `${player.firstLastName}`;
+      options.RBIs.push(`${playerName} will hit an RBI`);
+    });
 
-      // Player to steal a base
-      const stealBasePlayerID = findMLBPlayerID(roster);
-      const stealBasePlayerName = findMLBPlayerName(roster, stealBasePlayerID);
-      options.push(`${stealBasePlayerName} will steal a base`);
-
-      const pitcherID = findPitcherID(roster);
-      const pitcherName = findMLBPlayerName(roster, pitcherID);
-
-      options.push(`${pitcherName} will have over 5 strikeouts`);
-    }
+    const pitcherPlayers = roster.filter(p => p.primaryPosition.code === "1");
+    const selectedPitchers = selectRandomPlayers(pitcherPlayers, 5);
+    selectedPitchers.forEach(player => {
+      const playerName = `${player.firstLastName}`;
+      options.strikeouts.push(`${playerName} will have over 5 strikeouts`);
+    });
   }
 
   return options;
 };
 
-const handleCheckedBet = (option, updateCheckedBets) => {
-  updateCheckedBets(option);
-};
 
 export const BettingOptions = ({ updateCheckedBets, sportType }) => {
-  const [betOptions, setBetOptions] = useState([]);
-  const [selectedBet, setSelectedBet] = useState("");
+  const [betOptions, setBetOptions] = useState({
+    gameOutcome: [],
+    playerGoals: [],
+    playerShots: [],
+    playerAssists: [],
+    homeRuns: [],
+    RBIs: [],
+    strikeouts: [],
+  });
+
+  const [selectedBets, setSelectedBets] = useState({});
 
   useEffect(() => {
     const playByPlay = async () => {
@@ -100,73 +128,77 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
       const gameIDData = JSON.parse(gameID);
       const gameNumber = gameIDData.game_ID;
       const sportType = gameIDData.sportType;
-      if (sportType === "NHL") {
-        try {
-          const response = await fetch(
-            `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
-          );
+
+      try {
+        if (sportType === "NHL") {
+          const response = await fetch(`https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`);
           const liveGameData = await response.json();
           const homeTeam = liveGameData.homeTeam.name.default;
           const awayTeam = liveGameData.awayTeam.name.default;
-
-          const roster = [
-            ...(Array.isArray(liveGameData.rosterSpots) &&
-            liveGameData.rosterSpots.length > 0
-              ? liveGameData.rosterSpots
-              : []),
-          ];
-
-          const generatedOptions = generateBettingOptions(
-            roster,
-            homeTeam,
-            awayTeam,
-            sportType
-          );
+          const roster = liveGameData.rosterSpots || [];
+          const generatedOptions = generateBettingOptions(roster, homeTeam, awayTeam, sportType);
           setBetOptions(generatedOptions);
-        } catch (error) {
-          console.log(error);
+        } else if (sportType === "MLB") {
+          const response = await fetch(`https://statsapi.mlb.com/api/v1.1/game/${gameNumber}/feed/live`);
+          const gameInfo = await response.json();
+          const homeTeam = gameInfo.gameData.teams.home.name;
+          const awayTeam = gameInfo.gameData.teams.away.name;
+          const roster = Object.values(gameInfo.gameData.players);
+          const generatedOptions = generateBettingOptions(roster, homeTeam, awayTeam, sportType);
+          setBetOptions(generatedOptions);
         }
-      }
-      if (sportType === "MLB") {
-        const selectedGameApi =
-          await fetch(`https://statsapi.mlb.com/api/v1.1/game/${gameNumber}/feed/live
-        `);
-        const gameInfo = await selectedGameApi.json();
-
-        const homeTeam = gameInfo.gameData.teams.home.name;
-        const awayTeam = gameInfo.gameData.teams.away.name;
-        const roster = [].concat(...Object.values(gameInfo.gameData.players));
-        console.log(gameInfo);
-        const generatedOptions = generateBettingOptions(
-          roster,
-          homeTeam,
-          awayTeam,
-          sportType
-        );
-        setBetOptions(generatedOptions);
+      } catch (error) {
+        console.error("Error fetching game data:", error);
       }
     };
 
     playByPlay();
   }, [sportType]);
 
+  const handleBetSelection = (betType, betOption) => {
+
+    const resetBets = {
+      gameOutcome: "",
+      playerGoals: "",
+      playerShots: "",
+      playerAssists: "",
+      homeRuns: "",
+      RBIs: "",
+      strikeouts: "",
+    };
+
+    setSelectedBets({
+      ...resetBets,
+      [betType]: betOption,
+    });
+
+    updateCheckedBets(betOption);
+  };
+
   return (
     <div className="mb-3">
-      <select
-        className="form-select custom-select"
-        value={selectedBet}
-        onChange={(e) => {
-          setSelectedBet(e.target.value);
-          handleCheckedBet(e.target.value, updateCheckedBets);
-        }}
-      >
-        <option value="">Select a Bet</option>
-        {betOptions.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
+
+      {Object.keys(betOptions).map((betType) => {
+        if (betOptions[betType].length > 0) {
+          return (
+            <div className="mb-3" key={betType}>
+              <select
+                className="form-select custom-select"
+                value={selectedBets[betType] || ""}
+                onChange={(e) => handleBetSelection(betType, e.target.value)}
+              >
+                <option value="">{`Select ${betType}`}</option>
+                {betOptions[betType].map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+          );
+        }
+        return null;
+      })}
     </div>
   );
 };
