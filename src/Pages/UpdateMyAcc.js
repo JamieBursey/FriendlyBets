@@ -17,6 +17,7 @@ function UpdateMyAccount() {
     password: "",
     about_me: "",
     favorite_team: "",
+    phone_number:""
   });
 
   useEffect(() => {
@@ -44,9 +45,10 @@ function UpdateMyAccount() {
           setUserDetails({
             username: userData.username || "",
             email: userData.email || "",
-            password: "", // Passwords should not be prefilled
+            password: "",
             about_me: userData.about_me || "",
             favorite_team: userData.favorite_team || "",
+            phone_number: userData.phone_number || "",
           });
         }
       }
@@ -69,6 +71,7 @@ function UpdateMyAccount() {
       password: userDetails.password,
       about_me: userDetails.about_me || loggedUser.about_me,
       favorite_team: userDetails.favorite_team || loggedUser.favorite_team,
+      phone_number: userDetails.phone_number || loggedUser.phone_number,
     };
 
     // Update Supabase user details
@@ -79,6 +82,7 @@ function UpdateMyAccount() {
         email: updatedDetails.email,
         about_me: updatedDetails.about_me,
         favorite_team: updatedDetails.favorite_team,
+        phone_number: updatedDetails.phone_number,
       })
       .eq("public_user_id", loggedUser.public_user_id);
 
