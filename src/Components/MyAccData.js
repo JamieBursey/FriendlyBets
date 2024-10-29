@@ -103,9 +103,6 @@ const NavigateToUpdate = () => {
 };
 
 const MyAccountChanges = ({ userDetails, onUserDetailChange }) => {
-  const [email, setEmail] = useState(userDetails.email);
-  const [displayName, setDisplayName] = useState(userDetails.username);
-  const [password, setPassword] = useState("");
 
   return (
     <>

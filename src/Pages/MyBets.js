@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { getAllBets } from "../Data";
 import { CheckBetResults, acceptBets, deleteBets } from "../Components";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Loader = () => (
   <div className="spinner-border text-primary" role="status">
@@ -10,10 +11,12 @@ const Loader = () => (
 );
 
 const MyBets = () => {
-  const [betsArr, setBetsArr] = useState([]);
   const [activeBetArr, setActiveBetArr] = useState([]);
+  const [settledBetArr, setSettledBetArr] = useState([]);
+  const [pendingBetArr, setPendingBetArr] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [view, setView] = useState(''); // State to toggle between views
 
   const backgroundColor = {
     background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
@@ -63,7 +66,11 @@ const MyBets = () => {
               ></img>
             </div>
             <div className="col">
-              <img src={awayLogo} alt="Away Team" style={{ width: "100px", height: "100px" }} />
+              <img
+                src={awayLogo}
+                alt="Away Team"
+                style={{ width: "100px", height: "100px" }}
+              />
             </div>
           </div>
           <p>
@@ -150,7 +157,6 @@ const MyBets = () => {
     setLoading(true);
     const allBets = await getAllBets();
 
-
     const { data: sessionData, error: sessionError } =
       await supabase.auth.getSession();
     if (sessionError) {
@@ -188,7 +194,13 @@ const MyBets = () => {
             bet.friend_id === userData.public_user_id) &&
           bet.betstatus === "active"
       );
- 
+
+      let settledBets = allBets.filter(
+        (bet) =>
+          (bet.creator_id === userData.public_user_id ||
+            bet.friend_id === userData.public_user_id) &&
+          bet.betstatus === "settled"
+      );
 
       let pendingBetsCard = pendingBets.map((b) => {
         const betId = b.betid;
@@ -242,8 +254,43 @@ const MyBets = () => {
         );
       });
 
-      setBetsArr(pendingBetsCard);
+      let settledBetsCard = settledBets.map((b) => {
+        const betId = b.betid;
+        const gameTitle = b.gametitle;
+        const game_ID = b.gameid;
+        const friends = b.friends || [];
+        const homeLogo = b.homelogo;
+        const awayLogo = b.awaylogo;
+        const wager = b.wager;
+        const betDes = b.betdescription || {};
+        const betStatus = b.betstatus;
+        return createBetCard(
+          betId,
+          game_ID,
+          gameTitle,
+          friends,
+          awayLogo,
+          homeLogo,
+          wager,
+          betDes,
+          b.betcreator,
+          userData.username,
+          betStatus,
+          b.result
+        );
+      });
+
+      setPendingBetArr(pendingBetsCard); // Set pending bets
       setActiveBetArr(activeBetsCard);
+      setSettledBetArr(settledBetsCard);
+      if (pendingBets.length > 0) {
+        setView("pending");
+      } else if (activeBets.length > 0) {
+        setView("active");
+      } else if (settledBets.length>0) {
+        setView("settled");
+      }
+    else {setView("empty")}
     }
 
     setLoading(false);
@@ -263,27 +310,81 @@ const MyBets = () => {
         style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
       >
         <h1 className="login-text w-50 mx-auto">My Bets</h1>
-        <h3 className="text-white ">Pending Bets</h3>
-        <div className="row justify-content-center">
-          {loading ? (
-            <Loader />
-          ) : betsArr.length === 0 ? (
-            "No Pending Bets"
-          ) : (
-            betsArr
-          )}
+
+        {/* Toggle between Pending, Active, and Settled */}
+        <div className="btn-group mb-3" role="group" aria-label="Bet View Toggle">
+          <button
+            type="button"
+            className={`btn ${view === 'pending' ? 'btn-primary' : 'btn-outline-primary'}`}
+            onClick={() => setView('pending')}
+          >
+            Pending
+          </button>
+          <button
+            type="button"
+            className={`btn ${view === 'active' ? 'btn-primary' : 'btn-outline-primary'}`}
+            onClick={() => setView('active')}
+          >
+            Active
+          </button>
+          <button
+            type="button"
+            className={`btn ${view === 'settled' ? 'btn-primary' : 'btn-outline-primary'}`}
+            onClick={() => setView('settled')}
+          >
+            Settled
+          </button>
         </div>
-        <hr style={{ backgroundColor: "white", height: "2px" }} />
-        <h2 className="text-white">Active Bets</h2>
-        <div className="row justify-content-center">
-          {loading ? (
-            <Loader />
-          ) : activeBetArr.length === 0 ? (
-            "No Active Bets"
-          ) : (
-            activeBetArr
-          )}
-        </div>
+
+        {/* Conditionally render based on selected view */}
+        {view === "pending" && (
+          <>
+            <h3 className="text-white">Pending Bets</h3>
+            <div className="row justify-content-center">
+              {loading ? (
+                <Loader />
+              ) : pendingBetArr.length === 0 ? (
+                "No Pending Bets"
+              ) : (
+                pendingBetArr
+              )}
+            </div>
+          </>
+        )}
+
+        {view === "active" && (
+          <>
+            <h3 className="text-white">Active Bets</h3>
+            <div className="row justify-content-center">
+              {loading ? (
+                <Loader />
+              ) : activeBetArr.length === 0 ? (
+                "No Active Bets"
+              ) : (
+                activeBetArr
+              )}
+            </div>
+          </>
+        )}
+
+        {view === "settled" && (
+          <>
+            <h3 className="text-white">Settled Bets</h3>
+            <div className="row justify-content-center">
+              {loading ? (
+                <Loader />
+              ) : settledBetArr.length === 0 ? (
+                "No Settled Bets"
+              ) : (
+                settledBetArr
+              )}
+            </div>
+          </>
+        )}
+        {view==="empty" &&(
+          <>
+          <h2 className="text-white">You have no bets.</h2></>
+        )}
       </div>
     </div>
   );
