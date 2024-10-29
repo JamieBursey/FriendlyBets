@@ -47,6 +47,7 @@ const CheckBetResults = async (betId, callback) => {
             play.details.scoringPlayerId === playerId
         );
         return scoredAtLeastOnce ? `${betCreator} Wins` : `${betCreator} Lost`;
+
       };
 
       const checkAssistPlayer = (playerId, plays, isGameFinished) => {
@@ -99,6 +100,7 @@ const CheckBetResults = async (betId, callback) => {
           } else {
             bet.result = "Loss";
           }
+          
         }
         if (betDescription.includes("will score anytime")) {
           const playerName = betDescription.split(" will score anytime")[0];
@@ -157,11 +159,14 @@ const CheckBetResults = async (betId, callback) => {
         } else {
           bet.result = "Game not Finished";
         }
-
-        // Update the bet in Supabase
+        if (bet.result && (bet.result.includes("Wins") || bet.result.includes("Lost"))) {
+          // Update bet status to 'settled' if the result is determined --Jamie--
+          bet.betstatus = "settled";
+        }
+        // Update the bet in Supabase --Jamie--
         const { error: updateError } = await supabase
           .from("bets")
-          .update({ result: bet.result })
+          .update({ result: bet.result,betstatus: bet.betstatus })
           .eq("betid", betId);
 
         if (updateError) {
@@ -248,11 +253,14 @@ const CheckBetResults = async (betId, callback) => {
           }
         }
       }
-
-      // Update the bet in Supabase
+      if (bet.result && (bet.result.includes("Wins") || bet.result.includes("Lost"))) {
+        // Update bet status to 'settled' if the result is determined for mlb --Jamie--
+        bet.betstatus = "settled";
+      }
+      // Update the bet in Supabase --jamie--
       const { error: updateError } = await supabase
         .from("bets")
-        .update({ result: bet.result })
+        .update({ result: bet.result,betstatus: bet.betstatus })
         .eq("betid", betId);
 
       if (updateError) {
