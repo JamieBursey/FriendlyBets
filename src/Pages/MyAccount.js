@@ -5,6 +5,7 @@ import {
   MyAccEmail,
   RenderAboutMe,
   NavigateToUpdate,
+  RenderPhoneNumber,
 } from "../Components";
 import { supabase } from "../supabaseClient";
 
@@ -45,6 +46,7 @@ function MyAccount() {
       <AvatarComponent user={loggedUser} />
       <DisplayName user={loggedUser} />
       <MyAccEmail user={loggedUser} />
+      <RenderPhoneNumber user={loggedUser}/>
       <RenderAboutMe user={loggedUser} />
       <NavigateToUpdate />
     </>

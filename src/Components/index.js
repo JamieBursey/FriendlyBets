@@ -20,6 +20,7 @@ import {
   NavigateToUpdate,
   RenderFavoriteTeam,
   UpdateFavTeam,
+  RenderPhoneNumber,
 } from "./MyAccData";
 import {
   RenderContact,
@@ -47,6 +48,7 @@ export {
   RenderAboutMe,
   NavigateToUpdate,
   RenderFavoriteTeam,
+  RenderPhoneNumber,
   UpdateFavTeam,
   RenderContact,
   FriendRequests,

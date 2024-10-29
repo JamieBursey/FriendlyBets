@@ -20,8 +20,8 @@ const CheckBetResults = async (betId, callback) => {
     if (bet.sporttype === "NHL") {
 
       const checkShotsOnNet = (playerId, plays, isGameFinished) => {
-        if (isGameFinished) {
-          return "Waiting";
+        if (!isGameFinished) {
+          return "Waiting game to finish";
         }
 
         const shotsOnGoal = plays.filter(

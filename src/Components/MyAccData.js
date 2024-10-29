@@ -2,7 +2,6 @@ import React from "react";
 import Avatar from "react-avatar";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../supabaseClient";
 
 const dropDownScroll = {
   maxHeight: "200px",
@@ -74,7 +73,17 @@ const RenderFavoriteTeam = ({ user }) => {
     </div>
   );
 };
-
+const RenderPhoneNumber=({user})=>{
+  return (
+    <div className="text-center text-info fs-2">
+      {user.phone_number ? (
+<p>{user.phone_number}</p>
+      ) : (
+        <p>Select team in update account</p>
+      )}
+    </div>
+  );
+}
 const NavigateToUpdate = () => {
   const navigate = useNavigate();
   const handleButtonClick = () => {
@@ -132,7 +141,17 @@ const MyAccountChanges = ({ userDetails, onUserDetailChange }) => {
             aria-label="Recipient's password"
           />
         </div>
+        
       </div>
+              <div className="input-group mx-auto mb-3 w-50">
+          <input
+            type="text"
+            className="form-control"
+            placeholder={userDetails.phone_number || "Phone Number"}
+            onChange={(e) => onUserDetailChange("phone_number", e.target.value)}
+            aria-label="Recipient's phone number"
+          />
+        </div>
     </>
   );
 };
@@ -240,4 +259,6 @@ export {
   NavigateToUpdate,
   RenderFavoriteTeam,
   UpdateFavTeam,
+  RenderPhoneNumber
+
 };
