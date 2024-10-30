@@ -141,7 +141,7 @@ const MyBets = () => {
                       }}
                       className="btn btn-outline-danger w-100"
                     >
-                      Rescind Bet
+                      Withdraw Bet
                     </button>
                   </div>
                 )}
