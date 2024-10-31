@@ -1,43 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { LOCALSTORAGE } from "../Config";
 
-// const findPlayerID = (roster, sportType) => {
-
-//   if (sportType === "NHL") {
-//     const randomIndex = Math.floor(Math.random() * roster.length);
-//     return roster[randomIndex].playerId;
-//   }
-// };
-// const findPlayerName = (roster, playerId) => {
-
-//   const player = roster.find((player) => player.playerId === playerId);
-//   return player
-//     ? `${player.firstName.default} ${player.lastName.default}`
-//     : "Unknown Player";
-// };
-
-// //MLB info
-// const findMLBPlayerID = (roster) => {
-//   const randomIndex = Math.floor(Math.random() * roster.length);
-//   return roster[randomIndex].id;
-// };
-
 const findMLBPlayerName = (roster, playerId) => {
   const player = roster.find((player) => player.id === playerId);
   return player ? player.firstLastName : "Unknown Player";
 };
 
-// const findPitcherID = (roster) => {
-//   const pitchers = roster.filter(
-//     (player) => player.primaryPosition.code == "1"
-//   );
-//   if (pitchers.length === 0) {
-//     console.log("No pitchers found");
-//     return null;
-//   }
-//   const randomIndex = Math.floor(Math.random() * pitchers.length);
-//   return pitchers[randomIndex].id;
-// };
 const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   const options = {
     gameOutcome: [],
@@ -49,7 +17,6 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
     strikeouts: [],
   };
 
-  // Add common game outcome options
   options.gameOutcome.push(`${homeTeam} will win`);
   options.gameOutcome.push(`${awayTeam} will win`);
 
@@ -108,6 +75,16 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   return options;
 };
 
+// Define a dictionary to map bet types to friendly labels
+const betTypeLabels = {
+  gameOutcome: "Game Outcome",
+  playerGoals: "Goals Scored",
+  playerShots: "Shots on Goal",
+  playerAssists: "Assists",
+  homeRuns: "Home Runs",
+  RBIs: "RBIs",
+  strikeouts: "Strikeouts",
+};
 
 export const BettingOptions = ({ updateCheckedBets, sportType }) => {
   const [betOptions, setBetOptions] = useState({
@@ -187,7 +164,8 @@ export const BettingOptions = ({ updateCheckedBets, sportType }) => {
                 value={selectedBets[betType] || ""}
                 onChange={(e) => handleBetSelection(betType, e.target.value)}
               >
-                <option value="">{`Select ${betType}`}</option>
+                {/* Use the friendly label here */}
+                <option value="">{`Select ${betTypeLabels[betType]}`}</option>
                 {betOptions[betType].map((option, index) => (
                   <option key={index} value={option}>
                     {option}
