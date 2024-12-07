@@ -142,14 +142,14 @@ const CheckBetResults = async (betId, callback) => {
           const awayScore = resultsData.awayTeam.score;
 
           if (
-            betDescription === `${resultsData.homeTeam.name.default} will win`
+            betDescription === `${resultsData.homeTeam.abbrev} will win`
           ) {
             bet.result =
               homeScore > awayScore
                 ? `${betCreator} Wins`
                 : `${betCreator} Lost`;
           } else if (
-            betDescription === `${resultsData.awayTeam.name.default} will win`
+            betDescription === `${resultsData.awayTeam.abbrev} will win`
           ) {
             bet.result =
               awayScore > homeScore

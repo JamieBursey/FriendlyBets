@@ -26,7 +26,26 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
   };
 
   if (sportType === "NHL") {
-    const goalPlayers = selectRandomPlayers(roster, 5);
+    // Always include Dawson Mercer if present
+    const dawsonMercer = roster.find(
+      (player) =>
+        player.firstName?.default === "Dawson" && player.lastName?.default === "Mercer"
+    );
+
+    if (dawsonMercer) {
+      const playerName = `${dawsonMercer.firstName.default} ${dawsonMercer.lastName.default}`;
+      options.playerGoals.push(`${playerName} will score the first goal`);
+      options.playerGoals.push(`${playerName} will score anytime`);
+    }
+
+    // Add other random players for the goal option
+    const goalPlayers = selectRandomPlayers(
+      roster.filter(
+        (player) =>
+          !(player.firstName?.default === "Dawson" && player.lastName?.default === "Mercer")
+      ),
+      5
+    );
     goalPlayers.forEach((player) => {
       const firstName = player.firstName?.default || "Unknown";
       const lastName = player.lastName?.default || "Player";
@@ -35,6 +54,7 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
       options.playerGoals.push(`${playerName} will score anytime`);
     });
 
+    // Add random players for shots and assists
     const shotPlayers = selectRandomPlayers(roster, 5);
     shotPlayers.forEach((player) => {
       const firstName = player.firstName?.default || "Unknown";
@@ -52,6 +72,7 @@ const generateBettingOptions = (roster, homeTeam, awayTeam, sportType) => {
     });
   }
 
+  // MLB logic remains the same
   if (sportType === "MLB") {
     const homeRunPlayers = selectRandomPlayers(roster, 5);
     homeRunPlayers.forEach((player) => {
