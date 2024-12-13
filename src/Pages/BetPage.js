@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { handleSendFriendRequest } from "./AddFriends";
 import { BettingOptions } from "../Data";
+import VIPModal from "../Components/modals/vip";
+import { checkAndUpdateTokens } from "../Data/betdata/CheckAndUpdateTokens";
 
 const betsGradient = {
   background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
@@ -23,6 +25,7 @@ const BetPage = () => {
   const [wager, setWager] = useState("");
   const [email, setEmail] = useState("");
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [showvip,setShowvip]=useState(false)
 
   useEffect(() => {
     const fetchLoggedInUser = async () => {
@@ -45,8 +48,9 @@ const BetPage = () => {
         if (userError) {
           console.error("Error fetching user data:", userError);
         } else {
-          setLoggedInUser(userData);
-          setUsersFriendList(userData.friends || []);
+          const updatedUser=await checkAndUpdateTokens(userData)
+          setLoggedInUser(updatedUser);
+          setUsersFriendList(updatedUser.friends || []);
         }
       }
     };
@@ -62,6 +66,7 @@ const BetPage = () => {
     setSelectedBets({ [betOption]: true });
   };
 
+  
   const placeBet = async () => {
     if (!selectedFriend) {
       alert("Please select a friend to bet with.");
@@ -72,34 +77,31 @@ const BetPage = () => {
       alert("User not logged in.");
       return;
     }
-
-    let allUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE.USERS)) || [];
-
-    if (!loggedInUser.hasDonated) {
-      let betTokenCount = loggedInUser.betToken
-        ? loggedInUser.betToken
-        : parseInt(loggedInUser.betToken);
-
-      if (betTokenCount > 0 || betTokenCount === "unlimited") {
-
-        if (betTokenCount !== "unlimited") {
-          betTokenCount -= 1;
-        }
-        loggedInUser.betToken = betTokenCount.toString();
-      } else {
-        alert(
-          "You do not have enough bet tokens to place a bet. Please wait 24 hours or donate for unlimited tokens."
-        );
+    if (!loggedInUser.has_donated && !loggedInUser.is_admin) {
+      let betTokens = loggedInUser.betToken || 0;
+    
+      if (betTokens <= 0) {
+        setShowvip(true);
         return;
       }
+    
+      betTokens -= 1;
+    
+      const { error: tokenError } = await supabase
+        .from("users")
+        .update({ betToken: betTokens })
+        .eq("public_user_id", loggedInUser.public_user_id);
+    
+      if (tokenError) {
+        console.error("Error updating bet tokens:", tokenError);
+        alert("An error occurred while placing your bet. Please try again.");
+        return;
+      }
+    
+      // Update the token count in the frontend state
+      setLoggedInUser({ ...loggedInUser, betToken: betTokens });
     }
 
-    const userIndex = allUsers.findIndex(
-      (user) => user.email === loggedInUser.email
-    );
-    if (userIndex !== -1) {
-      allUsers[userIndex] = { ...allUsers[userIndex], ...loggedInUser };
-    }
 
 
     const newBet = {
@@ -173,7 +175,6 @@ const BetPage = () => {
     } catch (error) {
       return;
     }
-    localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(allUsers));
     navigate(NAVIGATION.MYBETS);
   };
 
@@ -182,6 +183,7 @@ const BetPage = () => {
       className="container mt-2 text-center p-2 rounded"
       style={betsGradient}
     >
+      <VIPModal show={showvip} onClose={() => setShowvip(false)} />
       <div className="set-bet-div text-center">
         <span className="straight-line"></span>
         <p className="set-bet-text">Set Your Bet</p>
