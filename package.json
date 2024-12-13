@@ -26,7 +26,7 @@
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
   },
-  "homepage": ".",
+  "homepage": "https://friendly-bets.vercel.app/Landingpage",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
