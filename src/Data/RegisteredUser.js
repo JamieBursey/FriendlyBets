@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
+import { supabase } from "../supabaseClient";
 
 const getAllUsers = () => {
   const allUsersStr = localStorage.getItem(LOCALSTORAGE.USERS);
@@ -298,13 +299,19 @@ const RedirectBasedOnLogin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkIfLoggedInExists = localStorage.getItem(
-      LOCALSTORAGE.LOGGEDINUSER
+    const { data: subscription } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (!session) {
+          navigate("/LandingPage");
+        }
+      }
     );
-    if (!checkIfLoggedInExists || checkIfLoggedInExists === "null") {
-      navigate("/LandingPage");
-    }
-  }, []);
+
+    // Cleanup the listener on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
 };
 
 export {
