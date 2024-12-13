@@ -77,7 +77,7 @@ function Register() {
           data: {
             username,
             favoriteTeam,
-            betToken: 3,
+            betToken: 5,
             hasDonated: false,
             friends: JSON.stringify([]),
             avatar: JSON.stringify([]),
