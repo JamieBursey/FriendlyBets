@@ -37,7 +37,7 @@ function App() {
     <div style={backgroundColor}>
       <BrowserRouter>
         <NavBar />
-        {/* <RedirectBasedOnLogin /> */}
+        <RedirectBasedOnLogin />
         <UseAuthListener />
         <Routes>
           <Route path="/FriendlyBets" element={<Home />} />
