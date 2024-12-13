@@ -308,9 +308,7 @@ const RedirectBasedOnLogin = () => {
     );
 
     // Cleanup the listener on unmount
-    return () => {
-      subscription.unsubscribe();
-    };
+    return
   }, [navigate]);
 };
 
