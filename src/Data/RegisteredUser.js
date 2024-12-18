@@ -275,35 +275,43 @@ const TeamDropdown = ({ teamSelect }) => {
 };
 
 const RedirectBasedOnLogin = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        console.log("Checking user authentication...");
+        const { data: sessionData, error } = await supabase.auth.getSession();
 
-        if (user) {
-          setIsAuthenticated(true); // User is authenticated
-        } else {
-          navigate("/LandingPage"); // Redirect to LandingPage if not logged in
+        if (error) {
+          console.error("Error fetching session:", error);
+          navigate("/");
+          return;
         }
-      } catch (error) {
-        console.error("Error checking authentication status:", error);
+
+        if (sessionData?.session?.user) {
+          console.log("User authenticated:", sessionData.session.user);
+          setIsAuthenticated(true);
+        } else {
+          console.warn("No active session. Redirecting to /LandingPage.");
+          navigate("/LandingPage");
+        }
+      } catch (err) {
+        console.error("Error in authentication check:", err);
+        navigate("/LandingPage");
       } finally {
-        setIsLoading(false); // Ensure loading state ends
+        setLoading(false);
       }
     };
 
     checkAuthStatus();
   }, [navigate]);
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Display a loading indicator while checking auth
-  }
+  if (loading) return <div>Loading...</div>;
 
-  return isAuthenticated ? <>{children}</> : null; // Render children if authenticated
+  return isAuthenticated ? <>{children}</> : null;
 };
 
 export {
