@@ -314,6 +314,56 @@ const RedirectBasedOnLogin = ({ children }) => {
   return isAuthenticated ? <>{children}</> : null;
 };
 
+const ForgotPasswordPopup = ({ onClose }) => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleForgotPassword = async () => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://friendly-bets.vercel.app/FriendlyBets/PasswordReset",
+      });
+  
+      if (error) {
+        console.error("Error sending reset email:", error);
+        alert("There was an error sending the reset email. Please try again.");
+      } else {
+        alert("Password reset email sent! Check your inbox.");
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("Something went wrong. Please try again.");
+    }
+  };
+  
+
+  return (
+    <div className="modal show d-block" style={{ background: "rgba(0, 0, 0, 0.5)" }}>
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Forgot Password</h5>
+            <button type="button" className="btn-close" onClick={onClose}></button>
+          </div>
+          <div className="modal-body">
+            <p>Enter your email to reset your password.</p>
+            <input
+              type="email"
+              className="form-control mb-3"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+            />
+            <button className="btn btn-primary" onClick={handleForgotPassword}>
+              Send Reset Email
+            </button>
+            {message && <p className="mt-3">{message}</p>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 export {
   getAllUsers,
   checkUserPassword,
@@ -322,4 +372,5 @@ export {
   TeamDropdown,
   RedirectBasedOnLogin,
   updateBetTokens,
+  ForgotPasswordPopup
 };
