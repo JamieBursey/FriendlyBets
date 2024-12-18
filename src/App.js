@@ -30,7 +30,7 @@ function App() {
 
   return (
     <div style={backgroundColor}>
-      <BrowserRouter basename="/FriendlyBets">
+      <BrowserRouter>
         <NavBar />
         <UseAuthListener />
         <Routes>
