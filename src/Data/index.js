@@ -15,6 +15,7 @@ import {
   TeamDropdown,
   RedirectBasedOnLogin,
   updateBetTokens,
+  ForgotPasswordPopup,
 } from "./RegisteredUser";
 import { BettingOptions, findMLBPlayerName } from "./BetOptions";
 import { getAllBets, findPlayerIdByName, findMLBPlayerIdByName } from "./Bets";
@@ -43,4 +44,5 @@ export {
   findMLBPlayerIdByName,
   findMLBPlayerName,
   updateBetTokens,
+  ForgotPasswordPopup
 };

@@ -1,17 +1,18 @@
-import { checkUserPassword, findUserByEmail } from "../Data";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LOCALSTORAGE, NAVIGATION } from "../Config";
 import { supabase } from "../supabaseClient";
-import { updateBetTokens } from "../Data";
+import { checkAndUpdateTokens } from "../Data/betdata/CheckAndUpdateTokens";
 import Logo from "../Components/Logo";
+import { ForgotPasswordPopup } from "../Data";
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [showForgotPassword, setShowForgotPassword] = useState(false); // State for forgot password popup
   const [loginHover, setLoginHover] = useState(false);
   const [registerHover, setRegisterHover] = useState(false);
+
   const blueButtonStyle = {
     backgroundColor: loginHover ? "blue" : "#010286",
     color: "white",
@@ -21,12 +22,6 @@ function Login() {
     color: "white",
   };
 
-  const backgroundColor = {
-    background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
-  };
-  const registerHandler = () => {
-    navigate(NAVIGATION.REGISTER);
-  };
   const loginHandler = async () => {
     if (!email || !password) {
       alert("Please fill in both email and password");
@@ -43,20 +38,22 @@ function Login() {
       return;
     }
 
-    // Check if the user data is available
     if (user) {
-
       navigate("/FriendlyBets");
     } else {
-
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
       if (session && session.user) {
+        checkAndUpdateTokens();
         navigate("/FriendlyBets");
       }
     }
+  };
+
+  const registerHandler = () => {
+    navigate("/register"); // Adjust navigation path as needed
   };
 
   return (
@@ -85,7 +82,7 @@ function Login() {
               onChange={(event) => setEmail(event.target.value)}
             />
           </div>
-          <div className="mb-3 mb-3 w-75 mx-auto">
+          <div className="mb-3 w-75 mx-auto">
             <label htmlFor="password" className="form-label text-white">
               Password
             </label>
@@ -121,10 +118,22 @@ function Login() {
               Register
             </button>
           </div>
+          <div className="text-center">
+            <button
+              className="btn btn-link mt-3 text-white"
+              onClick={() => setShowForgotPassword(true)}
+            >
+              Forgot Password?
+            </button>
+          </div>
         </div>
+        {showForgotPassword && (
+          <ForgotPasswordPopup onClose={() => setShowForgotPassword(false)} />
+        )}
       </div>
     </div>
   );
 }
 
-export { Login };
+export {Login}
+

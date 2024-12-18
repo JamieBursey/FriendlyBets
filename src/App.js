@@ -25,6 +25,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { RedirectBasedOnLogin } from "./Data";
 import backgroundColor from "./Pages/Register";
 import UseAuthListener from "./Components/authRedirectHandler";
+import ResetPassword from "./Pages/ResetPassword";
 
 function App() {
 
@@ -41,7 +42,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/LandingPage" element={<LandingPage />} />
-
+          <Route path="/PasswordReset" element={<ResetPassword />} />
           {/* Protected Routes */}
           <Route
             path="/myAccount"
