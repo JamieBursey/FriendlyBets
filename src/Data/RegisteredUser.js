@@ -321,7 +321,7 @@ const ForgotPasswordPopup = ({ onClose }) => {
   const handleForgotPassword = async () => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "https://friendly-bets.vercel.app/FriendlyBets/PasswordReset",
+        redirectTo: "https://friendly-bets.vercel.app/PasswordReset",
       });
   
       if (error) {
