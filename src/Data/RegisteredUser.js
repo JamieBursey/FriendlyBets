@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
+import { supabase } from "../supabaseClient";
 
 const getAllUsers = () => {
   const allUsersStr = localStorage.getItem(LOCALSTORAGE.USERS);
@@ -55,27 +56,6 @@ const checkUserPassword = (userPassword, inputPassword) => {
   }
 };
 
-const adminUser = () => {
-  const allUsers = getAllUsers();
-  const adminCheck = allUsers.find((user) => user.username === "Admin");
-  if (!adminCheck) {
-    const admin = {
-      username: "Admin",
-      password: "admin",
-      email: "admin@email.com",
-      favoriteTeam: "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
-      betToken: "unlimited",
-      hasDonated: true,
-      lastTokenUpdate: Date.now(),
-      friends: [],
-      avatar: [],
-      messages: [],
-      isAdmin: true,
-    };
-    allUsers.push(admin);
-  }
-  localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(allUsers));
-};
 // const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
 //   // Get all users
 //   const allUsers = getAllUsers();
@@ -294,17 +274,36 @@ const TeamDropdown = ({ teamSelect }) => {
   );
 };
 
-const RedirectBasedOnLogin = () => {
+const RedirectBasedOnLogin = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkIfLoggedInExists = localStorage.getItem(
-      LOCALSTORAGE.LOGGEDINUSER
-    );
-    if (!checkIfLoggedInExists || checkIfLoggedInExists === "null") {
-      navigate("/LandingPage");
-    }
-  }, []);
+    const checkAuthStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (user) {
+          setIsAuthenticated(true); // User is authenticated
+        } else {
+          navigate("/LandingPage"); // Redirect to LandingPage if not logged in
+        }
+      } catch (error) {
+        console.error("Error checking authentication status:", error);
+      } finally {
+        setIsLoading(false); // Ensure loading state ends
+      }
+    };
+
+    checkAuthStatus();
+  }, [navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Display a loading indicator while checking auth
+  }
+
+  return isAuthenticated ? <>{children}</> : null; // Render children if authenticated
 };
 
 export {
@@ -313,7 +312,6 @@ export {
   findUser,
   findUserByEmail,
   TeamDropdown,
-  adminUser,
   RedirectBasedOnLogin,
   updateBetTokens,
 };

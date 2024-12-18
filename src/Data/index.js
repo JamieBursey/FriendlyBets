@@ -13,7 +13,6 @@ import {
   checkUserPassword,
   findUserByEmail,
   TeamDropdown,
-  adminUser,
   RedirectBasedOnLogin,
   updateBetTokens,
 } from "./RegisteredUser";
@@ -40,7 +39,6 @@ export {
   TodaysGames,
   LiveGames,
   TeamDropdown,
-  adminUser,
   RedirectBasedOnLogin,
   findMLBPlayerIdByName,
   findMLBPlayerName,
