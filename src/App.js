@@ -21,42 +21,111 @@ import {
   LandingPage,
 } from "./Pages";
 import { NavBar } from "./Components";
-import { adminUser } from "./Data";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 import { RedirectBasedOnLogin } from "./Data";
 import backgroundColor from "./Pages/Register";
 import UseAuthListener from "./Components/authRedirectHandler";
 
 function App() {
-  useEffect(() => {
-    adminUser();
-  }, []);
 
   return (
     <div style={backgroundColor}>
       <BrowserRouter>
         <NavBar />
-        <RedirectBasedOnLogin />
         <UseAuthListener />
         <Routes>
+          {/* Public Routes */}
           <Route path="/FriendlyBets" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/myAccount" element={<MyAccount />} />
-          <Route path="/addFriends" element={<AddFriends />} />
-          {/* <Route path="/test/fetchFromAPI" element={<FetchFromAPI />} /> */}
-          <Route path="/fullSchedule" element={<FullSchedule />} />
-          <Route path="/betPage" element={<BetPage />} />
-          <Route path="/MyBets" element={<MyBets />} />
-          <Route path="/Notifications" element={<RenderRequests />} />
-          <Route path="/UpdateMyAccount" element={<UpdateMyAccount />} />
-          <Route path="/UserManagement" element={<UserManagement />} />
-          <Route path="/EditUserAsAdmin" element={<EditUserAsAdmin />} />
-          <Route path="/NflSchedule" element={<NflWeeklySchedulePage />} />
           <Route path="/LandingPage" element={<LandingPage />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/myAccount"
+            element={
+              <RedirectBasedOnLogin>
+                <MyAccount />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/addFriends"
+            element={
+              <RedirectBasedOnLogin>
+                <AddFriends />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/fullSchedule"
+            element={
+              <RedirectBasedOnLogin>
+                <FullSchedule />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/betPage"
+            element={
+              <RedirectBasedOnLogin>
+                <BetPage />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/MyBets"
+            element={
+              <RedirectBasedOnLogin>
+                <MyBets />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/Notifications"
+            element={
+              <RedirectBasedOnLogin>
+                <RenderRequests />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/UpdateMyAccount"
+            element={
+              <RedirectBasedOnLogin>
+                <UpdateMyAccount />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/UserManagement"
+            element={
+              <RedirectBasedOnLogin>
+                <UserManagement />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/EditUserAsAdmin"
+            element={
+              <RedirectBasedOnLogin>
+                <EditUserAsAdmin />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/NflSchedule"
+            element={
+              <RedirectBasedOnLogin>
+                <NflWeeklySchedulePage />
+              </RedirectBasedOnLogin>
+            }
+          />
+
+          {/* Catch-all Route */}
+          <Route path="*" element={<LandingPage />} />
         </Routes>
       </BrowserRouter>
     </div>
