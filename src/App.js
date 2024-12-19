@@ -125,7 +125,6 @@ function App() {
             }
           />
 
-          {/* Catch-all Route */}
           <Route path="*" element={<LandingPage />} />
         </Routes>
       </BrowserRouter>

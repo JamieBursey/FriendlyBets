@@ -9,7 +9,7 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const [showForgotPassword, setShowForgotPassword] = useState(false); // State for forgot password popup
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [loginHover, setLoginHover] = useState(false);
   const [registerHover, setRegisterHover] = useState(false);
 
@@ -53,7 +53,7 @@ function Login() {
   };
 
   const registerHandler = () => {
-    navigate("/register"); // Adjust navigation path as needed
+    navigate("/register");
   };
 
   return (
