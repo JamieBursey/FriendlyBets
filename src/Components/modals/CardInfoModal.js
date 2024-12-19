@@ -45,6 +45,7 @@ const CardInfoModal = ({ show, onClose }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Enter Payment Information</h5>
+              <h4>No payment system yet. just click comeplete purchase and enjoy the free VIP</h4>
               <button type="button" className="btn-close" onClick={onClose}></button>
             </div>
             <div className="modal-body">
