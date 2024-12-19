@@ -92,7 +92,7 @@ function Register() {
       }
 
       if (user) {
-        // Show the custom popup
+
         console.log(user);
       }
     } catch (error) {
@@ -141,7 +141,7 @@ function Register() {
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             style={blueButtonStyle}
-            disabled={loading} // Disable button when loading
+            disabled={loading} 
           >
             {loading ? "Registering..." : "Register"}
           </button>

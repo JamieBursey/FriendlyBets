@@ -24,7 +24,7 @@ const ResetPassword = () => {
         console.error("Password reset error:", error);
       } else {
         setMessage("Password reset successful!");
-        setTimeout(() => navigate("/login"), 2000); // Redirect to login after success
+        setTimeout(() => navigate("/login"), 2000);
       }
     } catch (err) {
       console.error("Unexpected error:", err);
