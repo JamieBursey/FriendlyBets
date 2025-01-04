@@ -60,7 +60,7 @@ const CheckBetResults = async (betId, callback) => {
             (play.details.assist1PlayerId === playerId ||
               play.details.assist2PlayerId === playerId)
         );
-        return assists.length > 1 ? `${betCreator} Wins` : `${betCreator} Lost`;
+        return assists.length >= 1 ? `${betCreator} Wins` : `${betCreator} Lost`;
       };
 
       // Fetch game data

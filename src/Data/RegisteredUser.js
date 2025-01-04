@@ -372,5 +372,6 @@ export {
   TeamDropdown,
   RedirectBasedOnLogin,
   updateBetTokens,
-  ForgotPasswordPopup
+  ForgotPasswordPopup,
+
 };
