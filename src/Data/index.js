@@ -44,5 +44,5 @@ export {
   findMLBPlayerIdByName,
   findMLBPlayerName,
   updateBetTokens,
-  ForgotPasswordPopup
+  ForgotPasswordPopup,
 };

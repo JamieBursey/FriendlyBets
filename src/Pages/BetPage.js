@@ -45,15 +45,38 @@ const BetPage = () => {
           .eq("public_user_id", user.id)
           .single();
 
-        if (userError) {
-          console.error("Error fetching user data:", userError);
-        } else {
-          const updatedUser=await checkAndUpdateTokens(userData)
+          if (userError) {
+            console.error("Error fetching user data:", userError);
+            return;
+          }
+    
+          if (userData.has_donated && userData.donateDate) {
+            const lastDonationDate = new Date(userData.donateDate);
+            const currentDate = new Date();
+            const timeDiff = currentDate - lastDonationDate;
+            const daysDiff = timeDiff / (1000 * 60 * 60 * 24); // Convert to days
+    
+            if (daysDiff > 30) {
+              // Update `has_donated` to false
+              const { error: updateError } = await supabase
+                .from("users")
+                .update({ has_donated: false })
+                .eq("public_user_id", user.id);
+    
+              if (updateError) {
+                console.error("Error updating donation status:", updateError);
+              } else {
+                console.log("User's donation status updated to false.");
+                userData.has_donated = false; // Update local state
+              }
+            }
+          }
+    
+          const updatedUser = await checkAndUpdateTokens(userData);
           setLoggedInUser(updatedUser);
           setUsersFriendList(updatedUser.friends || []);
         }
-      }
-    };
+      };
 
     fetchLoggedInUser();
   }, []);
