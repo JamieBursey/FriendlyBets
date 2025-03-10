@@ -119,13 +119,12 @@ function NavBar() {
                 Contact
               </Link>
             </li>
-            {/* Move the "Change Theme" button here */}
             <li className="nav-item">
               <button
                 className="btn"
                 onClick={() => setIsModalOpen(true)}
               >
-                Change Theme
+              Theme
               </button>
             </li>
             {loggedUser && (
