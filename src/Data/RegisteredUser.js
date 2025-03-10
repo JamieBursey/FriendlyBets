@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, } from "react-router-dom";
 import { LOCALSTORAGE } from "../Config";
 import { supabase } from "../supabaseClient";
 
@@ -295,12 +295,12 @@ const RedirectBasedOnLogin = ({ children }) => {
           console.log("User authenticated:", sessionData.session.user);
           setIsAuthenticated(true);
         } else {
-          console.warn("No active session. Redirecting to /LandingPage.");
-          navigate("/LandingPage");
+          console.warn("No active session. Redirecting to /about.");
+          navigate("/about");
         }
       } catch (err) {
         console.error("Error in authentication check:", err);
-        navigate("/LandingPage");
+        navigate("/about");
       } finally {
         setLoading(false);
       }

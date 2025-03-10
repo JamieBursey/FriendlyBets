@@ -1,0 +1,97 @@
+/* themes.css or App.css */
+.theme-toggle {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .theme-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  
+  .theme-toggle input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .theme-toggle input[type="radio"]:checked {
+    background-color: #007bff; /* Change color based on theme */
+    border-color: #007bff;
+  }
+  
+  /* Theme-specific styles for the toggle */
+  .theme-toggle.light input[type="radio"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .theme-toggle.dark input[type="radio"]:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .theme-toggle.retro input[type="radio"]:checked {
+    background-color: #ffc107;
+    border-color: #ffc107;
+  }
+
+  /* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+}
+
+.theme-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.theme-option {
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.theme-option.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.close-button {
+  padding: 10px 20px;
+  background-color: rgb(245, 81, 81);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

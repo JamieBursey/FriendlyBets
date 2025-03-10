@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LOCALSTORAGE, NAVIGATION } from "../Config";
+import { NAVIGATION } from "../Config";
 import Avatar from "react-avatar";
 import { Link } from "react-router-dom";
 import { supabase } from "../supabaseClient";
+import { useTheme } from "./theme/ThemeContext";
+import ThemeModal from "./theme/ThemeModal";
 
 function NavBar() {
   const navigate = useNavigate();
   const [loggedUser, setLoggedUser] = useState(null);
   const [userDetails, setUserDetails] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const {theme}=useTheme()
 
   async function fetchUserDetails(userId) {
     if (!userId) {
@@ -115,6 +119,15 @@ function NavBar() {
                 Contact
               </Link>
             </li>
+            {/* Move the "Change Theme" button here */}
+            <li className="nav-item">
+              <button
+                className="btn"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Change Theme
+              </button>
+            </li>
             {loggedUser && (
               <>
                 <li className="nav-item">
@@ -157,7 +170,7 @@ function NavBar() {
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                href="#"
+                href="a"
               >
                 <Avatar round={true} size="40" name={userDetails.username} />
               </a>
@@ -202,6 +215,8 @@ function NavBar() {
           )}
         </div>
       </div>
+      <ThemeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
     </nav>
   );
 }

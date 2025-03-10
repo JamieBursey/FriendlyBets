@@ -4,14 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ThemeProvider } from './Components/theme/ThemeContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <div className="bg-dark">
+    <ThemeProvider>
       <App />
-    </div>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

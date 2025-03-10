@@ -41,7 +41,6 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/LandingPage" element={<LandingPage />} />
           <Route path="/PasswordReset" element={<ResetPassword />} />
           {/* Protected Routes */}
           <Route
@@ -125,7 +124,7 @@ function App() {
             }
           />
 
-          <Route path="*" element={<LandingPage />} />
+          <Route path="*" element={<Home/>} />
         </Routes>
       </BrowserRouter>
     </div>
