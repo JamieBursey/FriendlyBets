@@ -4,12 +4,24 @@ import { MlbSchedule } from "../Components/mlb.js";
 import Logo from "../Components/Logo.js";
 import { supabase } from "../supabaseClient.js";
 import { checkAndUpdateTokens } from "../Data/betdata/CheckAndUpdateTokens.js";
-
+import { useTheme } from "../Components/theme/ThemeContext.js";
 function Home() {
   const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const backgroundColor = {
-    background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
+  const { theme } = useTheme();
+  const appStyle = {
+    backgroundColor:
+      theme === "light"
+        ? "#FFFFFF"
+        : theme === "dark"
+        ? "#1E1E1E"
+        : "transparent", 
+    background:
+      theme === "retro"
+        ? "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)"
+        : "none",
+    color: theme === "light" ? "#000000" : "#FFFFFF",
+    minHeight: "100vh", 
   };
   useEffect(() => {
     const fetchLoggedInUser = async () => {
@@ -57,9 +69,7 @@ function Home() {
     }
   };
   return (
-    <div style={backgroundColor}>
-      {/* <Dropdown onChange={(e) => setSelectMatchesUI(e.target.value)} /> */}
-      {/* <Banner /> */}
+    <div style={appStyle}>
       <Logo />
       <Buttons setSelectMatchesType={setSelectMatchesUI} />
       {selectMatchesUI()}

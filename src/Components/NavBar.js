@@ -4,7 +4,6 @@ import { NAVIGATION } from "../Config";
 import Avatar from "react-avatar";
 import { Link } from "react-router-dom";
 import { supabase } from "../supabaseClient";
-import { useTheme } from "./theme/ThemeContext";
 import ThemeModal from "./theme/ThemeModal";
 
 function NavBar() {
@@ -12,7 +11,6 @@ function NavBar() {
   const [loggedUser, setLoggedUser] = useState(null);
   const [userDetails, setUserDetails] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {theme}=useTheme()
 
   async function fetchUserDetails(userId) {
     if (!userId) {

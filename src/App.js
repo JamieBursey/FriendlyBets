@@ -18,19 +18,33 @@ import {
   UserManagement,
   EditUserAsAdmin,
   NflWeeklySchedulePage,
-  LandingPage,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { RedirectBasedOnLogin } from "./Data";
-import backgroundColor from "./Pages/Register";
+
 import UseAuthListener from "./Components/authRedirectHandler";
 import ResetPassword from "./Pages/ResetPassword";
+import { useTheme } from "./Components/theme/ThemeContext";
 
 function App() {
-
+  const { theme } = useTheme();
+  const appStyle = {
+    backgroundColor:
+      theme === "light"
+        ? "#FFFFFF"
+        : theme === "dark"
+        ? "#1E1E1E"
+        : "transparent",
+    background:
+      theme === "retro"
+        ? "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)"
+        : "none",
+    color: theme === "light" ? "#000000" : "#FFFFFF",
+    minHeight: "100vh",
+  };
   return (
-    <div style={backgroundColor}>
+    <div style={appStyle}>
       <BrowserRouter>
         <NavBar />
         <UseAuthListener />
