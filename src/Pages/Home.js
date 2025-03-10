@@ -42,10 +42,10 @@ function Home() {
   }, []);
   
   const selectMatchesUI = () => {
-    if (selectedMatchType == "Hockey") {
+    if (selectedMatchType === "Hockey") {
       return <Matches />;
     }
-    if (selectedMatchType == "Football") {
+    if (selectedMatchType === "Football") {
       return <NflMatches />;
     }
     if (selectedMatchType === "Baseball") {

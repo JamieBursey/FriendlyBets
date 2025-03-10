@@ -21,7 +21,7 @@ const EditUserAsAdmin = () => {
 
       if (sessionError) {
         console.error("Error fetching session:", sessionError);
-        navigate("/"); // Redirect to home if there's an error fetching the session
+        navigate("/FriendlyBets");
         return;
       }
 
