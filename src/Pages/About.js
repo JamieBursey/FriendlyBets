@@ -1,37 +1,36 @@
 import React from "react";
-import { Banner, RenderContact } from "../Components";
-import { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-
-const ShowVideo = ({ video, setVideo }) => {
-  if (!video) return null;
-  return (
-    <div className="bg-info video-container">
-      <button className="video-close-button" onClick={() => setVideo(false)}>
-        Close Video
-      </button>
-      {/* <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/YLslsZuEaNE?si=GbKbdYL4kRO-J06p"
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullScreen
-      ></iframe> */}
-    </div>
-  );
-};
-
+import { RenderContact } from "../Components";
+import { useTheme } from "../Components/theme/ThemeContext";
 function About() {
-  const [video, setVideo] = useState(true);
+  const { theme } = useTheme();
+
+  const containerStyle = {
+    backgroundColor:
+      theme === "light"
+        ? "#FFFFFF"
+        : theme === "dark"
+        ? "#1E1E1E"
+        : "transparent",
+    background:
+      theme === "retro"
+        ? "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)"
+        : theme === "light"
+        ? "#FFFFFF"
+        : theme==="dark"? "#1E1E1E":"#1E1E1E",
+    color: theme === "light" ? "#000000" : "#FFFFFF",
+    minHeight: "100vh",
+    padding: "20px",
+  };
+
+  const textColor = theme === "light" ? "#000000" : "#FFFFFF";
+  const dividerColor = theme === "light" ? "#000000" : "#FFFFFF";
 
   return (
-    <div className="mt-4">
+    <div style={containerStyle} className="container text-center p-4">
       <div className="container my-4">
         <div className="row">
-          <div className="col-md-6 text-white">
-            <div className="jumbotron text-center text-white">
+          <div className="col-md-6">
+            <div className="jumbotron text-center" style={{ color: textColor }}>
               <h1 className="display-4">
                 Welcome to Friendly Bets – Where Every Game Counts!
               </h1>
@@ -41,39 +40,12 @@ function About() {
               </p>
             </div>
           </div>
-
-          <div className="col-md-6">
-            <div className="video-container rounded bg-secondary">
-              <div
-                style={{
-                  position: "relative",
-                  paddingBottom: "45.625%",
-
-                  marginBottom: 25,
-                  marginTop: 25,
-                }}
-              >
-                <iframe
-                  src="https://www.loom.com/embed/ab91c2ac26ff4afcb57bc6fdf0355e76?sid=b6e0954e-c28c-4450-80f1-f3d3763a3c45"
-                  frameborder="0"
-                  webkitallowfullscreen
-                  mozallowFullScreen
-                  allowFullScreen
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "75%",
-                    height: "100%",
-                  }}
-                ></iframe>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-      <div className="line-divider"></div>
-      <div className="container p-4 text-white">
+
+      <div className="line-divider" style={{ borderTop: `1px solid ${dividerColor}` }}></div>
+
+      <div className="container p-4" style={{ color: textColor }}>
         <h2>Our Mission: Enhancing Your Game-Watching Experience</h2>
         <p>
           Here at Friendly Bets, we aim to make sports and games more exciting
@@ -90,9 +62,10 @@ function About() {
         </p>
       </div>
 
-      <div className="line-divider"></div>
+      <div className="line-divider" style={{ borderTop: `1px solid ${dividerColor}` }}></div>
+
       {/* How It Works */}
-      <div className="container p-5 text-white">
+      <div className="container p-5" style={{ color: textColor }}>
         <h2>How Friendly Bets Works:</h2>
         <div className="row">
           <div className="col-md-4">
@@ -109,11 +82,16 @@ function About() {
           </div>
         </div>
       </div>
-      <div className="line-divider"></div>
-      <div className="d-flex justify-content-center align-items-center p-5 text-white">
+
+      <div className="line-divider" style={{ borderTop: `1px solid ${dividerColor}` }}></div>
+
+      <div
+        className="d-flex justify-content-center align-items-center p-5"
+        style={{ color: textColor }}
+      >
         <div>
           <h2>Features That Make Us Stand Out</h2>
-          <ul className=" text-center fs-4">
+          <ul className="text-center fs-4">
             <li>Real-time updates</li>
             <li>Variety of sports and games</li>
             <li>Honor system betting</li>
@@ -122,11 +100,15 @@ function About() {
         </div>
       </div>
 
-      <div className="container p-5">
+      <div className="line-divider" style={{ borderTop: `1px solid ${dividerColor}` }}></div>
+
+      <div className="container p-5" style={{ color: textColor }}>
         <h2>Hear It From Our Community</h2>
       </div>
+
       <RenderContact />
-      <footer className="text-center p-4 text-white">
+
+      <footer className="text-center p-4" style={{ color: textColor }}>
         <p>&copy; 2024 Friendly Bets. All rights reserved.</p>
       </footer>
     </div>

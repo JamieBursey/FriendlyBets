@@ -35,11 +35,10 @@ function App() {
         ? "#FFFFFF"
         : theme === "dark"
         ? "#1E1E1E"
-        : "transparent",
-    background:
-      theme === "retro"
-        ? "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)"
-        : "none",
+        : "transparent", // Fallback for other themes
+    ...(theme === "retro" && {
+      background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
+    }),
     color: theme === "light" ? "#000000" : "#FFFFFF",
     minHeight: "100vh",
   };
