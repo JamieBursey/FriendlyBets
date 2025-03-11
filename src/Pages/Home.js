@@ -9,7 +9,7 @@ function Home() {
   const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
   const [loggedInUser, setLoggedInUser] = useState(null);
   const { theme } = useTheme();
-  const appStyle = {
+  const backgroundColor = {
     backgroundColor:
       theme === "light"
         ? "#FFFFFF"
@@ -69,7 +69,7 @@ function Home() {
     }
   };
   return (
-    <div style={appStyle}>
+    <div style={backgroundColor}>
       <Logo />
       <Buttons setSelectMatchesType={setSelectMatchesUI} />
       {selectMatchesUI()}
