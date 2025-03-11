@@ -1,4 +1,4 @@
-import { Buttons, Matches, NflMatches } from "../Components";
+import { AddSportButtons, Matches, NflMatches } from "../Components";
 import React, { useEffect,useState } from "react";
 import { MlbSchedule } from "../Components/mlb.js";
 import Logo from "../Components/Logo.js";
@@ -12,14 +12,16 @@ function Home() {
   const backgroundColor = {
     backgroundColor:
       theme === "light"
-        ? "#FFFFFF"
+        ? "#FFFFFF" 
         : theme === "dark"
-        ? "#1E1E1E"
+        ? "#1E1E1E" 
         : "transparent", 
     background:
       theme === "retro"
-        ? "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)"
-        : "none",
+        ? "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)" 
+        : theme === "light"
+        ? "#FFFFFF" 
+        : "#1E1E1E", 
     color: theme === "light" ? "#000000" : "#FFFFFF",
     minHeight: "100vh", 
   };
@@ -71,7 +73,7 @@ function Home() {
   return (
     <div style={backgroundColor}>
       <Logo />
-      <Buttons setSelectMatchesType={setSelectMatchesUI} />
+      <AddSportButtons setSelectMatchesType={setSelectMatchesUI} />
       {selectMatchesUI()}
     </div>
   );

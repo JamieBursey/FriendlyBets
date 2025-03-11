@@ -1,7 +1,7 @@
 import Banner from "./Banner";
 import Table from "./Table";
 
-import Buttons from "./Buttons";
+import AddSportButtons from "./Buttons";
 import { Matches, NflMatches } from "./Matches";
 import NavBar from "./NavBar";
 import { acceptBets, deleteBets } from "./HandleBets";
@@ -24,7 +24,6 @@ import {
 } from "./MyAccData";
 import {
   RenderContact,
-  AdminMessages,
   backgroundGradient,
 } from "./ContactComponent";
 import { FriendRequests } from "./NotificationComp";
@@ -32,7 +31,7 @@ import { FriendRequests } from "./NotificationComp";
 export {
   Banner,
   Table,
-  Buttons,
+  AddSportButtons,
   Matches,
   SportsDiv,
   NavBar,
