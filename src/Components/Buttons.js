@@ -1,6 +1,7 @@
 import React from "react";
 import Avatar from "react-avatar";
 import { useState } from "react";
+import { useTheme } from "./theme/ThemeContext";
 
 function Button({ buttonData, onClickCallback }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -26,7 +27,8 @@ function Button({ buttonData, onClickCallback }) {
     </div>
   );
 }
-function buttons({ buttonsData, onClickCallback }) {
+
+function SportButtons({ buttonsData, onClickCallback }) {
   return (
     <div className="App p-3 mb-3">
       <div className="container text-center">
@@ -46,7 +48,7 @@ function buttons({ buttonsData, onClickCallback }) {
   );
 }
 
-function AddButtons({ setSelectMatchesType }) {
+function AddSportButtons({ setSelectMatchesType }) {
   const sportButtons = [
     {
       text: "Fighting",
@@ -69,18 +71,32 @@ function AddButtons({ setSelectMatchesType }) {
         "https://th.bing.com/th/id/R.fb35581771dd8c5b57796a08803b05c6?rik=ShSZHJ6HhQGQsQ&riu=http%3a%2f%2fthebeastbrief.com%2fwp-content%2fuploads%2fmlb-logo.jpg&ehk=uuqTVdWYUq2CEu96Ze6aIGgvSDTYJf9j32csiFd9yRQ%3d&risl=&pid=ImgRaw&r=0",
     },
   ];
-  const ButtonsBackground = {
-    background: "linear-gradient(to right, #0B1305 50%, #1e90ff 100%)",
+
+  const { theme } = useTheme();
+
+  const containerStyle = {
+    backgroundColor:
+      theme === "light"
+        ? "#E0E0E0"
+        : theme === "dark"
+        ? "#2A2828" 
+        : "transparent",
+    background:
+      theme === "retro"
+        ? "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)" 
+        : theme === "light"
+        ? "#E0E0E0" 
+        : "#1E1E1E", 
+    color: theme === "light" ? "#000000" : "#FFFFFF",
     borderRadius: "5px",
+    padding: "20px",
   };
+
   return (
     <>
-      <div
-        className="container p-2 mb-3"
-        style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
-      >
+      <div className="container p-2 mb-3" style={containerStyle}>
         <div className="text-center">
-          {buttons({
+          {SportButtons({
             buttonsData: sportButtons,
             onClickCallback: setSelectMatchesType,
           })}
@@ -90,4 +106,4 @@ function AddButtons({ setSelectMatchesType }) {
   );
 }
 
-export default AddButtons;
+export default AddSportButtons;
