@@ -8,13 +8,15 @@ import { handleSendFriendRequest } from "./AddFriends";
 import { BettingOptions } from "../Data";
 import VIPModal from "../Components/modals/vip";
 import { checkAndUpdateTokens } from "../Data/betdata/CheckAndUpdateTokens";
+import { useTheme } from "../Components/theme/ThemeContext"; // Import the useTheme hook
 
-const betsGradient = {
-  background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
-  borderRadius: "1rem",
-};
+// const betsGradient = {
+//   background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
+//   borderRadius: "1rem",
+// };
 
 const BetPage = () => {
+  const { theme } = useTheme(); // Get the current theme from ThemeContext
   const gameInfo = localStorage.getItem(LOCALSTORAGE.SELECTEDGAME);
   const selectedGame = JSON.parse(gameInfo);
 
@@ -25,7 +27,7 @@ const BetPage = () => {
   const [wager, setWager] = useState("");
   const [email, setEmail] = useState("");
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [showvip,setShowvip]=useState(false)
+  const [showvip, setShowvip] = useState(false);
 
   useEffect(() => {
     const fetchLoggedInUser = async () => {
@@ -45,38 +47,38 @@ const BetPage = () => {
           .eq("public_user_id", user.id)
           .single();
 
-          if (userError) {
-            console.error("Error fetching user data:", userError);
-            return;
-          }
-    
-          if (userData.has_donated && userData.donateDate) {
-            const lastDonationDate = new Date(userData.donateDate);
-            const currentDate = new Date();
-            const timeDiff = currentDate - lastDonationDate;
-            const daysDiff = timeDiff / (1000 * 60 * 60 * 24); // Convert to days
-    
-            if (daysDiff > 30) {
-              // Update `has_donated` to false
-              const { error: updateError } = await supabase
-                .from("users")
-                .update({ has_donated: false })
-                .eq("public_user_id", user.id);
-    
-              if (updateError) {
-                console.error("Error updating donation status:", updateError);
-              } else {
-                console.log("User's donation status updated to false.");
-                userData.has_donated = false; // Update local state
-              }
+        if (userError) {
+          console.error("Error fetching user data:", userError);
+          return;
+        }
+
+        if (userData.has_donated && userData.donateDate) {
+          const lastDonationDate = new Date(userData.donateDate);
+          const currentDate = new Date();
+          const timeDiff = currentDate - lastDonationDate;
+          const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+
+          if (daysDiff > 30) {
+            // Update `has_donated` to false
+            const { error: updateError } = await supabase
+              .from("users")
+              .update({ has_donated: false })
+              .eq("public_user_id", user.id);
+
+            if (updateError) {
+              console.error("Error updating donation status:", updateError);
+            } else {
+              console.log("User's donation status updated to false.");
+              userData.has_donated = false; // Update local state
             }
           }
-    
-          const updatedUser = await checkAndUpdateTokens(userData);
-          setLoggedInUser(updatedUser);
-          setUsersFriendList(updatedUser.friends || []);
         }
-      };
+
+        const updatedUser = await checkAndUpdateTokens(userData);
+        setLoggedInUser(updatedUser);
+        setUsersFriendList(updatedUser.friends || []);
+      }
+    };
 
     fetchLoggedInUser();
   }, []);
@@ -89,7 +91,6 @@ const BetPage = () => {
     setSelectedBets({ [betOption]: true });
   };
 
-  
   const placeBet = async () => {
     if (!selectedFriend) {
       alert("Please select a friend to bet with.");
@@ -102,30 +103,28 @@ const BetPage = () => {
     }
     if (!loggedInUser.has_donated && !loggedInUser.is_admin) {
       let betTokens = loggedInUser.betToken || 0;
-    
+
       if (betTokens <= 0) {
         setShowvip(true);
         return;
       }
-    
+
       betTokens -= 1;
-    
+
       const { error: tokenError } = await supabase
         .from("users")
         .update({ betToken: betTokens })
         .eq("public_user_id", loggedInUser.public_user_id);
-    
+
       if (tokenError) {
         console.error("Error updating bet tokens:", tokenError);
         alert("An error occurred while placing your bet. Please try again.");
         return;
       }
-    
+
       // Update the token count in the frontend state
       setLoggedInUser({ ...loggedInUser, betToken: betTokens });
     }
-
-
 
     const newBet = {
       betid: new Date().getTime().toString(),
@@ -182,7 +181,7 @@ const BetPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            toUserEmail: selectedFriend.email
+            toUserEmail: selectedFriend.email,
           }),
         }
       );
@@ -201,10 +200,28 @@ const BetPage = () => {
     navigate(NAVIGATION.MYBETS);
   };
 
+  const cardStyles = {
+    light: {
+      backgroundColor: "#ffffff",
+      color: "#000000",
+      border: "1px solid #ddd",
+    },
+    dark: {
+      backgroundColor: "#1e1e1e",
+      color: "#ffffff",
+      border: "1px solid #444",
+    },
+    retro: {
+      backgroundColor: "#f4e2d8",
+      color: "#2b2b2b",
+      fontFamily: "Courier New, Courier, monospace",
+      border: "2px solid #ff9900",
+    },
+  };
+
   return (
     <div
-      className="container mt-2 text-center p-2 rounded"
-      style={betsGradient}
+      className={`container mt-2 text-center p-2 rounded ${theme}`} // Apply the theme class dynamically
     >
       <VIPModal show={showvip} onClose={() => setShowvip(false)} />
       <div className="set-bet-div text-center">
@@ -212,7 +229,7 @@ const BetPage = () => {
         <p className="set-bet-text">Set Your Bet</p>
         <span className="straight-line"></span>
       </div>
-      <div className="card-body">
+      <div className="card-body" style={cardStyles[theme]}> {/* Apply inline styles */}
         <h5 className="card-title text-center text-info">
           {selectedGame.gameTitle}
         </h5>
