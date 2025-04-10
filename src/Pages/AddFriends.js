@@ -3,19 +3,7 @@ import { supabase } from "../supabaseClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { RenderFriendList } from "../Data";
-
-const HeaderStyle = {
-  fontSize: "3rem",
-  fontWeight: "bold",
-  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  letterSpacing: "0.1em",
-  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-  background: "linear-gradient(45deg, #00b4d8, #90e0ef)",
-  WebkitBackgroundClip: "text",
-  backgroundClip: "text",
-  color: "transparent",
-  display: "inline",
-};
+import { useTheme } from "../Components/theme/ThemeContext"; // Import the useTheme hook
 
 const handleSendFriendRequest = async (email, onSuccess) => {
   const { data: userToRequest, error: userError } = await supabase
@@ -54,7 +42,6 @@ const handleSendFriendRequest = async (email, onSuccess) => {
     alert("Error fetching current user");
     return;
   }
-
 
   const userId = currentUserData.id;
 
@@ -102,27 +89,8 @@ const handleSendFriendRequest = async (email, onSuccess) => {
   }
 };
 
-const fetchFriends = async (userId, setFriends) => {
-  if (!userId) {
-    console.error("fetchFriends called with undefined userId");
-    return;
-  }
-
-  const { data, error } = await supabase
-    .from("users")
-    .select("friends")
-    .eq("id", userId)
-    .single();
-
-  if (error) {
-    console.error("Error fetching friends:", error);
-  } else {
-    const friends = data.friends || [];
-    setFriends(friends);
-  }
-};
-
 const AddFriends = () => {
+  const { theme } = useTheme(); // Get the current theme from ThemeContext
   const [currentUser, setCurrentUser] = useState(null);
   const [email, setEmail] = useState("");
   const [friends, setFriends] = useState([]);
@@ -137,7 +105,6 @@ const AddFriends = () => {
       if (sessionData && sessionData.session) {
         const user = sessionData.session.user;
 
-
         const { data: userData, error: userError } = await supabase
           .from("users")
           .select("*")
@@ -147,7 +114,6 @@ const AddFriends = () => {
         if (userError) {
           console.error("Error fetching user data:", userError);
         } else {
-
           setCurrentUser(userData);
           fetchFriends(userData.id, setFriends);
         }
@@ -159,7 +125,6 @@ const AddFriends = () => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (session && session.user) {
-
           const fetchUserData = async () => {
             const { data: userData, error: userError } = await supabase
               .from("users")
@@ -170,7 +135,6 @@ const AddFriends = () => {
             if (userError) {
               console.error("Error fetching user data:", userError);
             } else {
-
               setCurrentUser(userData);
               fetchFriends(userData.id, setFriends);
             }
@@ -198,10 +162,74 @@ const AddFriends = () => {
     }
   };
 
+  const fetchFriends = async (userId, setFriends) => {
+    if (!userId) {
+      console.error("fetchFriends called with undefined userId");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("friends")
+      .eq("id", userId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching friends:", error);
+    } else {
+      const friends = data.friends || [];
+      setFriends(friends);
+    }
+  };
+
+  // Define inline styles for the page based on the theme
+  const pageStyles = {
+    light: {
+      backgroundColor: "#ffffff",
+      color: "#000000",
+    },
+    dark: {
+      backgroundColor: "#333333",
+      color: "#000000",
+    },
+    retro: {
+      backgroundColor: "#f4e2d8",
+      color: "#2b2b2b",
+      fontFamily: "Courier New, Courier, monospace",
+    },
+  };
+
+  const headerStyles = {
+    light: {
+      fontSize: "3rem",
+      fontWeight: "bold",
+      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      letterSpacing: "0.1em",
+      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+      color: "#00b4d8",
+    },
+    dark: {
+      fontSize: "3rem",
+      fontWeight: "bold",
+      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      letterSpacing: "0.1em",
+      textShadow: "2px 2px 4px rgba(255, 255, 255, 0.5)",
+      color: "#90e0ef",
+    },
+    retro: {
+      fontSize: "3rem",
+      fontWeight: "bold",
+      fontFamily: "'Courier New', Courier, monospace",
+      letterSpacing: "0.1em",
+      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+      color: "#ff9900",
+    },
+  };
+
   return (
-    <div>
+    <div style={pageStyles[theme]} className="container text-center my-5">
       <div className="text-center">
-        <p style={HeaderStyle}>Friends</p>
+        <p style={headerStyles[theme]}>Friends</p> {/* Apply dynamic header styles */}
       </div>
       <div className="input-group mb-3 mx-auto" style={{ maxWidth: "90%" }}>
         <input
@@ -225,7 +253,7 @@ const AddFriends = () => {
       </div>
       {currentUser && (
         <div>
-          <p className="container text-white fs-6 w-75">
+          <p className="container fs-6 w-75" style={{ color: pageStyles[theme].color }}>
             <FontAwesomeIcon icon={faUserGroup} /> {friends.length}
           </p>
           <div className="container p-2">
