@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { LOCALSTORAGE } from "../../Config";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../Components/theme/ThemeContext";
+
 
 const normalizeTeamName = (name) => {
   return name.toLowerCase();
@@ -103,16 +105,15 @@ const MlbTodaysGames = () => {
   useEffect(() => {
     todaysSchedule();
   }, []);
-
   return (
-    <div className="text-white text-center">
+   <>
       <h1>Todays Games</h1>
       <div className="row justify-content-center">
         {todaysGameArr.length > 0 ? (
           todaysGameArr.map((game) => (
             <div
               key={game.gamePk}
-              className="col-3 card m-1"
+              className="col-3 card m-1 "
               style={{ width: "20rem" }}
             >
               <div className="card-body">
@@ -162,18 +163,30 @@ const MlbTodaysGames = () => {
           <p>No live games currently.</p>
         )}
       </div>
-    </div>
+</>
   );
 };
 
 const MlbSchedule = () => {
-  const backgroundColor = {
-    background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
-    borderRadius: "1rem",
-  };
+  const {theme} = useTheme()
+
+const backgroundColor =     theme === "retro"
+      ? {
+          background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
+          color: "#FFFFFF",
+          minHeight: "100vh",
+          width: "100%", // Ensure full width
+        }
+      : {
+          backgroundColor: theme === "light" ? "#e0e0e0" : "#333333",
+          color: theme === "light" ? "#000000" : "#FFFFFF",
+          minHeight: "100vh",
+          width: "100%",
+        };
+  console.log("MlbSchedule rendered with theme:", theme);
   return (
     <div style={backgroundColor} className="container text-center p-2">
-      {MlbTodaysGames()};
+      <MlbTodaysGames/>
     </div>
   );
 };
