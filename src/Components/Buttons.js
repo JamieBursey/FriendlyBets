@@ -2,7 +2,8 @@ import React from "react";
 import Avatar from "react-avatar";
 import { useState } from "react";
 import { useTheme } from "./theme/ThemeContext";
-
+import mlbButton from "../Components/buttonImages/mlbButton.jpeg";
+import mmaLogo from "../Components/buttonImages/mmaLogo.jpeg";
 function Button({ buttonData, onClickCallback }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -53,7 +54,7 @@ function AddSportButtons({ setSelectMatchesType }) {
     {
       text: "Fighting",
       imageURL:
-        "https://th.bing.com/th/id/R.a0bb7371d003fc78ee0b5897a1f6b2b7?rik=%2b0M6k68PsbCVUw&pid=ImgRaw&r=0",
+        mmaLogo
     },
     {
       text: "Hockey",
@@ -68,7 +69,7 @@ function AddSportButtons({ setSelectMatchesType }) {
     {
       text: "Baseball",
       imageURL:
-        "https://th.bing.com/th/id/R.fb35581771dd8c5b57796a08803b05c6?rik=ShSZHJ6HhQGQsQ&riu=http%3a%2f%2fthebeastbrief.com%2fwp-content%2fuploads%2fmlb-logo.jpg&ehk=uuqTVdWYUq2CEu96Ze6aIGgvSDTYJf9j32csiFd9yRQ%3d&risl=&pid=ImgRaw&r=0",
+        mlbButton
     },
   ];
 
