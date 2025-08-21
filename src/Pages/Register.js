@@ -54,6 +54,7 @@ function Register() {
   const [hover, setHover] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const blueButtonStyle = {
     backgroundColor: hover ? "blue" : "#010286",
@@ -110,7 +111,9 @@ const backgroundColor = {
     },
   },
 };
-
+const togglePasswordVisibility = () => {
+  setShowPassword(!showPassword);
+};
   const registerUser = async () => {
     if (!username || !password || !email) {
       alert("Please fill in all fields");
@@ -176,12 +179,29 @@ const styles=backgroundColor[theme] ||backgroundColor.light;
             placeholder="Display Name"
             onChange={(event) => setUserName(event.target.value)}
           />
-          <input
-            type="password"
-            className="form-control mb-3 w-75 mx-auto"
-            placeholder="Enter Password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
+<div className="position-relative w-75 mx-auto mb-3">
+  <input
+    type={showPassword ? "text" : "password"}
+    className="form-control"
+    placeholder="Enter Password"
+    onChange={(event) => setPassword(event.target.value)}
+  />
+  <span
+    onClick={togglePasswordVisibility}
+    style={{
+      position: "absolute",
+      right: "10px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      cursor: "pointer",
+      zIndex: 5,
+      backgroundColor: "white",
+      padding: "0 5px",
+    }}
+  >
+    {showPassword ? "👁️" : "👁️‍🗨️"}
+  </span>
+</div>
           <TeamDropdown teamSelect={setFavoriteTeam} />
           <button
             className="btn mt-4"

@@ -12,6 +12,7 @@ function Login() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [loginHover, setLoginHover] = useState(false);
   const [registerHover, setRegisterHover] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const blueButtonStyle = {
     backgroundColor: loginHover ? "blue" : "#010286",
@@ -21,7 +22,9 @@ function Login() {
     backgroundColor: registerHover ? "#198754" : "#010286",
     color: "white",
   };
-
+const togglePasswordVisibility = () => {
+  setShowPassword(!showPassword);
+};
   const loginHandler = async () => {
     if (!email || !password) {
       alert("Please fill in both email and password");
@@ -82,17 +85,34 @@ function Login() {
               onChange={(event) => setEmail(event.target.value)}
             />
           </div>
-          <div className="mb-3 w-75 mx-auto">
+          <div className="mb-3 w-75 mx-auto position-relative">
             <label htmlFor="password" className="form-label text-white">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               className="form-control"
               id="password"
               placeholder="Enter Password"
               onChange={(event) => setPassword(event.target.value)}
             />
+            <span
+              onClick={togglePasswordVisibility}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "65%", // Adjusted to align with input field
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                zIndex: 5,
+                backgroundColor: "white",
+                padding: "0 5px",
+                borderRadius: "3px",
+                fontSize: "16px",
+              }}
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"}
+            </span>
           </div>
           <div className="text-center">
             <button
