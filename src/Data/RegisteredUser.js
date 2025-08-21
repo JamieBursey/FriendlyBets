@@ -145,54 +145,61 @@ const checkUserPassword = (userPassword, inputPassword) => {
 // }; //moved to friends.js
 
 const TeamDropdown = ({ teamSelect }) => {
-  const [team, setTeam] = useState([]);
-  const [selectedTeam, setSelectedTeam] = useState("");
+  const [team, setTeam] = useState([]); // will hold objects { name, logo }
+  const [selectedTeam, setSelectedTeam] = useState(null);
   const [league, setLeague] = useState("NHL");
 
   useEffect(() => {
     const fetchMLBTeams = async () => {
-      //copy nhl fetch logic
-      // setTeams(mlbTeamLogos);
+      // Future addition
     };
+
     const fetchTeam = async () => {
+      try {
       if (league === "NHL") {
         const response = await fetch(
           "https://friendly-bets-back-end.vercel.app/api/now"
         );
+        if (!response.ok) throw new Error("Network response was not ok");
         const teamData = await response.json();
-        const teamLogos = [];
+        const teamsArr = [];
 
         teamData.gameWeek.forEach((week) => {
           week.games.forEach((game) => {
-            const homeLogo = game.homeTeam.logo;
-            const awayLogo = game.awayTeam.logo;
-            if (!teamLogos.includes(homeLogo)) {
-              teamLogos.push(homeLogo);
-            }
-            if (!teamLogos.includes(awayLogo)) {
-              teamLogos.push(awayLogo);
-            }
+            const homeTeam = { name: game.homeTeam.abbrev, logo: game.homeTeam.logo };
+            const awayTeam = { name: game.awayTeam.abbrev, logo: game.awayTeam.logo };
+
+            if (!teamsArr.find((t) => t.name === homeTeam.name)) teamsArr.push(homeTeam);
+            if (!teamsArr.find((t) => t.name === awayTeam.name)) teamsArr.push(awayTeam);
           });
         });
-        setTeam(teamLogos);
+
+        setTeam(teamsArr);
       } else if (league === "MLB") {
-        // Future addition
         await fetchMLBTeams();
       }
-    };
-    fetchTeam();
-  }, [league]);
-  const handleSelectedTeam = (logo) => {
-    setSelectedTeam(logo);
-    teamSelect(logo);
+    } catch (err) {
+      console.error("Failed to fetch teams:", err);
+    }
   };
+
+  fetchTeam();
+}, [league]);
+
+  const handleSelectedTeam = (teamObj) => {
+    setSelectedTeam(teamObj);
+    teamSelect(teamObj); // pass the whole object or just name/logo as needed
+  };
+
   const handleLeagueChange = (newLeague) => {
     setLeague(newLeague);
-    setSelectedTeam("");
+    setSelectedTeam(null);
   };
+
   return (
     <div className="d-flex justify-content-center align-items-center">
       <div className="d-flex flex-column align-items-center w-100">
+        {/* League Selector */}
         <div className="dropdown w-75 mb-3">
           <button
             className="btn favorite-team-btn dropdown-toggle text-secondary"
@@ -224,8 +231,8 @@ const TeamDropdown = ({ teamSelect }) => {
           </ul>
         </div>
 
+        {/* Team Selector */}
         <div className="dropdown w-75">
-          {/* Dropdown button */}
           <button
             className="btn favorite-team-btn dropdown-toggle text-secondary"
             type="button"
@@ -233,16 +240,18 @@ const TeamDropdown = ({ teamSelect }) => {
             aria-expanded="false"
           >
             {selectedTeam ? (
-              <img
-                src={selectedTeam}
-                style={{ width: "30px", height: "30px" }}
-                alt="Selected Team"
-              />
+              <span className="d-flex align-items-center">
+                <img
+                  src={selectedTeam.logo}
+                  alt={selectedTeam.name}
+                  style={{ width: "30px", height: "30px", marginRight: "10px" }}
+                />
+                {selectedTeam.name}
+              </span>
             ) : (
               "Select Favorite Team"
             )}
           </button>
-          {/* Dropdown menu */}
           <ul className="dropdown-menu">
             {league === "MLB" ? (
               <li>
@@ -251,18 +260,19 @@ const TeamDropdown = ({ teamSelect }) => {
                 </span>
               </li>
             ) : (
-              team.map((logo, index) => (
+              team.map((teamObj, index) => (
                 <li key={index}>
                   <button
-                    className="dropdown-item"
+                    className="dropdown-item d-flex align-items-center"
                     type="button"
-                    onClick={() => handleSelectedTeam(logo)}
+                    onClick={() => handleSelectedTeam(teamObj)}
                   >
                     <img
-                      src={logo}
-                      style={{ width: "30px", height: "30px" }}
-                      alt="Team Logo"
+                      src={teamObj.logo}
+                      alt={teamObj.name}
+                      style={{ width: "30px", height: "30px", marginRight: "10px" }}
                     />
+                    {teamObj.name}
                   </button>
                 </li>
               ))
@@ -273,6 +283,7 @@ const TeamDropdown = ({ teamSelect }) => {
     </div>
   );
 };
+
 
 const RedirectBasedOnLogin = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

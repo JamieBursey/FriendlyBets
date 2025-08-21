@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Logo from "../Components/Logo";
 import { TeamDropdown } from "../Data";
+import { useTheme } from "../Components/theme/ThemeContext";
 
 const RegisterSuccess = ({ message, onClose }) => {
   return (
@@ -42,12 +43,9 @@ const RegisterSuccess = ({ message, onClose }) => {
   );
 };
 
-const backgroundColor = {
-  background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
-  minHeight: "100vh",
-};
 
 function Register() {
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [username, setUserName] = useState(null);
   const [password, setPassword] = useState(null);
@@ -61,9 +59,60 @@ function Register() {
     backgroundColor: hover ? "blue" : "#010286",
     color: "white",
   };
+const backgroundColor = {
+  light: {
+    page: {
+      backgroundColor: "#ffffff",
+      color: "#000000",
+    },
+    card: {
+      backgroundColor: "#f0f0f0",
+      color: "#000000",
+      border: "1px solid #ddd",
+      borderRadius: "10px",
+    },
+    button: {
+      backgroundColor: "#007bff",
+      color: "#ffffff",
+    },
+  },
+  dark: {
+    page: {
+      backgroundColor: "#1e1e1e",
+      color: "#ffffff",
+    },
+    card: {
+      backgroundColor: "#2a2a2a",
+      color: "#ffffff",
+      border: "1px solid #444",
+      borderRadius: "10px",
+    },
+    button: {
+      backgroundColor: "#010286",
+      color: "#ffffff",
+    },
+  },
+  retro: {
+    page: {
+      background: "linear-gradient(boto ttom, #0B1305 0%, #00008B 100%)",
+      color: "#2b2b2b",
+      fontFamily: "Courier New, monospace",
+    },
+    card: {
+      backgroundColor: "#ffe0b2",
+      color: "#2b2b2b",
+      border: "2px solid #ff9900",
+      borderRadius: "10px",
+    },
+    button: {
+      backgroundColor: "#ff9900",
+      color: "#2b2b2b",
+    },
+  },
+};
 
   const registerUser = async () => {
-    if (!username || !password || !email || !favoriteTeam) {
+    if (!username || !password || !email) {
       alert("Please fill in all fields");
       return;
     }
@@ -103,13 +152,13 @@ function Register() {
       setShowPopup(true);
     }
   };
-
+const styles=backgroundColor[theme] ||backgroundColor.light;
   return (
-    <div style={backgroundColor}>
+    <div style={styles.page}>
       <Logo />
       <div
         className="container mx-auto mt-2 p-3"
-        style={{ backgroundColor: "#1E1E1E", borderRadius: "5px" }}
+        style={styles.card}
       >
         <div className="card-body text-center">
           <h3 className="card-title text-center w-50 mb-4 register-text mx-auto ">
@@ -161,4 +210,4 @@ function Register() {
 }
 
 export { Register };
-export default backgroundColor;
+
