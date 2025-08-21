@@ -10,10 +10,6 @@ import VIPModal from "../Components/modals/vip";
 import { checkAndUpdateTokens } from "../Data/betdata/CheckAndUpdateTokens";
 import { useTheme } from "../Components/theme/ThemeContext"; // Import the useTheme hook
 
-// const betsGradient = {
-//   background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
-//   borderRadius: "1rem",
-// };
 
 const BetPage = () => {
   const { theme } = useTheme(); // Get the current theme from ThemeContext
@@ -221,7 +217,7 @@ const BetPage = () => {
 
   return (
     <div
-      className={`container mt-2 text-center p-2 rounded ${theme}`} // Apply the theme class dynamically
+      className={`container mt-2 text-center p-2 rounded ${theme}`}
     >
       <VIPModal show={showvip} onClose={() => setShowvip(false)} />
       <div className="set-bet-div text-center">
