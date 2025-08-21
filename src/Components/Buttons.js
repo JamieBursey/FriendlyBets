@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useTheme } from "./theme/ThemeContext";
 import mlbButton from "../Components/buttonImages/mlbButton.jpeg";
 import mmaLogo from "../Components/buttonImages/mmaLogo.jpeg";
+import nhlButton from "../Components/buttonImages/nhlButton.jpeg";
+import footBallButton from "../Components/buttonImages/footBallButton.png"; 
+
 function Button({ buttonData, onClickCallback }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -59,12 +62,12 @@ function AddSportButtons({ setSelectMatchesType }) {
     {
       text: "Hockey",
       imageURL:
-        "https://th.bing.com/th/id/OIP.OyDSRCeMcmx2QRVzAuJilQHaId?pid=ImgDet&rs=1",
+       nhlButton
     },
     {
       text: "Football",
       imageURL:
-        "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/National_Football_League_logo.svg/380px-National_Football_League_logo.svg.png",
+        footBallButton
     },
     {
       text: "Baseball",
