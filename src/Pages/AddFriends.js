@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { RenderFriendList } from "../Data";
 import { useTheme } from "../Components/theme/ThemeContext"; // Import the useTheme hook
-
-const handleSendFriendRequest = async (email, onSuccess) => {
+import PopUpMessages from "../Components/modals/PopUpMessages";
+const handleSendFriendRequest = async (email, onSuccess,showPopup) => {
   const { data: userToRequest, error: userError } = await supabase
     .from("users")
     .select("*")
@@ -54,7 +54,9 @@ const handleSendFriendRequest = async (email, onSuccess) => {
       return;
     }
 
-    alert("Friend request sent");
+          showPopup("Success", "Friend request sent", () => {
+        onSuccess();
+      });
 
     // Notify existing user
     await fetch("https://friendly-bets-back-end.vercel.app/api/friendRequest", {
@@ -81,7 +83,7 @@ const handleSendFriendRequest = async (email, onSuccess) => {
       }),
     });
 
-    alert("Invitation sent to join FriendlyBets");
+  showPopup("Invitation Sent", "Invitation sent to join FriendlyBets");
   }
 };
 
@@ -91,7 +93,12 @@ const AddFriends = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [email, setEmail] = useState("");
   const [friends, setFriends] = useState([]);
+    const [popup, setPopup] = useState({ show: false, title: "", message: "", onConfirm: null });
 
+      const showPopup = (title, message, onConfirm = null) => {
+    setPopup({ show: true, title, message, onConfirm });
+  };
+  const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const { data: sessionData, error } = await supabase.auth.getSession();
@@ -240,7 +247,7 @@ const AddFriends = () => {
         <div className="input-group-append">
           <button
             className="btn btn-outline-success btn-sm"
-            onClick={() => handleSendFriendRequest(email, onSuccess)}
+            onClick={() => handleSendFriendRequest(email, onSuccess,showPopup)}
             type="button"
             style={{ flex: "0 0 auto" }}
           >
@@ -262,6 +269,7 @@ const AddFriends = () => {
           </div>
         </div>
       )}
+      <PopUpMessages show={popup.show} onClose={closePopup} title={popup.title} message={popup.message} onConfirm={popup.onConfirm} />
     </div>
   );
 };

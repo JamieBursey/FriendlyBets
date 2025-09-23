@@ -24,6 +24,13 @@ const BetPage = () => {
   const [email, setEmail] = useState("");
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [showvip, setShowvip] = useState(false);
+  const [popup, setPopup] = useState({ show: false, title: "", message: "", onConfirm: null });
+
+  const showPopup = (title, message, onConfirm = null) => {
+  setPopup({ show: true, title, message, onConfirm });
+};
+
+const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
 
   useEffect(() => {
     const fetchLoggedInUser = async () => {
@@ -185,7 +192,7 @@ const BetPage = () => {
       const result = await response.json();
 
       if (response.ok) {
-        alert("Friend request sent and notification email sent successfully");
+        showPopup("User not found, invite sent")
         onSuccess();
       } else {
         console.error("Error:", result.message);
@@ -271,7 +278,7 @@ const BetPage = () => {
             <button
               style={{ height: "3rem", width: "6rem" }}
               className="btn btn-outline-info ms-2"
-              onClick={() => handleSendFriendRequest(email, onSuccess)}
+              onClick={() => handleSendFriendRequest(email, onSuccess,showPopup)}
               type="button"
             >
               Send
