@@ -12,12 +12,6 @@ const handleSendFriendRequest = async (email, onSuccess) => {
     .eq("email", email)
     .single();
 
-  if (userError || !userToRequest) {
-    console.error("Error fetching user to request:", userError);
-    alert("User Not Found");
-    return;
-  }
-
   const { data: sessionData, error: sessionError } =
     await supabase.auth.getSession();
 
@@ -35,59 +29,62 @@ const handleSendFriendRequest = async (email, onSuccess) => {
     .single();
 
   if (currentUserError || !currentUserData) {
-    console.error(
-      "Error fetching current user from users table:",
-      currentUserError
-    );
+    console.error("Error fetching current user from users table:", currentUserError);
     alert("Error fetching current user");
     return;
   }
 
   const userId = currentUserData.id;
 
-  const { error: friendRequestError } = await supabase
-    .from("friend_requests")
-    .insert([
-      {
-        from_user: userId,
-        to_user: userToRequest.id,
-        status: "pending",
-      },
-    ]);
-
-  if (friendRequestError) {
-    console.error("Error sending friend request:", friendRequestError);
-    alert("Error sending friend request");
-  } else {
-    alert("Friend request sent");
-    try {
-      const response = await fetch(
-        "https://friendly-bets-back-end.vercel.app/api/friendRequest",
+  // ✅ CASE 1: User exists → send friend request
+  if (userToRequest) {
+    const { error: friendRequestError } = await supabase
+      .from("friend_requests")
+      .insert([
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            toUserEmail: email,
-          }),
-        }
-      );
+          from_user: userId,
+          to_user: userToRequest.id,
+          status: "pending",
+        },
+      ]);
 
-      const result = await response.json();
-
-      if (response.ok) {
-        alert("Friend request sent and notification email sent successfully");
-        onSuccess();
-      } else {
-        console.error("Error:", result.message);
-      }
-    } catch (error) {
+    if (friendRequestError) {
+      console.error("Error sending friend request:", friendRequestError);
+      alert("Error sending friend request");
       return;
     }
+
+    alert("Friend request sent");
+
+    // Notify existing user
+    await fetch("https://friendly-bets-back-end.vercel.app/api/friendRequest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        toUserEmail: email,
+        type: "friend_request",
+      }),
+    });
+
     onSuccess();
+  } 
+  // ✅ CASE 2: User not found → send invite
+  else {
+    console.log("User not found, sending invite email");
+
+    await fetch("https://friendly-bets-back-end.vercel.app/api/inviteFriend", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        toUserEmail: email,
+        type: "invite",  // new type
+      }),
+    });
+
+    alert("Invitation sent to join FriendlyBets");
   }
 };
+
 
 const AddFriends = () => {
   const { theme } = useTheme(); // Get the current theme from ThemeContext
