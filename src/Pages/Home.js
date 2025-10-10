@@ -5,9 +5,11 @@ import Logo from "../Components/Logo.js";
 import { supabase } from "../supabaseClient.js";
 import { checkAndUpdateTokens } from "../Data/betdata/CheckAndUpdateTokens.js";
 import { useTheme } from "../Components/theme/ThemeContext.js";
+import SeasonalStart from "../Components/theme/SeasonalStart.js";
 function Home() {
   const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [showseasonTheme, setShowSeasonTheme] = useState(true);
   const { theme } = useTheme();
   const backgroundColor = {
     backgroundColor:
@@ -25,6 +27,11 @@ function Home() {
     color: theme === "light" ? "#000000" : "#FFFFFF",
     minHeight: "100vh", 
   };
+    useEffect(() => {
+    const timer = setTimeout(() => setShowSeasonTheme(false), 4000); // 4 seconds
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const fetchLoggedInUser = async () => {
       const { data: sessionData, error: sessionError } =
@@ -75,6 +82,8 @@ function Home() {
       <Logo />
       <AddSportButtons setSelectMatchesType={setSelectMatchesUI} />
       {selectMatchesUI()}
+      {showseasonTheme && <SeasonalStart onFinish={() => setShowSeasonTheme(false)} />}
+
     </div>
   );
 }
