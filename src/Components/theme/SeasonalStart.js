@@ -5,12 +5,12 @@ const SeasonalStart = ({ onFinish }) => {
   const [month, setMonth] = useState("");
 
   useEffect(() => {
-    const currentMonth = new Date().getMonth(); // 0 = Jan, 9 = Oct, 11 = Dec
+    const currentMonth = new Date().getMonth();
     if (currentMonth === 9) setMonth("october");
     else if (currentMonth === 11) setMonth("december");
     else setMonth("default");
 
-    // Automatically close animation after 3 seconds
+    
     const timer = setTimeout(() => {
       onFinish();
     }, 3000);
@@ -26,6 +26,12 @@ const SeasonalStart = ({ onFinish }) => {
             src="/animations/halloween.gif"
             alt="Skeleton Stickhandling"
             className="skeleton"
+          />
+                    <img
+            src="/animations/SkeletonHockey.gif"
+            alt="Skeleton"
+            className="skeleton"
+            height={100}
           />
         </div>
       )}
