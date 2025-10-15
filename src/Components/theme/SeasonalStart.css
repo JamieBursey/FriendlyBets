@@ -4,16 +4,16 @@
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* so it doesn't block clicks */
-  z-index: 9999;        /* stays on top */
-  overflow: visible;    /* allow animation outside bounds */
+  pointer-events: none;
+  z-index: 9999;      
+  overflow: visible; 
 }
 
 
 /* Skeleton animation */
 .skeleton {
   width: 150px;
-  animation: skateAcross 3s linear forwards;
+  animation: skateAcross 6s linear forwards;
 }
 
 @keyframes skateAcross {

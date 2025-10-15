@@ -13,7 +13,7 @@ const SeasonalStart = ({ onFinish }) => {
     
     const timer = setTimeout(() => {
       onFinish();
-    }, 3000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, [onFinish]);
@@ -28,7 +28,7 @@ const SeasonalStart = ({ onFinish }) => {
             className="skeleton"
           />
                     <img
-            src="/animations/SkeletonHockey.gif"
+            src="/animations/HockeySkeleton.gif"
             alt="Skeleton"
             className="skeleton"
             height={100}
