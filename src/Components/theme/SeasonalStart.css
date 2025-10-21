@@ -10,7 +10,6 @@
 }
 
 
-/* Skeleton animation */
 .skeleton {
   width: 150px;
   animation: skateAcross 6s linear forwards;
@@ -25,7 +24,25 @@
   }
 }
 
-/* Santa animation */
+.RD-animation {
+  width: 200px;
+  animation: fadeInOut 10s ease-in-out forwards;
+}
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .santa {
   width: 200px;
   animation: flyAcross 3s ease-in-out forwards;

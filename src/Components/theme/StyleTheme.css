@@ -23,11 +23,11 @@
   }
   
   .theme-toggle input[type="radio"]:checked {
-    background-color: #007bff; /* Change color based on theme */
+    background-color: #007bff; 
     border-color: #007bff;
   }
   
-  /* Theme-specific styles for the toggle */
+ 
   .theme-toggle.light input[type="radio"]:checked {
     background-color: #007bff;
     border-color: #007bff;
@@ -43,7 +43,7 @@
     border-color: #ffc107;
   }
 
-  /* Modal Styles */
+
 .modal-overlay {
   position: fixed;
   top: 0;
