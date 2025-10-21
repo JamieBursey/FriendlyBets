@@ -8,6 +8,7 @@ const SeasonalStart = ({ onFinish }) => {
     const currentMonth = new Date().getMonth();
     if (currentMonth === 9) setMonth("october");
     else if (currentMonth === 11) setMonth("december");
+    else if (currentMonth === 10) setMonth("november");
     else setMonth("default");
 
     
@@ -35,7 +36,15 @@ const SeasonalStart = ({ onFinish }) => {
           />
         </div>
       )}
-
+{month === "november" && (
+        <div className="rememberance-container">
+          <img
+            src="/animations/rememberanceDay.gif"
+            alt="rememberance Day"
+            className="RD-animation"
+          />
+        </div>
+      )}
       {month === "december" && (
         <div className="santa-container">
           <img

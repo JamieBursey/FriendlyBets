@@ -32,7 +32,6 @@ const BetPage = () => {
 
 const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
 
-  useEffect(() => {
     const fetchLoggedInUser = async () => {
       const { data: sessionData, error: sessionError } =
         await supabase.auth.getSession();
@@ -82,6 +81,7 @@ const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
         setUsersFriendList(updatedUser.friends || []);
       }
     };
+  useEffect(() => {
 
     fetchLoggedInUser();
   }, []);
@@ -226,7 +226,9 @@ const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
     <div
       className={`container mt-2 text-center p-2 rounded ${theme}`}
     >
-      <VIPModal show={showvip} onClose={() => setShowvip(false)} />
+      <VIPModal show={showvip} onClose={() => setShowvip(false)} onDonationSuccess={async()=>{
+        await fetchLoggedInUser();
+      }} />
       <div className="set-bet-div text-center">
         <span className="straight-line"></span>
         <p className="set-bet-text">Set Your Bet</p>

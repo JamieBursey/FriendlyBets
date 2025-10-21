@@ -2,13 +2,14 @@ import { supabase } from "../../supabaseClient";
 import { useState } from "react";
 import PopUpMessages from "./PopUpMessages";
 
-const CardInfoModal = ({ show, onClose }) => {
+const CardInfoModal = ({ show, onClose,onDonationSuccess }) => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
   
     const handlePurchase = async () => {
       setSuccessMessage("Thank you for your purchase! Your VIP status has been activated.");
       setShowSuccessMessage(true);
+      
   
 
       const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
@@ -30,6 +31,7 @@ const CardInfoModal = ({ show, onClose }) => {
           setSuccessMessage("An error occurred. Please try again.");
           return;
         }
+        if (onDonationSuccess) onDonationSuccess();
       }
   
       setTimeout(() => {

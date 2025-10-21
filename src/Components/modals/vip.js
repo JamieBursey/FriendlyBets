@@ -1,7 +1,7 @@
 import CardInfoModal from "./CardInfoModal";
 import { useState } from "react";
 
-const VIPModal = ({ show, onClose }) => {
+const VIPModal = ({ show, onClose,onDonationSuccess }) => {
     const [showCardModal, setShowCardModal] = useState(false);
   
     if (!show) return null;
@@ -40,6 +40,7 @@ const VIPModal = ({ show, onClose }) => {
             setShowCardModal(false); // Hide CardInfoModal
             onClose(); // Hide VIPModal
           }}
+          onDonationSuccess={onDonationSuccess}
         />
       </>
     );
