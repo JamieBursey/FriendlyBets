@@ -10,7 +10,7 @@ import { useFriends } from "./data/fetchFriends";
 import { useChatRooms } from "./data/useChatRooms";
 import { useMessages } from "./data/useMessages";
 import LeaveChatModal from "./LeaveChatModal";
-import AddPeopleModal from "./data/AddPeopleModal";
+import AddPeopleModal from "./data/AddPeopleModal"; 
 import "./MessengerUI.css";
 
 
@@ -105,7 +105,7 @@ const leaveChat = async () => {
       .eq("user_id", currentUserId);
     if (delErr) throw delErr;
 
-    // 2) check remaining participants
+
     const { data: remaining, error: remErr } = await supabase
       .from("chat_participants")
       .select("user_id", { count: "exact", head: false })
@@ -113,12 +113,12 @@ const leaveChat = async () => {
     if (remErr) throw remErr;
 
     if (!remaining || remaining.length === 0) {
-      // I was the last → delete messages then room
+
       await supabase.from("chat_messages").delete().eq("chat_id", activeChatId);
       await supabase.from("chat_rooms").delete().eq("id", activeChatId);
     } else {
       // still members → post a system-like message for others
-      const whoLeft = publicUser?.username || "Someone";
+      const whoLeft = publicUser?.username || "";
       await supabase.from("chat_messages").insert([{
         chat_id: activeChatId,
         sender_id: currentUserId, // stored as me; I won't see it after leaving
@@ -248,7 +248,7 @@ const startChat = async () => {
         : (() => {
             const who =
               room.participants.find((p) => p.id === room.latestMessage.sender_id)?.username ||
-              "Someone";
+              "";
             return `${who}: `;
           })();
       return truncate(prefix + room.latestMessage.content, 40);
@@ -271,7 +271,7 @@ const startChat = async () => {
           <h3 className="msn-title">MSN Reborn</h3>
 
           {/* Start New Chat */}
-          <div className="friends-list">
+          <div className="friends-list start-chat-section">
             <h4 style={{ margin: "10px 0 5px 10px", fontSize: "0.95rem" }}>Start New Chat</h4>
 
             {friendsLoading ? (
@@ -306,8 +306,8 @@ const startChat = async () => {
             Start Chat
           </button>
 
-          {/* Your Chats (sorted by activity, with preview + time) */}
-          <div className="friends-list">
+
+          <div className="friends-list chats-section">
             <h4 style={{ margin: "10px 0 5px 10px", fontSize: "0.95rem" }}>Your Chats</h4>
             {chatRooms.map((room) => (
               <div

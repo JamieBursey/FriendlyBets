@@ -1,4 +1,4 @@
-// src/components/messages/AddPeopleModal.jsx
+
 import React, { useState } from "react";
 
 const AddPeopleModal = ({ open, friends, existing, onCancel, onConfirm }) => {
