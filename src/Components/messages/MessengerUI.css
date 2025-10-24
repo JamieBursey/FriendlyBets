@@ -322,3 +322,29 @@
     border-left: 4px solid #fff;
   }
 }
+
+/* ✅ Ensure modal always centers on all devices */
+.msn-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.35);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* ✅ Fix modal width on small screens */
+.msn-modal {
+  width: 90%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+/* ✅ Ensure scrolling background doesn’t shift modal */
+@media (max-width: 768px) {
+  body {
+    overflow: hidden; /* prevent background scroll pulling modal */
+  }
+}
