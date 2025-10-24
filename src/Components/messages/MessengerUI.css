@@ -3,7 +3,7 @@
   height: 90vh;
   background: linear-gradient(180deg, #dfe9f3 0%, #ffffff 100%);
   border-radius: 10px;
-  overflow: hidden; /* was scroll – caused mobile bugs */
+  overflow: hidden; 
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
@@ -70,6 +70,13 @@
   flex: 1;
   overflow-y: auto;
 }
+@media (max-width: 768px) {
+  .friends-list {
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255,255,255,0.25);
+    margin-bottom: 8px;
+  }
+}
 
 .friend-item {
   display: flex;
@@ -84,9 +91,6 @@
   background: rgba(255,255,255,0.2);
 }
 
-.friend-item.active {
-  background: rgba(255,255,255,0.3);
-}
 
 .friend-avatar {
   font-size: 1.6rem;
@@ -279,4 +283,42 @@
 
 .friend-select-item.active .friend-select-check {
   visibility: visible;
+}
+
+
+@media (max-width: 768px) {
+  .start-chat-section {
+    background: rgba(255, 255, 255, 0.15);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 5px;
+  }
+
+  .chats-section {
+    background: rgba(0, 0, 0, 0.1);
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 5px;
+  }
+
+  .sidebar-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    opacity: 0.9;
+    padding-left: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Improve list spacing */
+  .friend-item {
+    border-radius: 4px;
+    margin: 4px 8px;
+    padding: 10px;
+  }
+
+  /* Highlight active chat stronger */
+  .friend-item.active {
+    background: rgba(255, 255, 255, 0.6);
+    border-left: 4px solid #fff;
+  }
 }
