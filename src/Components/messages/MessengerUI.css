@@ -342,9 +342,3 @@
   margin: 0 auto;
 }
 
-/* ✅ Ensure scrolling background doesn’t shift modal */
-@media (max-width: 768px) {
-  body {
-    overflow: hidden; /* prevent background scroll pulling modal */
-  }
-}
