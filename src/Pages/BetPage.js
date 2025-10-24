@@ -61,7 +61,7 @@ const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
           const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
 
           if (daysDiff > 30) {
-            // Update `has_donated` to false
+         
             const { error: updateError } = await supabase
               .from("users")
               .update({ has_donated: false })
@@ -71,7 +71,7 @@ const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
               console.error("Error updating donation status:", updateError);
             } else {
               console.log("User's donation status updated to false.");
-              userData.has_donated = false; // Update local state
+              userData.has_donated = false;
             }
           }
         }
@@ -226,9 +226,10 @@ const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
     <div
       className={`container mt-2 text-center p-2 rounded ${theme}`}
     >
-      <VIPModal show={showvip} onClose={() => setShowvip(false)} onDonationSuccess={async()=>{
+      <div>      <VIPModal show={showvip} onClose={() => setShowvip(false)} onDonationSuccess={async()=>{
         await fetchLoggedInUser();
-      }} />
+      }} /></div>
+
       <div className="set-bet-div text-center">
         <span className="straight-line"></span>
         <p className="set-bet-text">Set Your Bet</p>

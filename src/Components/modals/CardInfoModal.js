@@ -42,7 +42,18 @@ const CardInfoModal = ({ show, onClose,onDonationSuccess }) => {
     if (!show) return null;
   
     return (
-      <div className="modal" style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+ <div
+  className="modal show d-flex align-items-center justify-content-center"
+  style={{
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 1050,
+  }}
+>
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
