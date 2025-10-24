@@ -10,15 +10,9 @@ import { useFriends } from "./data/fetchFriends";
 import { useChatRooms } from "./data/useChatRooms";
 import { useMessages } from "./data/useMessages";
 import LeaveChatModal from "./LeaveChatModal";
+import AddPeopleModal from "./data/AddPeopleModal";
 import "./MessengerUI.css";
 
-// ---- helpers ----
-const sameSet = (a, b) => {
-  if (a.length !== b.length) return false;
-  const A = new Set(a);
-  for (const x of b) if (!A.has(x)) return false;
-  return true;
-};
 
 const fmtRelTime = (iso) => {
   if (!iso) return "";
@@ -62,6 +56,7 @@ const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   // rooms the user is in (participants resolved to {id, username}), sorted by last activity
   const { chatRooms, loading: chatLoading, refresh } = useChatRooms(currentUserId);
+const [showAddModal, setShowAddModal] = useState(false);
 
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
@@ -82,6 +77,21 @@ const activeRoomLabel = activeRoom
       : activeRoom.name || activeRoom.participants.filter(p => p.id !== currentUserId).map(p => p.username).join(", "))
   : "";
 
+  const availableToAdd = friends.filter(
+  f => !activeRoom?.participants.some(p => p.id === f.public_user_id)
+);
+const handleAddPeople = async (newUserIds) => {
+  if (!activeChatId) return;
+  const rows = newUserIds.map(uid => ({ chat_id: activeChatId, user_id: uid }));
+
+  const { error } = await supabase.from("chat_participants").insert(rows);
+  if (error) {
+    console.error("Error adding people:", error);
+  } else {
+    await refresh(); // reload rooms
+    setShowAddModal(false); // close modal
+  }
+};
 // LEAVE CHAT: core logic
 const leaveChat = async () => {
   try {
@@ -328,6 +338,11 @@ const startChat = async () => {
   </button>
   <h4 style={{ flex: 1 }}>{displayRoomName}</h4>
   {/* Leave Chat action */}
+  <button
+  className="msn-btn xp-secondary"
+  onClick={() => setShowAddModal(true)}>
+  Add People
+</button>
   <button className="msn-btn xp-secondary" onClick={() => setShowLeaveModal(true)}>
     Leave Chat
   </button>
@@ -395,6 +410,13 @@ const startChat = async () => {
   chatName={activeRoomLabel}
   onCancel={() => setShowLeaveModal(false)}
   onConfirm={leaveChat}
+/>
+<AddPeopleModal
+  open={showAddModal}
+  friends={availableToAdd}
+  existing={activeRoom?.participants}
+  onCancel={() => setShowAddModal(false)}
+  onConfirm={handleAddPeople}
 />
     </div>
   );
