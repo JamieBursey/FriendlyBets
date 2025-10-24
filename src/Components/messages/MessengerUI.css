@@ -214,8 +214,69 @@
   height: 20px;
   vertical-align: middle;
 }
+.msn-btn.xp-primary {
+  background: linear-gradient(180deg, #34a0ff 0%, #1b76d1 100%);
+  color: white;
+  border: 1px solid #0d5faf;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+}
 
+.msn-btn.xp-primary:hover {
+  background: linear-gradient(180deg, #1b76d1 0%, #0d5faf 100%);
+}
 /* Modal Buttons */
 .msn-btn.xp-secondary {
-  margin-left: auto;
+  background: linear-gradient(180deg, #f6f6f6 0%, #e0e0e0 100%);
+  color: #333;
+  border: 1px solid #b5b5b5;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+}
+
+.msn-btn.xp-secondary:hover {
+  background: linear-gradient(180deg, #eaeaea 0%, #d4d4d4 100%);
+}
+
+/* Friend selector inside AddPeopleModal */
+.add-people-list {
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid #d0d7e2;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.friend-select-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 6px;
+  background: white;
+  border: 1px solid #e4e4e4;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+}
+
+.friend-select-item:hover {
+  background: #f0f7ff;
+  border-color: #7bb4ff;
+}
+
+.friend-select-item.active {
+  background: #d9ecff;
+  border-color: #1b76d1;
+  font-weight: bold;
+}
+
+.friend-select-check {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1b76d1;
+  visibility: hidden;
+}
+
+.friend-select-item.active .friend-select-check {
+  visibility: visible;
 }
