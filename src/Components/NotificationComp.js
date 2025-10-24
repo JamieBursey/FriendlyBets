@@ -4,7 +4,8 @@ import { acceptFriendRequest, rejectFriendRequest } from "../Data";
 
 const FriendRequests = () => {
   const [requests, setRequests] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); 
+  const [processingId, setProcessingId] = useState(null);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -63,7 +64,9 @@ const FriendRequests = () => {
   };
 
   const handleAccept = async (requestId) => {
+    setProcessingId(requestId);
     await acceptFriendRequest(requestId, async () => {
+      
       setRequests(requests.filter((request) => request.id !== requestId));
       const { data: updatedUser, error } = await supabase.auth.getUser();
       if (error) {
@@ -91,12 +94,13 @@ const FriendRequests = () => {
                     {request.users.username}
                   </h5>
                   <p className="card-text">Would like to be your friend</p>
-                  <button
-                    onClick={() => handleAccept(request.id)}
-                    className="btn btn-primary mr-2"
-                  >
-                    Accept
-                  </button>
+<button
+  onClick={() => handleAccept(request.id)}
+  className="btn btn-primary mr-2"
+  disabled={processingId === request.id}
+>
+  {processingId === request.id ? "Accepting..." : "Accept"}
+</button>
                   <button
                     onClick={() => handleRejectFriend(request.id)}
                     className="btn btn-secondary mx-2"
