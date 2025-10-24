@@ -191,6 +191,12 @@ function NavBar() {
                   </li>
                 )}
                 <li>
+                                    <button
+                    className="dropdown-item"
+                    onClick={() => navigate("/Messages")}
+                  >
+                    Messages
+                  </button>
                   <button
                     className="dropdown-item"
                     onClick={() => navigate("/fullSchedule")}

@@ -7,6 +7,7 @@ import { MyAccount } from "./MyAccount";
 import { AddFriends, handleSendFriendRequest } from "./AddFriends";
 // import { FetchFromAPI } from "./Tests/FetchFromAPI";
 import { FullSchedule } from "./FullSchedule";
+import { Messages } from "./Messages";
 import { BetPage } from "./BetPage";
 import { MyBets, Loader } from "./MyBets";
 import { UpdateMyAccount } from "./UpdateMyAcc";
@@ -36,4 +37,5 @@ export {
   handleSendFriendRequest,
   LandingPage,
   Loader,
+  Messages
 };

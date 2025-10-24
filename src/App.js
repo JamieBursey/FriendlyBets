@@ -18,6 +18,7 @@ import {
   UserManagement,
   EditUserAsAdmin,
   NflWeeklySchedulePage,
+  Messages,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -77,6 +78,14 @@ function App() {
             element={
               <RedirectBasedOnLogin>
                 <FullSchedule />
+              </RedirectBasedOnLogin>
+            }
+          />
+                    <Route
+            path="/Messages"
+            element={
+              <RedirectBasedOnLogin>
+                <Messages/>
               </RedirectBasedOnLogin>
             }
           />
