@@ -30,6 +30,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0;
   }
 
   .chat-header .menu-btn {
@@ -124,8 +125,9 @@
 
 .chat-body {
   flex: 1;
+  min-height: 0;
   padding: 15px;
-  overflow-y: auto;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -152,9 +154,11 @@
 
 /* Chat Input */
 .chat-input {
+    flex-shrink: 0;
   display: flex;
   border-top: 1px solid #ccc;
   background: white;
+  padding: 5px;
 }
 
 .chat-input input {
