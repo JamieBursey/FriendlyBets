@@ -348,23 +348,31 @@ const startChat = async () => {
   </button>
 </div>
 
-          <div className="chat-body">
-            {messagesLoading ? (
-              <p style={{ color: "#555" }}>Loading messages…</p>
-            ) : (
-              messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`chat-bubble ${msg.sender_id === currentUserId ? "sent" : "received"}`}
-                >
-                  <div>{renderMessageContent(msg.content)}</div>
-                  <div style={{ fontSize: "0.75rem", opacity: 0.7, marginTop: 4, textAlign: "right" }}>
-                    {fmtRelTime(msg.created_at)}
-                  </div>
-                </div>
-              ))
-            )}
+<div className="chat-body">
+  {messagesLoading ? (
+    <p style={{ color: "#555" }}>Loading messages…</p>
+  ) : (
+    messages.map((msg) => {
+      const sender = activeRoom?.participants.find(p => p.id === msg.sender_id);
+      const senderName = sender?.username || "Unknown";
+
+      return (
+        <div key={msg.id} className={`chat-message-wrapper ${msg.sender_id === currentUserId ? "sent" : "received"}`}>
+          {/* ✅ Show sender name only in group chat AND only for others */}
+          {activeRoom?.type === "group" && msg.sender_id !== currentUserId && (
+            <div className="sender-name">{senderName}</div>
+          )}
+
+          <div className={`chat-bubble ${msg.sender_id === currentUserId ? "sent" : "received"}`}>
+            {renderMessageContent(msg.content)}
+            <div className="timestamp">{fmtRelTime(msg.created_at)}</div>
           </div>
+        </div>
+      );
+    })
+  )}
+</div>
+
 
           {showEmojiPicker && (
             <div className="emoji-picker">
