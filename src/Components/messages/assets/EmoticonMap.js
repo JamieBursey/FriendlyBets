@@ -5,6 +5,7 @@ export const emojiMap = {
   "(y)": "/assets/emoticons/like.png",
   "(n)": "/assets/emoticons/dislike.png",
   "<3": "/assets/emoticons/heart.png",
+  "</3": "/assets/emoticons/brokenHeart.gif",
   ":'(": "/assets/emoticons/sad.png",
   ";'(":  "/assets/emoticons/cry.png",
   "|-)": "/assets/emoticons/bored.png",
@@ -21,6 +22,8 @@ export const emojiMap = {
   "(6)": "/assets/emoticons/devil.png",
 
   "(K)": "/assets/emoticons/kiss.png",
+  "(Li)": "/assets/emoticons/lightning.gif",
+
 
 
 };
