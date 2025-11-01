@@ -4,20 +4,35 @@ import "./SeasonalStart.css";
 const SeasonalStart = ({ onFinish }) => {
   const [month, setMonth] = useState("");
 
-  useEffect(() => {
-    const currentMonth = new Date().getMonth();
-    if (currentMonth === 9) setMonth("october");
-    else if (currentMonth === 11) setMonth("december");
-    else if (currentMonth === 10) setMonth("november");
-    else setMonth("default");
+useEffect(() => {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentDay = currentDate.getDate();
 
-    
-    const timer = setTimeout(() => {
-      onFinish();
-    }, 10000);
 
-    return () => clearTimeout(timer);
-  }, [onFinish]);
+  if (currentMonth === 9) setMonth("october"); // October
+  else if (currentMonth === 11) setMonth("december"); // December
+  else if (currentMonth === 10) {
+    const remembranceDay = 11; 
+    const oneWeekAfter = remembranceDay + 7;
+
+    if (currentDay >= remembranceDay - 11 && currentDay <= oneWeekAfter) {
+      setMonth("november");
+    } else {
+      setMonth("default");
+    }
+  } else {
+    setMonth("default");
+  }
+
+  // Automatically stop the animation after 10 seconds
+  const timer = setTimeout(() => {
+    onFinish();
+  }, 10000);
+
+  return () => clearTimeout(timer);
+}, [onFinish]);
+
 
   return (
     <div className="seasonal-startup">
