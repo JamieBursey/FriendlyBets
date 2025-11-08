@@ -124,7 +124,7 @@ function RenderContact() {
 
             <li>
               <i className="fas fa-envelope mt-4 fa-2x"></i>
-              <p>Jamie4551@gmail.com</p>
+              <p>example@email.com</p>
             </li>
             <li>
               <i className="fa-brands fa-github"></i>
@@ -195,12 +195,13 @@ const AdminMessages = () => {
                         {message.email}
                       </h6>
                       <p className="card-text">{message.message}</p>
-                      <a href="#" className="btn btn-primary">
+                      <a href="index.html" className="btn btn-primary">
                         Home
                       </a>
                     </div>
                     <div className="card-footer text-body-secondary">
                       <a
+                        href="index.html"
                         className="btn btn-outline-danger"
                         onClick={() => deleteMessage(index)}
                       >

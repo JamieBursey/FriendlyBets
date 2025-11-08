@@ -156,6 +156,7 @@ const RenderFriendList = ({ currentUser, setCurrentUser }) => {
               <div className="card card-body">
                 <div className="mb-2 text-center">
                   <img
+                  alt="Favorite Team Logo"
                     src={friend.favoriteTeam}
                     style={{ maxWidth: "40px", maxHeight: "40px" }}
                   />
