@@ -56,94 +56,6 @@ const checkUserPassword = (userPassword, inputPassword) => {
   }
 };
 
-// const deleteFriend = (friendUsername, currentUser, setLoggedInUser) => {
-//   // Get all users
-//   const allUsers = getAllUsers();
-//   //fetch friend
-//   let friendUser = allUsers.filter(
-//     (user) => user.username === friendUsername
-//   )[0];
-
-//   // modify currentUser friend list
-//   const updatedFriends = (currentUser.friends = currentUser.friends.filter(
-//     (username) => username !== friendUser.username
-//   ));
-//   const currenUserUpdate = {
-//     ...currentUser,
-//     friends: updatedFriends,
-//   };
-
-//   // modify friendUser friend list
-//   friendUser.friends = friendUser.friends.filter(
-//     (username) => username !== currentUser.username
-//   );
-
-//   // Get rid of the original currentUser and friendUser
-//   let temporaryArrayUsers = allUsers.filter(
-//     (user) =>
-//       user.username !== currentUser.username &&
-//       user.username !== friendUser.username
-//   );
-
-//   //push back the new values
-//   temporaryArrayUsers.push(currenUserUpdate);
-//   temporaryArrayUsers.push(friendUser);
-
-//   // Push the new array of users back to the local storage using localStorage.setItem(allUserKey, JSON.stringify(allUsers))
-//   localStorage.setItem(LOCALSTORAGE.USERS, JSON.stringify(temporaryArrayUsers));
-//   localStorage.setItem(LOCALSTORAGE.LOGGEDINUSER, JSON.stringify(currentUser));
-
-//   console.log("modifying LoggedInUser to rerender list of cards", currentUser);
-//   setLoggedInUser(currenUserUpdate);
-// }; //moved to friends.js
-
-// const renderFriendList = (currentUser, setLoggedInUser) => {
-//   const allUsers = getAllUsers();
-//   return (
-//     <div className="row">
-//       {currentUser.friends.map((friendUsername) => {
-//         let friendUser = allUsers.find(
-//           (user) => user.username === friendUsername
-//         );
-//         return friendUser ? (
-//           <div
-//             key={friendUser.email}
-//             className="col-sm-12 col-md-6 col-lg-4 mb-3"
-//           >
-//             <div className="card bg-white">
-//               <div className="card-body text-center">
-//                 <h5 className="card-title">{friendUser.username}</h5>
-//                 <p className="card-text">{friendUser.email}</p>
-//                 <div
-//                   className="card text-center mx-auto mt-2 mb-3"
-//                   style={{ maxWidth: "18rem", backgroundColor: "#d6d6d6" }}
-//                 >
-//                   <div className="card-header">About</div>
-//                   <div className="card-body">
-//                     <p className="card-text">{friendUser.aboutMe}</p>
-//                   </div>
-//                 </div>
-//                 <button
-//                   onClick={() =>
-//                     deleteFriend(
-//                       friendUser.username,
-//                       currentUser,
-//                       setLoggedInUser
-//                     )
-//                   }
-//                   className="btn btn-outline-danger"
-//                 >
-//                   Delete
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         ) : null;
-//       })}
-//     </div>
-//   );
-// }; //moved to friends.js
-
 const TeamDropdown = ({ teamSelect }) => {
   const [team, setTeam] = useState([]); // will hold objects { name, logo }
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -329,23 +241,24 @@ const ForgotPasswordPopup = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleForgotPassword = async () => {
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "https://friendly-bets.vercel.app/PasswordReset",
-      });
-  
-      if (error) {
-        console.error("Error sending reset email:", error);
-        alert("There was an error sending the reset email. Please try again.");
-      } else {
-        alert("Password reset email sent! Check your inbox.");
-      }
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      alert("Something went wrong. Please try again.");
+const handleForgotPassword = async () => {
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://friendly-bets.vercel.app/PasswordReset",
+    });
+
+    if (error) {
+      console.error("Error sending reset email:", error);
+      setMessage("There was an error sending the reset email. Please try again.");
+    } else {
+      setMessage("Password reset email sent! Check your inbox.");
     }
-  };
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    setMessage("Something went wrong. Please try again.");
+  }
+};
+
   
 
   return (

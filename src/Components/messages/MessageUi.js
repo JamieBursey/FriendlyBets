@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState,useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 import { FaUserCircle } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
-import { FiMenu } from "react-icons/fi";
+import { FiMenu,FiSettings } from "react-icons/fi";
 import { emojiMap } from "./assets/EmoticonMap";
 import renderMessageContent from "./Emoji-img";
 import { usePublicUser } from "./data/usePublicUserID";
@@ -11,7 +11,10 @@ import { useChatRooms } from "./data/useChatRooms";
 import { useMessages } from "./data/useMessages";
 import LeaveChatModal from "./LeaveChatModal";
 import AddPeopleModal from "./data/AddPeopleModal"; 
+import SettingsModal from "./data/NameColorPicker";
+
 import "./MessengerUI.css";
+
 
 
 const fmtRelTime = (iso) => {
@@ -63,6 +66,48 @@ const [showAddModal, setShowAddModal] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [showSidebar, setShowSidebar] = useState(true);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+const [userColor, setUserColor] = useState("#003366");
+
+useEffect(() => {
+    
+  if (!currentUserId) return;
+
+  // Initialize color
+  if (publicUser?.name_color) setUserColor(publicUser.name_color);
+
+  // Create channel specifically for the users table
+  const channel = supabase
+    .channel("realtime-user-color", {
+      config: { broadcast: { self: true } }, // allow receiving own updates
+    })
+.on(
+  "postgres_changes",
+  {
+    event: "UPDATE",
+    schema: "public",
+    table: "users",
+  },
+  (payload) => {
+    console.log("⚡ Realtime event received:", payload);
+    const updated = payload.new;
+    if (!updated) return;
+
+    if (updated.public_user_id === currentUserId) {
+      setUserColor(updated.name_color);
+    }
+    refresh();
+  }
+)
+    .subscribe((status) => {
+      console.log("Realtime status:", status);
+    });
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}, [currentUserId, publicUser, refresh]);
+
 
   // messages for the active chat
   const activeRoom = useMemo(
@@ -263,169 +308,276 @@ const startChat = async () => {
   if (userError) return <p>Error: {userError.message}</p>;
   if (!currentUserId) return <p>Not signed in.</p>;
 
-  return (
-    <div className="msn-container">
-      {/* Sidebar */}
-      {showSidebar && (
-        <div className="msn-sidebar open">
-          <h3 className="msn-title">MSN Reborn</h3>
+return (
+  <div className="msn-container">
+    {/* Sidebar */}
+    {showSidebar && (
+      <div className="msn-sidebar open">
+        <h3 className="msn-title">MSN Reborn</h3>
 
-          {/* Start New Chat */}
-          <div className="friends-list start-chat-section">
-            <h4 style={{ margin: "10px 0 5px 10px", fontSize: "0.95rem" }}>Start New Chat</h4>
+        {/* Start New Chat */}
+        <div className="friends-list start-chat-section">
+          <h4 style={{ margin: "10px 0 5px 10px", fontSize: "0.95rem" }}>
+            Start New Chat
+          </h4>
 
-            {friendsLoading ? (
-              <p style={{ margin: 10 }}>Loading friends…</p>
-            ) : (
-              friends.map((friend) => (
+          {friendsLoading ? (
+            <p style={{ margin: 10 }}>Loading friends…</p>
+          ) : (
+            friends.map((friend) => (
+              <div
+                key={friend.public_user_id}
+                className={`friend-item ${
+                  selectedFriends.includes(friend.username) ? "active" : ""
+                }`}
+                onClick={() => toggleFriendSelection(friend.username)}
+              >
+                <FaUserCircle className="friend-avatar" />
+                <span>{friend.username}</span>
+              </div>
+            ))
+          )}
+        </div>
+
+        <button
+          className="start-chat-btn"
+          onClick={startChat}
+          style={{
+            margin: "10px",
+            padding: "8px",
+            background: "#005a9e",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          Start Chat
+        </button>
+
+<div className="sidebar-gap"></div>
+
+        <div className="friends-list chats-section">
+          <h4 style={{ margin: "10px 0 5px 10px", fontSize: "0.95rem" }}>
+            Your Chats
+          </h4>
+          {chatRooms.map((room) => (
+            <div
+              key={room.id}
+              className={`friend-item ${
+                room.id === activeChatId ? "active" : ""
+              }`}
+              onClick={() => setActiveChatId(room.id)}
+            >
+              <FaUserCircle className="friend-avatar" />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
+                <span style={{ fontWeight: 600 }}>{roomLabel(room)}</span>
                 <div
-                  key={friend.public_user_id}
-                  className={`friend-item ${selectedFriends.includes(friend.username) ? "active" : ""}`}
-                  onClick={() => toggleFriendSelection(friend.username)}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "0.85rem",
+                    opacity: 0.9,
+                  }}
                 >
-                  <FaUserCircle className="friend-avatar" />
-                  <span>{friend.username}</span>
+                  <span>{roomPreview(room)}</span>
+                  <span>{fmtRelTime(room.lastActivity)}</span>
                 </div>
-              ))
-            )}
-          </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
 
-          <button
-            className="start-chat-btn"
-            onClick={startChat}
-            style={{
-              margin: "10px",
-              padding: "8px",
-              background: "#005a9e",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-          >
-            Start Chat
-          </button>
-
-
-          <div className="friends-list chats-section">
-            <h4 style={{ margin: "10px 0 5px 10px", fontSize: "0.95rem" }}>Your Chats</h4>
+    {/* Chat Section */}
+    {activeRoom ? (
+      <div className="chat-section">
+        {/* Tabs bar */}
+        {chatRooms.length > 0 && (
+          <div className="chat-tabs">
             {chatRooms.map((room) => (
               <div
                 key={room.id}
-                className={`friend-item ${room.id === activeChatId ? "active" : ""}`}
+                className={`chat-tab ${
+                  room.id === activeChatId ? "active" : ""
+                }`}
                 onClick={() => setActiveChatId(room.id)}
               >
-                <FaUserCircle className="friend-avatar" />
-                <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                  <span style={{ fontWeight: 600 }}>{roomLabel(room)}</span>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", opacity: 0.9 }}>
-                    <span>{roomPreview(room)}</span>
-                    <span>{fmtRelTime(room.lastActivity)}</span>
-                  </div>
-                </div>
+                {roomLabel(room)}
+                <span
+                  className="close-tab"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveChatId(
+                      activeChatId === room.id
+                        ? chatRooms[0]?.id || null
+                        : activeChatId
+                    );
+                  }}
+                >
+                  ×
+                </span>
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Chat Section */}
-      {activeRoom ? (
-        <div className="chat-section">
-<div className="chat-header">
-  <button className="menu-btn" onClick={() => setShowSidebar(!showSidebar)}>
-    <FiMenu />
+        {/* Header */}
+        <div className="chat-header">
+          <button
+            className="menu-btn"
+            onClick={() => setShowSidebar(!showSidebar)}
+          >
+            <FiMenu />
+          </button>
+          <h4 style={{ flex: 1 }}>{displayRoomName}</h4>
+          <button
+            className="msn-btn xp-secondary"
+            onClick={() => setShowAddModal(true)}
+          >
+            Add People
+          </button>
+          <button
+            className="msn-btn xp-secondary"
+            onClick={() => setShowLeaveModal(true)}
+          >
+            Leave Chat
+          </button>
+            <button
+    className="msn-btn xp-secondary"
+    onClick={() => setShowSettingsModal(true)}
+    title="Settings"
+  >
+    <FiSettings />
   </button>
-  <h4 style={{ flex: 1 }}>{displayRoomName}</h4>
-  {/* Leave Chat action */}
-  <button
-  className="msn-btn xp-secondary"
-  onClick={() => setShowAddModal(true)}>
-  Add People
-</button>
-  <button className="msn-btn xp-secondary" onClick={() => setShowLeaveModal(true)}>
-    Leave Chat
-  </button>
+        </div>
+
+        {/* Messages */}
+        <div className="chat-body">
+          {messagesLoading ? (
+            <p style={{ color: "#555" }}>Loading messages…</p>
+          ) : (
+            messages.map((msg) => {
+              const sender = activeRoom.participants.find(
+                (p) => p.id === msg.sender_id
+              );
+              const senderName = sender?.username || "Unknown";
+
+              return (
+                <div
+                  key={msg.id}
+                  className={`chat-message-wrapper ${
+                    msg.sender_id === currentUserId ? "sent" : "received"
+                  }`}
+                >
+                  {activeRoom.type === "group" &&
+                    msg.sender_id !== currentUserId && (
+                      <div className="sender-name" style={{ color: sender?.name_color || "#0078d4" }}>{senderName}</div>
+                    )}
+<div
+  className={`chat-bubble ${
+    msg.sender_id === currentUserId ? "sent" : "received"
+  }`}
+>
+  <div
+    style={{
+color:
+  msg.sender_id === currentUserId
+    ? userColor || "#003366"
+    : sender?.name_color || "#003366",
+
+    }}
+  >
+    {renderMessageContent(msg.content)}
+  </div>
+  <div className="timestamp">{fmtRelTime(msg.created_at)}</div>
 </div>
-
-<div className="chat-body">
-  {messagesLoading ? (
-    <p style={{ color: "#555" }}>Loading messages…</p>
-  ) : (
-    messages.map((msg) => {
-      const sender = activeRoom?.participants.find(p => p.id === msg.sender_id);
-      const senderName = sender?.username || "Unknown";
-
-      return (
-        <div key={msg.id} className={`chat-message-wrapper ${msg.sender_id === currentUserId ? "sent" : "received"}`}>
-          {/* ✅ Show sender name only in group chat AND only for others */}
-          {activeRoom?.type === "group" && msg.sender_id !== currentUserId && (
-            <div className="sender-name">{senderName}</div>
+                </div>
+              );
+            })
           )}
+        </div>
 
-          <div className={`chat-bubble ${msg.sender_id === currentUserId ? "sent" : "received"}`}>
-            {renderMessageContent(msg.content)}
-            <div className="timestamp">{fmtRelTime(msg.created_at)}</div>
+        {/* Emoji Picker */}
+        {showEmojiPicker && (
+          <div className="emoji-picker">
+            {Object.entries(emojiMap).map(([code, src]) => (
+              <img
+                key={code}
+                src={src}
+                alt={code}
+                title={code}
+                className="emoji-option"
+                onClick={() => {
+                  setNewMessage((prev) => prev + " " + code + " ");
+                  setShowEmojiPicker(false);
+                }}
+              />
+            ))}
           </div>
-        </div>
-      );
-    })
-  )}
-</div>
+        )}
 
-
-          {showEmojiPicker && (
-            <div className="emoji-picker">
-              {Object.entries(emojiMap).map(([code, src]) => (
-                <img
-                  key={code}
-                  src={src}
-                  alt={code}
-                  title={code}
-                  className="emoji-option"
-                  onClick={() => {
-                    setNewMessage((prev) => prev + " " + code + " ");
-                    setShowEmojiPicker(false);
-                  }}
-                />
-              ))}
-            </div>
-          )}
-
-          <div className="chat-input">
-            <input
-              type="text"
-              placeholder="Type a message..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            />
-            <button type="button" className="emoji-btn" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-              😊
-            </button>
-            <button onClick={handleSend}>
-              <IoSend />
-            </button>
-          </div>
+        {/* Chat Input */}
+        <div className="chat-input">
+          <input
+            type="text"
+            placeholder="Type a message…"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          />
+          <button
+            type="button"
+            className="emoji-btn"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          >
+            😊
+          </button>
+          <button onClick={handleSend}>
+            <IoSend />
+          </button>
         </div>
-      ) : (
-        <div className="chat-section" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <p style={{ color: "#555" }}>Select friends and start a chat!</p>
-        </div>
-      )}
-      <LeaveChatModal
-  open={showLeaveModal}
-  chatName={activeRoomLabel}
-  onCancel={() => setShowLeaveModal(false)}
-  onConfirm={leaveChat}
-/>
-<AddPeopleModal
-  open={showAddModal}
-  friends={availableToAdd}
-  existing={activeRoom?.participants}
-  onCancel={() => setShowAddModal(false)}
-  onConfirm={handleAddPeople}
-/>
-    </div>
-  );
-};
+      </div>
+    ) : (
+      <div
+        className="chat-section"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <p style={{ color: "#555" }}>Select friends and start a chat!</p>
+      </div>
+    )}
+
+    {/* Modals */}
+    <LeaveChatModal
+      open={showLeaveModal}
+      chatName={activeRoomLabel}
+      onCancel={() => setShowLeaveModal(false)}
+      onConfirm={leaveChat}
+    />
+    <AddPeopleModal
+      open={showAddModal}
+      friends={availableToAdd}
+      existing={activeRoom?.participants}
+      onCancel={() => setShowAddModal(false)}
+      onConfirm={handleAddPeople}
+    />
+    <SettingsModal
+      open={showSettingsModal}
+      onClose={() => setShowSettingsModal(false)}
+      userId={currentUserId}
+      onColorChange={(color) => setUserColor(color)}
+    />
+  </div>
+);
+}

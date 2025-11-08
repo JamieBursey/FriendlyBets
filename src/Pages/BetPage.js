@@ -30,8 +30,6 @@ const BetPage = () => {
   setPopup({ show: true, title, message, onConfirm });
 };
 
-const closePopup = () => setPopup({ ...popup, show: false, onConfirm: null });
-
     const fetchLoggedInUser = async () => {
       const { data: sessionData, error: sessionError } =
         await supabase.auth.getSession();

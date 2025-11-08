@@ -4,9 +4,10 @@
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  z-index: 9999;      
-  overflow: visible; 
+  pointer-events: none;     
+  overflow: visible !important;
+    z-index: 9999;
+  isolation: isolate; 
 }
 .rememberance-container {
   position: absolute;
@@ -52,16 +53,56 @@
   }
 }
 
-.santa {
-  width: 200px;
-  animation: flyAcross 3s ease-in-out forwards;
+.snowfall-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
 }
 
-@keyframes flyAcross {
-  from {
+/* Each flake is created in the SeasonalStart component */
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #fff;
+  font-size: 10px;
+  opacity: 0.9;
+  animation: fall linear infinite;
+  z-index: 9999;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(150vh) rotate(360deg); /* fall past bottom */
+  }
+}
+
+
+/* --- Santa Animation --- */
+.santa {
+  width: 250px;
+  position: fixed;
+  top: 20%;
+  left: -300px;
+  animation: flyAcrossUp 6s ease-in-out forwards;
+  z-index: 9999;
+}
+
+@keyframes flyAcrossUp {
+  0% {
     transform: translateX(-250px) translateY(0);
   }
-  to {
-    transform: translateX(100vw) translateY(-50px);
+  70% {
+    transform: translateX(100vw) translateY(0);
+  }
+  100% {
+    transform: translateX(110vw) translateY(-200px);
   }
 }

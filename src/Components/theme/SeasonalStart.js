@@ -2,33 +2,35 @@ import React, { useEffect, useState } from "react";
 import "./SeasonalStart.css";
 
 const SeasonalStart = ({ onFinish }) => {
-  const [month, setMonth] = useState("");
+  const [season, setSeason] = useState("default");
 
 useEffect(() => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentDay = currentDate.getDate();
 
-
-  if (currentMonth === 9) setMonth("october"); // October
-  else if (currentMonth === 11) setMonth("december"); // December
+  if (currentMonth === 9) setSeason("october");
   else if (currentMonth === 10) {
-    const remembranceDay = 11; 
+    const remembranceDay = 11;
     const oneWeekAfter = remembranceDay + 7;
-
-    if (currentDay >= remembranceDay - 11 && currentDay <= oneWeekAfter) {
-      setMonth("november");
+    if (currentDay >= remembranceDay - 10 && currentDay <= oneWeekAfter) {
+      setSeason("november");
     } else {
-      setMonth("default");
+      setSeason("default");
+    }
+  } else if (currentMonth === 11) {
+    if (currentDay >= 18 && currentDay <= 26) {
+      setSeason("christmasWeek");
+    } else {
+      setSeason("december");
     }
   } else {
-    setMonth("default");
+    setSeason("default");
   }
 
-  // Automatically stop the animation after 10 seconds
-  const timer = setTimeout(() => {
-    onFinish();
-  }, 10000);
+  // ⏳ Timer logic: longer for December, shorter for others
+  const timerDuration = (currentMonth === 11 ? 60000 : 10000); // 60s for December
+  const timer = setTimeout(() => onFinish(), timerDuration);
 
   return () => clearTimeout(timer);
 }, [onFinish]);
@@ -36,31 +38,58 @@ useEffect(() => {
 
   return (
     <div className="seasonal-startup">
-      {month === "october" && (
+      {season === "october" && (
         <div className="skeleton-container">
           <img
-            src="/animations/halloween.gif"
-            alt="Skeleton Stickhandling"
-            className="skeleton"
-          />
-                    <img
             src="/animations/HockeySkeleton.gif"
             alt="Skeleton"
             className="skeleton"
-            height={100}
           />
         </div>
       )}
-{month === "november" && (
+
+      {season === "november" && (
         <div className="rememberance-container">
           <img
             src="/animations/rememberanceDay.gif"
-            alt="rememberance Day"
+            alt="Remembrance Day"
             className="RD-animation"
           />
         </div>
       )}
-      {month === "december" && (
+
+      {/* December — Snow all month */}
+      {(season === "december" || season === "christmasWeek") && (
+        <div className="snowfall-container">
+          {Array.from({ length: 60 }).map((_, i) => {
+            const size = Math.random() * 8 + 4;
+            const left = Math.random() * 100;
+            const duration = Math.random() * 5 + 5;
+            const delay = Math.random() * 5;
+            const opacity = Math.random() * 0.5 + 0.5;
+            const drift = Math.random() * 50 - 25;
+            return (
+              <span
+                key={i}
+                className="snowflake"
+                style={{
+                  left: `${left}%`,
+                  fontSize: `${size}px`,
+                  animationDuration: `${duration}s`,
+                  animationDelay: `${delay}s`,
+                  transform: `translateX(${drift}px)`,
+                  opacity,
+                }}
+              >
+                ❄
+              </span>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Santa flies during Christmas week */}
+      {season === "christmasWeek" && (
         <div className="santa-container">
           <img
             src="/animations/santa.gif"
