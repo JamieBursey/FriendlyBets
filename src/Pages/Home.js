@@ -78,13 +78,15 @@ function Home() {
     }
   };
   return (
-    <div style={backgroundColor}>
-      <Logo />
-      <AddSportButtons setSelectMatchesType={setSelectMatchesUI} />
-      {selectMatchesUI()}
-      {showseasonTheme && <SeasonalStart onFinish={() => setShowSeasonTheme(false)} />}
+<>
+  <div style={backgroundColor}>
+    <Logo />
+    <AddSportButtons setSelectMatchesType={setSelectMatchesUI} />
+    {selectMatchesUI()}
+  </div>
 
-    </div>
+  {showseasonTheme && <SeasonalStart onFinish={() => setShowSeasonTheme(false)} />}
+</>
   );
 }
 
