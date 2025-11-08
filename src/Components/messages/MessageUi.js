@@ -2,7 +2,8 @@ import { useMemo, useState,useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 import { FaUserCircle } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
-import { FiMenu,FiSettings } from "react-icons/fi";
+import { FiMenu } from "react-icons/fi";
+import { FaPalette } from "react-icons/fa";
 import { emojiMap } from "./assets/EmoticonMap";
 import renderMessageContent from "./Emoji-img";
 import { usePublicUser } from "./data/usePublicUserID";
@@ -451,11 +452,11 @@ return (
             Leave Chat
           </button>
             <button
-    className="msn-btn xp-secondary"
+    className="color-btn"
     onClick={() => setShowSettingsModal(true)}
     title="Settings"
   >
-    <FiSettings />
+    <FaPalette />
   </button>
         </div>
 
