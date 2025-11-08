@@ -347,3 +347,106 @@
   margin: 0 auto;
 }
 
+/* Chat Tabs Bar (MSN Messenger look) */
+.chat-tabs {
+  display: flex;
+  background: linear-gradient(to bottom, #eaf3ff 0%, #d0e1ff 100%);
+  border-bottom: 1px solid #a6bfe9;
+  height: 34px;
+  align-items: flex-end;
+  padding-left: 6px;
+  overflow-x: auto;
+}
+
+.chat-tab {
+  background: linear-gradient(to bottom, #f8fbff 0%, #dce9ff 100%);
+  border: 1px solid #a9c1ea;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  margin-right: 4px;
+  padding: 5px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  color: #003366;
+  transition: all 0.2s ease;
+}
+
+.chat-tab.active {
+  background: linear-gradient(to bottom, #c6dcff 0%, #a6c8ff 100%);
+  font-weight: bold;
+  color: #002a7a;
+  box-shadow: inset 0 -2px 0 #fff;
+}
+
+.chat-tab:hover {
+  background: linear-gradient(to bottom, #dde9ff 0%, #c3d8ff 100%);
+}
+
+.close-tab {
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+  font-size: 1rem;
+  padding-left: 4px;
+  transition: color 0.2s;
+}
+
+.close-tab:hover {
+  color: #000;
+}
+
+/* Timestamp inside messages */
+.timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 3px;
+  text-align: right;
+}
+
+/* Sender name in group chats */
+.sender-name {
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 2px;
+  color: #00468b;
+}
+
+/* Chat message wrapper for better spacing */
+.chat-message-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+}
+
+/* Improve bubble visual polish */
+.chat-bubble.sent {
+  background: linear-gradient(180deg, #d8ecff 0%, #c2e0ff 100%);
+  border: 1px solid #a0c9ff;
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+.sidebar-gap {
+  height: 20px; /* adjust for desired space */
+  background: transparent;
+}
+
+/* On mobile, make the gap more obvious */
+@media (max-width: 768px) {
+  .sidebar-gap {
+    height: 30px;
+  }
+}
+
+.msn-modal input[type="color"] {
+  width: 40px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  background: none;
+}

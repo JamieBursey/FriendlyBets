@@ -4,7 +4,7 @@ import { supabase } from "../../../supabaseClient";
 export const useChatRooms = (currentUserId) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]   = useState(null);
+  const [error, setError] = useState(null);
 
   const fetchRooms = async () => {
     if (!currentUserId) return;
@@ -12,6 +12,7 @@ export const useChatRooms = (currentUserId) => {
     setError(null);
 
     try {
+      // 1️⃣ Find which rooms the user is in
       const { data: participantRows, error: pError } = await supabase
         .from("chat_participants")
         .select("chat_id")
@@ -24,8 +25,9 @@ export const useChatRooms = (currentUserId) => {
         return;
       }
 
-      const chatIds = [...new Set(participantRows.map(r => r.chat_id))];
+      const chatIds = [...new Set(participantRows.map((r) => r.chat_id))];
 
+      // 2️⃣ Load chat room metadata
       const { data: roomRows, error: rError } = await supabase
         .from("chat_rooms")
         .select("id, name, type, created_at")
@@ -33,6 +35,7 @@ export const useChatRooms = (currentUserId) => {
 
       if (rError) throw rError;
 
+      // 3️⃣ Load participants for those chats
       const { data: allParticipants, error: apError } = await supabase
         .from("chat_participants")
         .select("chat_id, user_id")
@@ -40,17 +43,19 @@ export const useChatRooms = (currentUserId) => {
 
       if (apError) throw apError;
 
-      const userIds = [...new Set(allParticipants.map(p => p.user_id))];
+      // 4️⃣ Load all user data — include name_color!
+      const userIds = [...new Set(allParticipants.map((p) => p.user_id))];
 
       const { data: userRows, error: uError } = await supabase
         .from("users")
-        .select("public_user_id, username")
+        .select("public_user_id, username, name_color") // 👈 include name_color
         .in("public_user_id", userIds);
 
       if (uError) throw uError;
 
-      const idToUser = new Map(userRows.map(u => [u.public_user_id, u]));
+      const idToUser = new Map(userRows.map((u) => [u.public_user_id, u]));
 
+      // 5️⃣ Fetch latest messages for previews
       const { data: msgRows } = await supabase
         .from("chat_messages")
         .select("chat_id, content, sender_id, created_at")
@@ -58,27 +63,32 @@ export const useChatRooms = (currentUserId) => {
         .order("created_at", { ascending: false });
 
       const latestMsg = new Map();
-      msgRows?.forEach(msg => {
+      msgRows?.forEach((msg) => {
         if (!latestMsg.has(msg.chat_id)) latestMsg.set(msg.chat_id, msg);
       });
 
-      const rooms = roomRows.map(room => {
+      // 6️⃣ Build rooms array
+      const rooms = roomRows.map((room) => {
         const participants = allParticipants
-          .filter(ap => ap.chat_id === room.id)
-          .map(ap => ({
+          .filter((ap) => ap.chat_id === room.id)
+          .map((ap) => ({
             id: ap.user_id,
-            username: idToUser.get(ap.user_id)?.username || "Unknown"
+            username: idToUser.get(ap.user_id)?.username || "Unknown",
+            name_color: idToUser.get(ap.user_id)?.name_color || "#ffffff", // 👈 attach color
           }));
 
         return {
           ...room,
           participants,
           latestMessage: latestMsg.get(room.id) || null,
-          lastActivity: latestMsg.get(room.id)?.created_at || room.created_at
+          lastActivity:
+            latestMsg.get(room.id)?.created_at || room.created_at,
         };
       });
 
-      rooms.sort((a, b) => new Date(b.lastActivity) - new Date(a.lastActivity));
+      rooms.sort(
+        (a, b) => new Date(b.lastActivity) - new Date(a.lastActivity)
+      );
       setChatRooms(rooms);
     } catch (err) {
       console.error(err);
@@ -96,6 +106,6 @@ export const useChatRooms = (currentUserId) => {
     chatRooms,
     loading,
     error,
-    refresh: fetchRooms // ✅ <-- Now refresh actually fetches
+    refresh: fetchRooms,
   };
 };
