@@ -241,23 +241,24 @@ const ForgotPasswordPopup = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleForgotPassword = async () => {
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "https://friendly-bets.vercel.app/PasswordReset",
-      });
-  
-      if (error) {
-        console.error("Error sending reset email:", error);
-        alert("There was an error sending the reset email. Please try again.");
-      } else {
-        alert("Password reset email sent! Check your inbox.");
-      }
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      alert("Something went wrong. Please try again.");
+const handleForgotPassword = async () => {
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://friendly-bets.vercel.app/PasswordReset",
+    });
+
+    if (error) {
+      console.error("Error sending reset email:", error);
+      setMessage("There was an error sending the reset email. Please try again.");
+    } else {
+      setMessage("Password reset email sent! Check your inbox.");
     }
-  };
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    setMessage("Something went wrong. Please try again.");
+  }
+};
+
   
 
   return (

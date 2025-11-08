@@ -1,10 +1,6 @@
 import { LOCALSTORAGE } from "../Config";
 import { findUser, getAllUsers } from "./RegisteredUser";
 import { supabase } from "../supabaseClient";
-const friendsGradient = {
-  background: "linear-gradient(to bottom, #0B1305 60%, #1e90ff 100%)",
-  borderRadius: "1rem",
-};
 const getFriend = (username) => {
   return { username: "", password: "" };
 };
@@ -357,11 +353,11 @@ const acceptFriendRequest = async (requestId, callBack) => {
 
 const rejectFriendRequest = async (requestId) => {
   // Fetch the friend request details
-  const { data: friendRequest, error: requestError } = await supabase
-    .from("friend_requests")
-    .select("*")
-    .eq("id", requestId)
-    .single();
+const { error: requestError } = await supabase
+  .from("friend_requests")
+  .select("*")
+  .eq("id", requestId)
+  .single();
 
   if (requestError) {
     console.error("Error fetching friend request:", requestError);

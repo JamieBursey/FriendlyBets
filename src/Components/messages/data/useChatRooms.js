@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "../../../supabaseClient";
 
 export const useChatRooms = (currentUserId) => {
@@ -6,13 +6,13 @@ export const useChatRooms = (currentUserId) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchRooms = async () => {
+  const fetchRooms = useCallback(async () => {
     if (!currentUserId) return;
     setLoading(true);
     setError(null);
 
     try {
-      // 1️⃣ Find which rooms the user is in
+      // 1️⃣ Get participant rooms
       const { data: participantRows, error: pError } = await supabase
         .from("chat_participants")
         .select("chat_id")
@@ -25,37 +25,33 @@ export const useChatRooms = (currentUserId) => {
         return;
       }
 
-      const chatIds = [...new Set(participantRows.map((r) => r.chat_id))];
+      const chatIds = [...new Set(participantRows.map(r => r.chat_id))];
 
-      // 2️⃣ Load chat room metadata
+      // 2️⃣ Room metadata
       const { data: roomRows, error: rError } = await supabase
         .from("chat_rooms")
         .select("id, name, type, created_at")
         .in("id", chatIds);
-
       if (rError) throw rError;
 
-      // 3️⃣ Load participants for those chats
+      // 3️⃣ Participants
       const { data: allParticipants, error: apError } = await supabase
         .from("chat_participants")
         .select("chat_id, user_id")
         .in("chat_id", chatIds);
-
       if (apError) throw apError;
 
-      // 4️⃣ Load all user data — include name_color!
-      const userIds = [...new Set(allParticipants.map((p) => p.user_id))];
-
+      // 4️⃣ Users with name_color
+      const userIds = [...new Set(allParticipants.map(p => p.user_id))];
       const { data: userRows, error: uError } = await supabase
         .from("users")
-        .select("public_user_id, username, name_color") // 👈 include name_color
+        .select("public_user_id, username, name_color")
         .in("public_user_id", userIds);
-
       if (uError) throw uError;
 
-      const idToUser = new Map(userRows.map((u) => [u.public_user_id, u]));
+      const idToUser = new Map(userRows.map(u => [u.public_user_id, u]));
 
-      // 5️⃣ Fetch latest messages for previews
+      // 5️⃣ Latest messages
       const { data: msgRows } = await supabase
         .from("chat_messages")
         .select("chat_id, content, sender_id, created_at")
@@ -63,18 +59,18 @@ export const useChatRooms = (currentUserId) => {
         .order("created_at", { ascending: false });
 
       const latestMsg = new Map();
-      msgRows?.forEach((msg) => {
+      msgRows?.forEach(msg => {
         if (!latestMsg.has(msg.chat_id)) latestMsg.set(msg.chat_id, msg);
       });
 
-      // 6️⃣ Build rooms array
-      const rooms = roomRows.map((room) => {
+      // 6️⃣ Assemble room list
+      const rooms = roomRows.map(room => {
         const participants = allParticipants
-          .filter((ap) => ap.chat_id === room.id)
-          .map((ap) => ({
+          .filter(ap => ap.chat_id === room.id)
+          .map(ap => ({
             id: ap.user_id,
             username: idToUser.get(ap.user_id)?.username || "Unknown",
-            name_color: idToUser.get(ap.user_id)?.name_color || "#ffffff", // 👈 attach color
+            name_color: idToUser.get(ap.user_id)?.name_color || "#ffffff",
           }));
 
         return {
@@ -86,9 +82,7 @@ export const useChatRooms = (currentUserId) => {
         };
       });
 
-      rooms.sort(
-        (a, b) => new Date(b.lastActivity) - new Date(a.lastActivity)
-      );
+      rooms.sort((a, b) => new Date(b.lastActivity) - new Date(a.lastActivity));
       setChatRooms(rooms);
     } catch (err) {
       console.error(err);
@@ -96,16 +90,12 @@ export const useChatRooms = (currentUserId) => {
     }
 
     setLoading(false);
-  };
+  }, [currentUserId]); // ✅ stable dependency
 
+  // Run once or when user changes
   useEffect(() => {
     fetchRooms();
-  }, [currentUserId]);
+  }, [fetchRooms]); // ✅ no ESLint warning now
 
-  return {
-    chatRooms,
-    loading,
-    error,
-    refresh: fetchRooms,
-  };
+  return { chatRooms, loading, error, refresh: fetchRooms };
 };
