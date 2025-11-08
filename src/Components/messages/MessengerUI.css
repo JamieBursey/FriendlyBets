@@ -450,3 +450,75 @@
   border-radius: 6px;
   background: none;
 }
+
+
+/* colorChange Styles */
+/* Modal base theme colors */
+.msn-modal-card.light {
+  background: #f4f4f4;
+  color: #222;
+}
+
+.msn-modal-card.dark {
+  background: #1e1e1e;
+  color: #fff;
+}
+
+.msn-modal-card.retro {
+  background: #fdf3d7;
+  color: #3b2f2f;
+  border: 2px solid #d1a75c;
+  box-shadow: inset 0 0 10px rgba(209, 167, 92, 0.4);
+}
+
+/* Theme buttons */
+.theme-section {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.theme-options {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.theme-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.theme-btn.active {
+  background: var(--theme-accent, #0078d4);
+  color: #fff;
+}
+
+.theme-btn:hover {
+  transform: translateY(-1px);
+}
+
+.color-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--accent-color, red);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+  color: var(--hover-accent, green);
+}
+
+.color-btn:active {
+  transform: scale(0.95);
+}
+
