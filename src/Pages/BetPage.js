@@ -88,9 +88,13 @@ const BetPage = () => {
     setEmail("");
   };
 
-  const updateCheckedBets = (betOption) => {
-    setSelectedBets({ [betOption]: true });
-  };
+const updateCheckedBets = (betOption) => {
+  if (!betOption) {
+    setSelectedBets({}); // fully clears all selected bets
+  } else {
+    setSelectedBets({ [betOption]: true }); // ensures only one bet active
+  }
+};
 
   const placeBet = async () => {
     if (!selectedFriend) {
