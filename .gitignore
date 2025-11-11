@@ -22,3 +22,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Ignore build, dependency, and SDK files
+node_modules/
+build/
+dist/
+target/
+lib/
+*.jar
+*.class
+*.war
+*.zip
+

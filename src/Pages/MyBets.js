@@ -18,6 +18,51 @@ const MyBets = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [view, setView] = useState(''); // State to toggle between views
 
+  const [showGiftModal, setShowGiftModal] = useState(false);
+  const [giftBetId, setGiftBetId] = useState(null);
+  const [giftRecipient, setGiftRecipient] = useState("");
+  const [giftAmount, setGiftAmount] = useState("");
+  const [giftVendor, setGiftVendor] = useState("Tim Hortons");
+
+  // Modal handlers
+  const handleOpenGiftModal = (betId, friend, wager) => {
+    setGiftBetId(betId);
+    setGiftRecipient(friend);
+    setGiftAmount("");
+    setGiftVendor("Tim Hortons");
+    setShowGiftModal(true);
+  };
+
+  const handleCloseGiftModal = () => setShowGiftModal(false);
+
+  const handleSubmitGiftCard = async () => {
+    try {
+      const response = await fetch(
+        "https://your-backend.com/api/createGiftCardLink",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            betId: giftBetId,
+            recipient: giftRecipient,
+            amount: giftAmount,
+            vendor: giftVendor,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (data.url) {
+        window.open(data.url, "_blank");
+        handleCloseGiftModal();
+      } else {
+        alert("Failed to create gift card link");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error creating gift card");
+    }
+  };
+
   const backgroundColor = {
     background: "linear-gradient(to bottom, #0B1305 0%, #00008B 100%)",
   };
@@ -109,45 +154,59 @@ const MyBets = () => {
               </>
             ) : (
               <div className="row">
-                {betcreator !== loggedInUserUsername ||
-                betStatus !== "pending" ? (
-                  <>
-                    <div className="col">
-                      <button
-                        onClick={() => {
-                          CheckBetResults(betId, fetchBetData);
-                        }}
-                        className="btn btn-primary w-100"
-                      >
-                        Results
-                      </button>
-                    </div>
-                    <div className="col">
-                      <button
-                        onClick={() => {
-                          deleteBets(betId, fetchBetData);
-                        }}
-                        className="btn btn-primary w-100"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <div className="col-12">
-                    <button
-                      onClick={() => {
-                        deleteBets(betId, fetchBetData);
-                      }}
-                      className="btn btn-outline-danger w-100"
-                    >
-                      Withdraw Bet
-                    </button>
-                  </div>
-                )}
+               {betcreator !== loggedInUserUsername || betStatus !== "pending" ? (
+  <>
+    {/* 🟢 Show Results button only if NOT settled */}
+    {betStatus !== "settled" && (
+      <div className="col">
+        <button
+          onClick={() => {
+            CheckBetResults(betId, fetchBetData);
+          }}
+          className="btn btn-primary w-100"
+        >
+          Results
+        </button>
+      </div>
+    )}
+    <div className="col">
+      <button
+        onClick={() => {
+          deleteBets(betId, fetchBetData);
+        }}
+        className="btn btn-primary w-100"
+      >
+        Delete
+      </button>
+    </div>
+  </>
+) : (
+  <div className="col-12">
+    <button
+      onClick={() => {
+        deleteBets(betId, fetchBetData);
+      }}
+      className="btn btn-outline-danger w-100"
+    >
+      Withdraw Bet
+    </button>
+  </div>
+)}
+
+                
               </div>
             )}
           </div>
+                {betStatus === "settled" && (
+        <div className="mt-3">
+          <button
+            className="btn btn-success w-100"
+            onClick={() => handleOpenGiftModal(betId, friends, wager)}
+          >
+            Pay with Gift Card
+          </button>
+        </div>
+      )}
         </div>
       </div>
     );

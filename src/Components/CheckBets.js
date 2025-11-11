@@ -17,163 +17,186 @@ const CheckBetResults = async (betId, callback) => {
     const gameNumber = bet.gameid;
  
 
-    if (bet.sporttype === "NHL") {
+if (bet.sporttype === "NHL") {
+  const response = await fetch(
+    `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
+  );
+  const resultsData = await response.json();
 
-      const checkShotsOnNet = (playerId, plays, isGameFinished) => {
-        if (!isGameFinished) {
-          return "Waiting game to finish";
-        }
+  const isGameFinished =
+    resultsData.gameState === "OFF" ||
+    (resultsData.clock?.timeRemaining === "00:00" &&
+      resultsData.period >= 3);
 
-        const shotsOnGoal = plays.filter(
-          (play) =>
-            (play.typeDescKey === "shot-on-goal" &&
-              play.details.shootingPlayerId === playerId) ||
-            (play.typeDescKey === "goal" &&
-              play.details.scoringPlayerId === playerId)
-        );
+  // ---- Helper functions ----
+  const checkShotsOnNet = (playerId, plays) => {
+    const shotsOnGoal = plays.filter(
+      (play) =>
+        (play.typeDescKey === "shot-on-goal" &&
+          play.details.shootingPlayerId === playerId) ||
+        (play.typeDescKey === "goal" &&
+          play.details.scoringPlayerId === playerId)
+    );
+    return shotsOnGoal.length >= 2;
+  };
 
-        return shotsOnGoal.length >= 2
-          ? `${betCreator} Wins`
-          : `${betCreator} Lost`;
-      };
+  const checkAnytimeGoal = (playerId, plays) => {
+    return plays.some(
+      (play) =>
+        play.typeDescKey === "goal" &&
+        play.details.scoringPlayerId === playerId
+    );
+  };
 
-      const checkAnytimeGoal = (playerId, plays, isGameFinished) => {
-        if (isGameFinished) {
-          return "Waiting";
-        }
-        const scoredAtLeastOnce = plays.some(
-          (play) =>
-            play.typeDescKey === "goal" &&
-            play.details.scoringPlayerId === playerId
-        );
-        return scoredAtLeastOnce ? `${betCreator} Wins` : `${betCreator} Lost`;
+  const checkAssistPlayer = (playerId, plays) => {
+    const assists = plays.filter(
+      (play) =>
+        play.typeDescKey === "goal" &&
+        (play.details.assist1PlayerId === playerId ||
+          play.details.assist2PlayerId === playerId)
+    );
+    return assists.length >= 1;
+  };
 
-      };
+  // ---- Loop through each bet ----
+  for (const [betDescription, isActive] of Object.entries(bet.betdescription)) {
+    if (!isActive) continue;
 
-      const checkAssistPlayer = (playerId, plays, isGameFinished) => {
-        if (isGameFinished) {
-          return "Game not over";
-        }
-        const assists = plays.filter(
-          (play) =>
-            play.typeDescKey === "goal" &&
-            (play.details.assist1PlayerId === playerId ||
-              play.details.assist2PlayerId === playerId)
-        );
-        return assists.length >= 1 ? `${betCreator} Wins` : `${betCreator} Lost`;
-      };
+    // 🏒 FIRST GOAL
+if (betDescription.includes("will score first goal")) {
+  const firstGoalEvent = resultsData.plays.find(
+    (play) => play.typeDescKey === "goal"
+  );
 
-      // Fetch game data
-      const response = await fetch(
-        `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameNumber}/play-by-play`
-      );
-      const resultsData = await response.json();
-      
-      const isGameFinished =
-        resultsData.gameState === "OFF" ||
-        (resultsData.clock.timeRemaining === "00:00" &&
-          resultsData.period === 3);
+  if (!firstGoalEvent) {
+    bet.result = !isGameFinished ? "Game not over" : `${betCreator} Lost`;
+  } else {
+    const playerName = betDescription.split(" will score first goal")[0];
+    const scoringPlayerId = firstGoalEvent.details.scoringPlayerId;
+    const player = resultsData.rosterSpots.find(
+      (p) => p.playerId === scoringPlayerId
+    );
+    const fullName = `${player.firstName.default} ${player.lastName.default}`;
+    bet.result =
+      fullName === playerName
+        ? `${betCreator} Wins`
+        : `${betCreator} Lost`;
+  }
+}
 
-      for (const [betDescription, isActive] of Object.entries(
-        bet.betdescription
-      )) {
-        if (!isActive) continue;
 
-        if (betDescription.includes("will score the first goal")) {
-          let firstGoalEvent = resultsData.plays.find(
-            (play) => play.typeDescKey === "goal"
-          );
-          if (firstGoalEvent) {
-            const playerName = betDescription.split(
-              " will score the first goal"
-            )[0];
-            const scoringPlayerId = firstGoalEvent.details.scoringPlayerId;
-            const player = resultsData.rosterSpots.find(
-              (p) => p.playerId === scoringPlayerId
-            );
-            bet.result =
-              player &&
-              `${player.firstName.default} ${player.lastName.default}` ===
-                playerName
-                ? `${betCreator} Wins`
-                : `${betCreator} Lost`;
-          } else {
-            bet.result = "Loss";
-          }
-          
-        }
-        if (betDescription.includes("will score anytime")) {
-          const playerName = betDescription.split(" will score anytime")[0];
-          const playerId = findPlayerIdByName(
-            playerName,
-            resultsData.rosterSpots
-          );
-          const scoreingResults = checkAnytimeGoal(playerId, resultsData.plays);
-          bet.result = scoreingResults;
-        }
-        if (betDescription.includes("will get 2 shots on net")) {
-          const playerName = betDescription.split(
-            " will get 2 shots on net"
-          )[0];
-          const playerId = findPlayerIdByName(
-            playerName,
-            resultsData.rosterSpots
-          );
-          const shotsResult = checkShotsOnNet(
-            playerId,
-            resultsData.plays,
-            isGameFinished
-          );
+    // 🏒 ANYTIME GOAL
+else if (betDescription.includes("will score anytime")) {
+  const playerName = betDescription.split(" will score anytime")[0];
+  const playerId = findPlayerIdByName(playerName, resultsData.rosterSpots);
 
-          bet.result = shotsResult;
-        }
-        if (betDescription.includes("will make an assist")) {
-          const playerName = betDescription.split(" Will make an assist")[0];
-          const playerId = findPlayerIdByName(
-            playerName,
-            resultsData.rosterSpots
-          );
-          const playerAssist = checkAssistPlayer(playerId, resultsData.plays);
-          bet.result = playerAssist;
-        }
+  const hasScored = checkAnytimeGoal(playerId, resultsData.plays);
 
-        if (isGameFinished) {
-          const homeScore = resultsData.homeTeam.score;
-          const awayScore = resultsData.awayTeam.score;
+  if (hasScored) {
+    bet.result = `${betCreator} Wins`;
+  } else if (!isGameFinished) {
+    bet.result = "Game not over";
+  } else {
+    bet.result = `${betCreator} Lost`;
+  }
+}
 
-          if (
-            betDescription === `${resultsData.homeTeam.abbrev} will win`
-          ) {
-            bet.result =
-              homeScore > awayScore
-                ? `${betCreator} Wins`
-                : `${betCreator} Lost`;
-          } else if (
-            betDescription === `${resultsData.awayTeam.abbrev} will win`
-          ) {
-            bet.result =
-              awayScore > homeScore
-                ? `${betCreator} Wins`
-                : `${betCreator} Lost`;
-          }
-        } else {
-          bet.result = "Game not Finished";
-        }
-        if (bet.result && (bet.result.includes("Wins") || bet.result.includes("Lost"))) {
-          // Update bet status to 'settled' if the result is determined --Jamie--
-          bet.betstatus = "settled";
-        }
-        // Update the bet in Supabase --Jamie--
-        const { error: updateError } = await supabase
-          .from("bets")
-          .update({ result: bet.result,betstatus: bet.betstatus })
-          .eq("betid", betId);
 
-        if (updateError) {
-          console.error("Error updating bet result:", updateError);
-        }
+    // 🏒 SHOTS ON NET
+else if (betDescription.includes("will get 2 shots on net")) {
+  const playerName = betDescription.split(" will get 2 shots on net")[0];
+  const playerId = findPlayerIdByName(playerName, resultsData.rosterSpots);
+
+  const hasEnoughShots = checkShotsOnNet(playerId, resultsData.plays);
+
+  if (hasEnoughShots) {
+    bet.result = `${betCreator} Wins`;
+  } else if (!isGameFinished) {
+    bet.result = "Game not over";
+  } else {
+    bet.result = `${betCreator} Lost`;
+  }
+}
+
+// 🏒 SHOTS ON NET (3+)
+else if (betDescription.includes("will get 3+ shots on net")) {
+  const playerName = betDescription.split(" will get 3+ shots on net")[0];
+  const playerId = findPlayerIdByName(playerName, resultsData.rosterSpots);
+
+  // We’ll tweak the helper slightly inline for 3+ shots
+  const shotsOnGoal = resultsData.plays.filter(
+    (play) =>
+      (play.typeDescKey === "shot-on-goal" &&
+        play.details.shootingPlayerId === playerId) ||
+      (play.typeDescKey === "goal" &&
+        play.details.scoringPlayerId === playerId)
+  );
+
+  const hasEnoughShots = shotsOnGoal.length >= 3;
+
+  if (hasEnoughShots) {
+    bet.result = `${betCreator} Wins`;
+  } else if (!isGameFinished) {
+    bet.result = "Game not over";
+  } else {
+    bet.result = `${betCreator} Lost`;
+  }
+}
+
+
+
+    // 🏒 ASSIST
+else if (betDescription.includes("will make an assist")) {
+  const playerName = betDescription.split(" will make an assist")[0];
+  const playerId = findPlayerIdByName(playerName, resultsData.rosterSpots);
+
+  const hasAssist = checkAssistPlayer(playerId, resultsData.plays);
+
+  if (hasAssist) {
+    bet.result = `${betCreator} Wins`;
+  } else if (!isGameFinished) {
+    bet.result = "Game not over";
+  } else {
+    bet.result = `${betCreator} Lost`;
+  }
+}
+
+
+    // 🏒 GAME WINNER
+    else if (isGameFinished) {
+      const homeScore = resultsData.homeTeam.score;
+      const awayScore = resultsData.awayTeam.score;
+      if (betDescription === `${resultsData.homeTeam.abbrev} will win`) {
+        bet.result =
+          homeScore > awayScore
+            ? `${betCreator} Wins`
+            : `${betCreator} Lost`;
+      } else if (
+        betDescription === `${resultsData.awayTeam.abbrev} will win`
+      ) {
+        bet.result =
+          awayScore > homeScore
+            ? `${betCreator} Wins`
+            : `${betCreator} Lost`;
       }
+    } else {
+      bet.result = "Waiting for game to finish";
     }
+
+    // ---- Final update ----
+    if (bet.result && (bet.result.includes("Wins") || bet.result.includes("Lost"))) {
+      bet.betstatus = "settled";
+    }
+
+    const { error: updateError } = await supabase
+      .from("bets")
+      .update({ result: bet.result, betstatus: bet.betstatus })
+      .eq("betid", betId);
+
+    if (updateError) console.error("Error updating bet result:", updateError);
+  }
+}
+
     if (bet.sporttype === "MLB") {
       const response = await fetch(
         `https://statsapi.mlb.com/api/v1.1/game/${gameNumber}/feed/live`
