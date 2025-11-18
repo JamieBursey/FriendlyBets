@@ -12,7 +12,7 @@ useEffect(() => {
   if (currentMonth === 9) setSeason("october");
   else if (currentMonth === 10) {
     const remembranceDay = 11;
-    const oneWeekAfter = remembranceDay + 7;
+    const oneWeekAfter = remembranceDay + 3;
     if (currentDay >= remembranceDay - 10 && currentDay <= oneWeekAfter) {
       setSeason("november");
     } else {
