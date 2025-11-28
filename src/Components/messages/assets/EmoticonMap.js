@@ -10,7 +10,7 @@ export const emojiMap = {
   ";'(":  "/assets/emoticons/cry.png",
   "|-)": "/assets/emoticons/bored.png",
   "B)": "/assets/emoticons/cool.png",
-  "<:o":" /assets/emoticons/party.png",
+  "<:o": "/assets/emoticons/party.png",
   ">:(": "/assets/emoticons/angry.png",
   "^o)": "/assets/emoticons/sarcastic.png",
   ":D": "/assets/emoticons/grin.png",

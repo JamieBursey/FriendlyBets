@@ -1,524 +1,571 @@
+/* ============================================
+   CLASSIC MSN MESSENGER 7.5 (XP STYLE)
+   Applied to your existing class names
+   ============================================ */
+
+/* Global font just for the messenger area */
+.msn-container,
+.msn-container * {
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+/* Outer window */
 .msn-container {
   display: flex;
-  height: 90vh;
-  background: linear-gradient(180deg, #dfe9f3 0%, #ffffff 100%);
-  border-radius: 10px;
-  overflow: hidden; 
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  height: 80vh;
+  background: #ffffff;
+  border: 1px solid #3b6ea5;
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+  overflow: visible !important;
 }
 
-/* ✅ Mobile Layout */
-@media (max-width: 768px) {
-  .msn-container {
-    flex-direction: column;
-    height: 100vh;
-  }
+/* ============================================
+   SIDEBAR / CONTACT LIST
+   ============================================ */
 
-  .msn-sidebar {
-    width: 100% !important;
-    max-height: 45vh;
-    position: relative;
-    z-index: 5;
-  }
-
-  .msn-sidebar.closed {
-    display: none; /* hide sidebar entirely when closed */
-  }
-
-  .chat-section {
-    width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .chat-header .menu-btn {
-    display: block !important;
-  }
-
-  .emoji-picker {
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 80px;
-  }
-}
-
-/* Sidebar */
 .msn-sidebar {
-  width: 250px;
-  background: linear-gradient(180deg, #6ec1e4 0%, #0078d4 100%);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-}
-
-.msn-sidebar.closed {
-  transform: translateX(-100%);
-  position: absolute;
-  z-index: 10;
+  width: 260px;
+  background: linear-gradient(to bottom, #f6fbff 0%, #d9e8fb 100%);
+  border-right: 1px solid #95b9e6;
+  padding: 6px 8px 8px;
+  overflow: scroll;
 }
 
 .msn-title {
-  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-weight: bold;
-  font-size: 1.2rem;
-  border-bottom: 2px solid rgba(255,255,255,0.2);
+  color: #0b3b81;
+  font-size: 13px;
+  margin-bottom: 6px;
 }
 
-.friends-list {
-  flex: 1;
-  overflow-y: auto;
-}
-@media (max-width: 768px) {
-  .friends-list {
-    padding-bottom: 10px;
-    border-bottom: 2px solid rgba(255,255,255,0.25);
-    margin-bottom: 8px;
-  }
+/* Optional: fake MSN buddy logo on the left of title */
+.msn-title::before {
+  content: "";
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: radial-gradient(circle at 30% 30%, #6fd25b 0, #2d9c2c 55%, #1a5e19 100%);
 }
 
+/* Section headings inside sidebar */
+.start-chat-section h4,
+.chats-section h4 {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #1f4f9a;
+  margin: 6px 0 3px 4px;
+}
+
+/* Contact / chat rows */
 .friend-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px;
+  gap: 6px;
+  padding: 4px 6px;
+  margin-bottom: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 3px;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 .friend-item:hover {
-  background: rgba(255,255,255,0.2);
+  background: #e9f2ff;
+  border-color: #8db3e2;
 }
 
+.friend-item.active {
+  background: #cfe3ff;
+  border-color: #3c7bd9;
+}
 
 .friend-avatar {
-  font-size: 1.6rem;
+  font-size: 24px;
+  color: #2f5fa9;
 }
 
-/* Chat Section */
+/* Start chat button = XP style button */
+.start-chat-btn {
+  width: calc(100% - 16px);
+  margin: 8px;
+  padding: 5px 0;
+  border-radius: 4px;
+  border: 1px solid #2a5aa5;
+  background: linear-gradient(to bottom, #ffffff, #d6e6ff);
+  color: #123765;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.start-chat-btn:hover {
+  background: linear-gradient(to bottom, #ffffff, #c3d8ff);
+}
+
+/* ============================================
+   CHAT SECTION
+   ============================================ */
+
 .chat-section {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #f2f7fb;
+  background: #ffffff;
 }
 
-.chat-header {
-  background: #0078d4;
-  color: white;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.menu-btn {
-  display: none;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-.chat-body {
-  flex: 1;
-  min-height: 0;
-  padding: 15px;
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.chat-bubble {
-  max-width: 70%;
-  padding: 10px 14px;
-  border-radius: 16px;
-  line-height: 1.4;
-  font-size: 0.95rem;
-  word-wrap: break-word;
-}
-
-.chat-bubble.sent {
-  align-self: flex-end;
-  background: #cce5ff;
-}
-
-.chat-bubble.received {
-  align-self: flex-start;
-  background: #e4e6eb;
-}
-
-/* Chat Input */
-.chat-input {
-    flex-shrink: 0;
-  display: flex;
-  border-top: 1px solid #ccc;
-  background: white;
-  padding: 5px;
-}
-
-.chat-input input {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-}
-
-.chat-input button {
-  background: #0078d4;
-  border: none;
-  color: white;
-  padding: 0 20px;
-  cursor: pointer;
-}
-
-.chat-input button:hover {
-  background: #005a9e;
-}
-
-/* Emoji Picker */
-.emoji-picker {
-  position: absolute;
-  bottom: 60px;
-  right: 70px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 8px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 30px);
-  gap: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  z-index: 20;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.emoji-option {
-  width: 26px;
-  height: 26px;
-  cursor: pointer;
-}
-
-.emoji-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.4rem;
-  cursor: pointer;
-  padding: 0 10px;
-}
-
-.emoji-btn:hover {
-  transform: scale(1.1);
-}
-
-.emoji-inline {
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-}
-.msn-btn.xp-primary {
-  background: linear-gradient(180deg, #34a0ff 0%, #1b76d1 100%);
-  color: white;
-  border: 1px solid #0d5faf;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.2);
-}
-
-.msn-btn.xp-primary:hover {
-  background: linear-gradient(180deg, #1b76d1 0%, #0d5faf 100%);
-}
-/* Modal Buttons */
-.msn-btn.xp-secondary {
-  background: linear-gradient(180deg, #f6f6f6 0%, #e0e0e0 100%);
-  color: #333;
-  border: 1px solid #b5b5b5;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.15);
-}
-
-.msn-btn.xp-secondary:hover {
-  background: linear-gradient(180deg, #eaeaea 0%, #d4d4d4 100%);
-}
-
-/* Friend selector inside AddPeopleModal */
-.add-people-list {
-  max-height: 250px;
-  overflow-y: auto;
-  padding: 4px;
-  border: 1px solid #d0d7e2;
-  border-radius: 6px;
-  background: #f8fafc;
-}
-
-.friend-select-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  margin-bottom: 6px;
-  background: white;
-  border: 1px solid #e4e4e4;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s, border 0.2s;
-}
-
-.friend-select-item:hover {
-  background: #f0f7ff;
-  border-color: #7bb4ff;
-}
-
-.friend-select-item.active {
-  background: #d9ecff;
-  border-color: #1b76d1;
-  font-weight: bold;
-}
-
-.friend-select-check {
-  font-size: 1rem;
-  font-weight: bold;
-  color: black;
-  visibility: hidden;
-  
-}
-
-.friend-select-item.active .friend-select-check {
-  visibility: visible;
-}
-
-
-@media (max-width: 768px) {
-  .start-chat-section {
-    background: rgba(255, 255, 255, 0.15);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-    padding-bottom: 5px;
-  }
-
-  .chats-section {
-    background: rgba(0, 0, 0, 0.1);
-    flex: 1;
-    overflow-y: auto;
-    padding-top: 5px;
-  }
-
-  .sidebar-title {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    opacity: 0.9;
-    padding-left: 12px;
-    letter-spacing: 0.5px;
-  }
-
-  /* Improve list spacing */
-  .friend-item {
-    border-radius: 4px;
-    margin: 4px 8px;
-    padding: 10px;
-  }
-
-  /* Highlight active chat stronger */
-  .friend-item.active {
-    background: rgba(255, 255, 255, 0.6);
-    border-left: 4px solid #fff;
-  }
-}
-
-/* ✅ Ensure modal always centers on all devices */
-.msn-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.35);
-  z-index: 9999;
-  overflow: hidden;
-}
-
-/* ✅ Fix modal width on small screens */
-.msn-modal {
-  width: 90%;
-  max-width: 360px;
-  margin: 0 auto;
-}
-
-/* Chat Tabs Bar (MSN Messenger look) */
+/* Tabs bar like multiple conversations */
 .chat-tabs {
   display: flex;
-  background: linear-gradient(to bottom, #eaf3ff 0%, #d0e1ff 100%);
-  border-bottom: 1px solid #a6bfe9;
-  height: 34px;
-  align-items: flex-end;
-  padding-left: 6px;
-  overflow-x: auto;
+  gap: 2px;
+  padding: 2px 4px 0;
+  background: linear-gradient(to bottom, #f6fbff, #d9e8fb);
+  border-bottom: 1px solid #95b9e6;
 }
 
 .chat-tab {
-  background: linear-gradient(to bottom, #f8fbff 0%, #dce9ff 100%);
-  border: 1px solid #a9c1ea;
+  padding: 3px 8px;
+  border-radius: 4px 4px 0 0;
+  font-size: 11px;
+  background: linear-gradient(to bottom, #fbfdff, #d3e3ff);
+  border: 1px solid #95b9e6;
   border-bottom: none;
-  border-radius: 6px 6px 0 0;
-  margin-right: 4px;
-  padding: 5px 12px;
-  font-size: 0.9rem;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  color: #003366;
-  transition: all 0.2s ease;
 }
 
 .chat-tab.active {
-  background: linear-gradient(to bottom, #c6dcff 0%, #a6c8ff 100%);
+  background: #ffffff;
+  border-color: #3c7bd9;
   font-weight: bold;
-  color: #002a7a;
-  box-shadow: inset 0 -2px 0 #fff;
-}
-
-.chat-tab:hover {
-  background: linear-gradient(to bottom, #dde9ff 0%, #c3d8ff 100%);
 }
 
 .close-tab {
+  margin-left: 4px;
   font-weight: bold;
-  color: #555;
-  cursor: pointer;
-  font-size: 1rem;
-  padding-left: 4px;
-  transition: color 0.2s;
 }
 
-.close-tab:hover {
-  color: #000;
-}
-
-/* Timestamp inside messages */
-.timestamp {
-  display: block;
-  font-size: 0.75rem;
-  color: #777;
-  margin-top: 3px;
-  text-align: right;
-}
-
-/* Sender name in group chats */
-.sender-name {
-  font-size: 0.85rem;
-  font-weight: bold;
-  margin-bottom: 2px;
-  color: #00468b;
-}
-
-/* Chat message wrapper for better spacing */
-.chat-message-wrapper {
+/* Header bar (blue MSN gradient) */
+.chat-header {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 6px;
-}
-
-/* Improve bubble visual polish */
-.chat-bubble.sent {
-  background: linear-gradient(180deg, #d8ecff 0%, #c2e0ff 100%);
-  border: 1px solid #a0c9ff;
-  box-shadow: inset 0 1px 0 #fff;
-}
-
-.sidebar-gap {
-  height: 20px; /* adjust for desired space */
-  background: transparent;
-}
-
-/* On mobile, make the gap more obvious */
-@media (max-width: 768px) {
-  .sidebar-gap {
-    height: 30px;
-  }
-}
-
-.msn-modal input[type="color"] {
-  width: 40px;
-  height: 30px;
-  border: none;
-  cursor: pointer;
-  border-radius: 6px;
-  background: none;
-}
-
-
-/* colorChange Styles */
-/* Modal base theme colors */
-.msn-modal-card.light {
-  background: #f4f4f4;
-  color: #222;
-}
-
-.msn-modal-card.dark {
-  background: #1e1e1e;
-  color: #fff;
-}
-
-.msn-modal-card.retro {
-  background: #fdf3d7;
-  color: #3b2f2f;
-  border: 2px solid #d1a75c;
-  box-shadow: inset 0 0 10px rgba(209, 167, 92, 0.4);
-}
-
-/* Theme buttons */
-.theme-section {
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 6px;
+  padding: 4px 8px;
+  background: linear-gradient(to bottom, #5fb0ff, #1b64c5);
+  color: #ffffff;
+  border-bottom: 1px solid #1b4f94;
 }
 
-.theme-options {
+.chat-header h4 {
+  margin: 0;
+  flex: 1;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* Left hamburger */
+.menu-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* XP style header buttons */
+.msn-btn {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  border: 1px solid #274f9f;
+  background: linear-gradient(to bottom, #ffffff, #d6e6ff);
+  color: #123765;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.msn-btn:hover {
+  background: linear-gradient(to bottom, #ffffff, #c3d8ff);
+}
+
+/* make the color button a small square icon */
+.color-button {
+  padding: 3px;
   display: flex;
-  gap: 8px;
+  align-items: center;
   justify-content: center;
 }
 
-.theme-btn {
-  border: none;
-  padding: 6px 12px;
+/* ============================================
+   MESSAGE AREA
+   ============================================ */
+
+.chat-body {
+  flex: 1;
+
+  padding: 10px;
+  background: linear-gradient(to bottom, #ffffff 0%, #f1f6ff 100%);
+  overflow-y: scroll;
+}
+
+/* Wrapper aligns sent/received */
+.chat-message-wrapper {
+  display: flex;
+  margin-bottom: 6px;
+}
+
+.chat-message-wrapper.sent {
+  justify-content: flex-end;
+}
+
+.chat-message-wrapper.received {
+  justify-content: flex-start;
+}
+
+/* MSN didn't really use bubbles; keep text simple */
+.chat-bubble {
+  max-width: 70%;
+  padding: 2px 0;
+}
+
+.chat-bubble.sent {
+  text-align: right;
+}
+
+/* Name above messages in group chats */
+.sender-name {
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 1px;
+}
+
+/* Time under message */
+.timestamp {
+  font-size: 10px;
+  color: #808080;
+  margin-top: 1px;
+}
+
+/* ============================================
+   INPUT BAR
+   ============================================ */
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: red;
+  padding: 6px 8px;
+  background: #f2f7ff;
+  border-top: 1px solid #95b9e6;
+  z-index: 9000;
+}
+
+.chat-input input[type="text"] {
+  flex: 1;
+  border: 1px solid #95b9e6;
+  border-radius: 3px;
+  padding: 4px 6px;
+  font-size: 13px;
+}
+
+/* Emoji circle button */
+.emoji-btn {
+  border: 1px solid #95b9e6;
+  background: #ffffff;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Send button — XP blue */
+.chat-input > button:last-child {
+  background: linear-gradient(to bottom, #52a7f9, #1f74d1);
+  border: 1px solid #1c5aaa;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Emoji palette popup */
+.emoji-picker {
+  position: absolute;
+  bottom: 56px;
+  right: 16px;
+  padding: 6px;
+  border-radius: 4px;
+  background: #ffffff;
+  border: 1px solid #95b9e6;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  max-width: 260px;
+}
+
+/* ============================================
+   MODAL (NAME COLOR PICKER) — XP STYLE
+   ============================================ */
+
+.msn-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.msn-modal {
+  min-width: 320px;
+  background: #f0f4ff;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  color: inherit;
+  border: 1px solid #3b6ea5;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Your h3 acts like the modal title bar */
+.msn-modal > h3 {
+  margin: 0;
+  padding: 6px 10px;
+  background: linear-gradient(to bottom, #5fb0ff, #1b64c5);
+  color: #ffffff;
+  font-size: 13px;
+}
+
+/* Body content inside modal */
+.msn-modal > div:nth-of-type(1),
+.msn-modal > .msn-modal-body {
+  padding: 12px;
+}
+
+.msn-section-title {
+  font-weight: bold;
+  font-size: 13px;
+  color: #1d63c1;
+  margin: 10px 0 6px 0;
+}
+
+.msn-separator {
+  margin: 10px 0;
+  border-bottom: 1px solid #c8d6e5;
+}
+
+.chatroom-item {
+  padding: 6px 8px;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  margin-bottom: 4px;
 }
 
-.theme-btn.active {
-  background: var(--theme-accent, #0078d4);
-  color: #fff;
+.chatroom-item:hover {
+  background: #e3f0ff;
 }
 
-.theme-btn:hover {
-  transform: translateY(-1px);
+.active-chatroom {
+  background: #c9e2ff;
 }
 
-.color-btn {
-  background: transparent;
+.chatroom-name {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.chatroom-preview {
+  font-size: 11px;
+  color: #555;
+}
+.emoji-picker {
+  position: absolute;
+  bottom: 55px;
+  right: 10px;
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  padding: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 180px;
+  height: 140px;
+  overflow-y: auto;
+  border-radius: 6px;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+}
+
+.emoji-btn-item {
   border: none;
+  background: transparent;
   cursor: pointer;
-  color: var(--accent-color, red);
-  transition: transform 0.2s ease, color 0.2s ease;
+  margin: 3px;
+  padding: 2px;
 }
 
-.color-btn:hover {
-  transform: scale(1.1);
-  color: var(--hover-accent, green);
+.emoji-inline {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+.shake-screen {
+  animation: msnshake 0.15s linear 0s 5;
 }
 
-.color-btn:active {
-  transform: scale(0.95);
+@keyframes msnshake {
+  0% { transform: translate(2px, 2px); }
+  25% { transform: translate(-2px, 2px); }
+  50% { transform: translate(-2px, -2px); }
+  75% { transform: translate(2px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+
+.typing-indicator {
+  font-size: 12px;
+  color: #4b79ff;
+  margin: 6px 12px;
+  font-style: italic;
+}
+
+
+/* ============================================
+   MOBILE RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* -------- TABLET (600–899px) -------- */
+@media (max-width: 899px) {
+  .msn-container {
+    flex-direction: column;
+    height: 100dvh;
+  }
+
+  .msn-sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    overflow-y: auto;
+    border-right: none;
+    border-bottom: 1px solid #95b9e6;
+  }
+
+  .chat-section {
+    flex: 1;
+  }
+
+  .chat-header h4 {
+    font-size: 12px;
+  }
+}
+
+/* -------- MOBILE (≤ 599px) -------- */
+@media (max-width: 599px) {
+
+  /* Main container fills screen */
+  .msn-container {
+    flex-direction: column;
+    width: 100%;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+  }
+
+  /* SIDEBAR becomes slide-out panel */
+  .msn-sidebar {
+    position: fixed;
+    top: 20%;
+    left: 60%;
+    width: 220px;
+    height: calc(100dvh - 48px);
+    background: linear-gradient(to bottom, #f6fbff 0%, #d9e8fb 100%);
+    border-right: 1px solid #95b9e6;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
+  
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 2000;
+  }
+
+  /* When sidebar is toggled from menu icon */
+  .msn-sidebar.show {
+    transform: translateX(0%);
+  }
+
+  /* TAB BAR */
+  .chat-tabs {
+    padding: 2px 4px;
+    gap: 3px;
+    overflow-x: auto;
+  }
+
+  .chat-tab {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+
+  /* CHAT HEADER */
+  .chat-header {
+    padding: 6px;
+  }
+
+  .chat-header h4 {
+    font-size: 12px;
+  }
+
+  /* MESSAGES AREA */
+.chat-body {
+  flex: 1;
+  height:70%;
+  padding: 10px;
+  margin-bottom: 150px !important; /* space for input bar */
+  background: linear-gradient(to bottom, #ffffff 0%, #f1f6ff 100%);
+  overflow: scroll;
+}
+
+
+  .sender-name {
+    font-size: 10px;
+  }
+
+  .timestamp {
+    font-size: 9px;
+  }
+
+  /* INPUT BAR */
+  .chat-input {
+    position: fixed;
+    bottom:100px;
+    left: 0;
+    right: 0;
+    padding: 8px;
+    background: #f2f7ff;
+    border-top: 1px solid #95b9e6;
+    z-index: 3000; /* stays above messages */
+  }
+
+  .chat-input input[type="text"] {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .emoji-picker {
+    bottom: 62px !important;
+    right: 6px !important;
+    width: 150px;
+    height: 120px;
+  }
+
+  /* Nudge shakes full page visually on mobile */
+  .shake-screen {
+    animation: msnshake 0.25s linear 0s 6;
+  }
 }
 

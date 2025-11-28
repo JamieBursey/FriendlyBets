@@ -7,7 +7,7 @@
   pointer-events: none;     
   overflow: visible !important;
     z-index: 9999;
-  isolation: isolate; 
+  isolation: unset
 }
 .rememberance-container {
   position: absolute;
@@ -57,11 +57,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
-  overflow: hidden;
-  z-index: 9999;
+  z-index: 999;
 }
 
 /* Each flake is created in the SeasonalStart component */
@@ -86,23 +85,33 @@
 
 
 /* --- Santa Animation --- */
-.santa {
-  width: 250px;
-  position: fixed;
-  top: 20%;
-  left: -300px;
-  animation: flyAcrossUp 6s ease-in-out forwards;
-  z-index: 9999;
+.santa-container {
+  position: fixed;      /* Stays in view during the animation */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;       /* Full screen */
+  z-index: 10000; 
+  overflow: visible !important;      /* Above snow */
+  pointer-events: none;
 }
+
+.santa {
+  width: 300px;
+  animation: flyAcrossUp 22s linear infinite
+}
+
 
 @keyframes flyAcrossUp {
   0% {
-    transform: translateX(-250px) translateY(0);
+    transform: translateX(70vw) translateY(70vh);
   }
-  70% {
-    transform: translateX(100vw) translateY(0);
+  50% {
+    transform: translateX(0vw) translateY(30vh);   /* Middle of screen */
   }
   100% {
-    transform: translateX(110vw) translateY(-200px);
+    transform: translateX(-120vw) translateY(-10vh); /* Exit top-left */
   }
 }
+
+
