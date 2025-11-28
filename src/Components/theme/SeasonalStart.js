@@ -3,11 +3,21 @@ import "./SeasonalStart.css";
 
 const SeasonalStart = ({ onFinish }) => {
   const [season, setSeason] = useState("default");
+  const [gifKey, setGifKey] = useState(Date.now());
 
+useEffect(() => {
+  const interval = setInterval(() => {
+    // restart GIF by forcing a new key
+    setGifKey(Date.now());
+  }, 12000); // same as CSS animation duration
+
+  return () => clearInterval(interval);
+}, []);
 useEffect(() => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentDay = currentDate.getDate();
+
 
   if (currentMonth === 9) setSeason("october");
   else if (currentMonth === 10) {
@@ -29,13 +39,24 @@ useEffect(() => {
   }
 
   // ⏳ Timer logic: longer for December, shorter for others
-  const timerDuration = (currentMonth === 11 ? 60000 : 10000); // 60s for December
+  const timerDuration = (currentMonth === 11 ? 200000 : 200000); // 60s for December
   const timer = setTimeout(() => onFinish(), timerDuration);
 
   return () => clearTimeout(timer);
 }, [onFinish]);
 
+useEffect(() => {
+  const handler = (e) => {
+    if (e.key === "1") setSeason("october");
+    if (e.key === "2") setSeason("november");
+    if (e.key === "3") setSeason("december");
+    if (e.key === "4") setSeason("christmasWeek");
+    if (e.key === "0") setSeason("default");
+  };
 
+  window.addEventListener("keydown", handler);
+  return () => window.removeEventListener("keydown", handler);
+}, []);
   return (
     <div className="seasonal-startup">
       {season === "october" && (
@@ -92,8 +113,9 @@ useEffect(() => {
       {season === "christmasWeek" && (
         <div className="santa-container">
           <img
-            src="/animations/santa.gif"
-            alt="Santa Flying"
+            key={gifKey}
+            src="/animations/grinchinf.gif"
+            alt="Grinch Flying"
             className="santa"
           />
         </div>

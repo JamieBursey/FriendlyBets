@@ -3,6 +3,7 @@ import { supabase } from "../../supabaseClient";
 import { FaUserCircle } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { FiMenu } from "react-icons/fi";
+import { IoColorPalette } from "react-icons/io5";
 import { FaPalette } from "react-icons/fa";
 import { emojiMap } from "./assets/EmoticonMap";
 import renderMessageContent from "./Emoji-img";
@@ -69,6 +70,35 @@ const [showAddModal, setShowAddModal] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 const [userColor, setUserColor] = useState("#003366");
+const [isShaking, setIsShaking] = useState(false);
+const [someoneTyping, setSomeoneTyping] = useState(null);
+
+
+const sendNudge = async () => {
+  if (!activeChatId) return;
+
+  await sendMessage(currentUserId, "/nudge"); // store as a special system command
+};
+
+useEffect(() => {
+  const channel = supabase
+    .channel("typing")
+    .on("broadcast", { event: "typing" }, (payload) => {
+      if (
+        payload.payload.roomId === activeChatId &&
+        payload.payload.userId !== currentUserId
+      ) {
+        setSomeoneTyping(payload.payload.username);
+
+        setTimeout(() => setSomeoneTyping(null), 2000); // auto-clear
+      }
+    })
+    .subscribe();
+
+  return () => supabase.removeChannel(channel);
+}, [activeChatId, currentUserId]);
+
+
 
 useEffect(() => {
     
@@ -138,6 +168,33 @@ const handleAddPeople = async (newUserIds) => {
     setShowAddModal(false); // close modal
   }
 };
+useEffect(() => {
+  const last = messages[messages.length - 1];
+  if (!last) return;
+
+  const isNudge = last.content === "/nudge";
+  const fromOther = last.sender_id !== currentUserId;
+
+  if (isNudge && fromOther) {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 800);
+  }
+}, [messages, currentUserId]);
+const handleTyping = async (text) => {
+  setNewMessage(text);
+if (!activeChatId) return;
+  await supabase.channel("typing")
+    .send({
+      type: "broadcast",
+      event: "typing",
+      payload: {
+        userId: currentUserId,
+        roomId: activeChatId,
+        username: publicUser?.username
+      }
+    });
+};
+
 // LEAVE CHAT: core logic
 const leaveChat = async () => {
   try {
@@ -208,38 +265,18 @@ const leaveChat = async () => {
 const startChat = async () => {
   if (!currentUserId || selectedFriends.length === 0) return;
 
-  // friends selected → convert to their public_user_id values
+  // convert selected usernames → IDs
   const selectedIds = selectedFriends
     .map(username => friends.find(f => f.username === username)?.public_user_id)
     .filter(Boolean);
 
-  // Include current user always
+  // include self
   const participantIds = Array.from(new Set([currentUserId, ...selectedIds]));
 
-  // 🛑 CHECK FOR EXISTING 1-on-1 chat
-  if (participantIds.length === 2) {
-    const existingPrivateChat = chatRooms.find(
-      room =>
-        room.type === "private" &&
-        room.participants.length === 2 &&
-        room.participants.some(p => p.id === participantIds[0]) &&
-        room.participants.some(p => p.id === participantIds[1])
-    );
+  // ALWAYS TREAT NEW CHATS AS GROUPS
+  const chatType = "group";
 
-    if (existingPrivateChat) {
-      console.log("PRIVATE CHAT ALREADY EXISTS ✅", existingPrivateChat.id);
-      setActiveChatId(existingPrivateChat.id);
-      setSelectedFriends([]);
-      return;
-    }
-  }
-
-  // 🔥 If no existing, create new chat
-  const chatType = participantIds.length === 2 ? "private" : "group";
-  const chatName =
-    chatType === "private"
-      ? selectedFriends[0]
-      : `Chat with ${selectedFriends.join(", ")}`;
+  const chatName = `Chat with ${selectedFriends.join(", ")}`;
 
   const { data: newChat, error } = await supabase
     .from("chat_rooms")
@@ -252,18 +289,18 @@ const startChat = async () => {
     return;
   }
 
-  // insert participants
   const participantRows = participantIds.map(uid => ({
     chat_id: newChat.id,
-    user_id: uid
+    user_id: uid,
   }));
 
   await supabase.from("chat_participants").insert(participantRows);
 
-  await refresh(); // reload chat rooms
-  setActiveChatId(newChat.id); // open new chat
-  setSelectedFriends([]); // reset selection
+  await refresh();
+  setActiveChatId(newChat.id);
+  setSelectedFriends([]);
 };
+
 
 
 
@@ -274,17 +311,6 @@ const startChat = async () => {
   };
 
   // sidebar preview helpers
-  const roomLabel = (room) => {
-    if (room.type === "private") {
-      return room.participants
-        .filter((p) => p.id !== currentUserId)
-        .map((p) => p.username)
-        .join(", ");
-    }
-    return room.name ||
-      room.participants.filter((p) => p.id !== currentUserId).map((p) => p.username).join(", ") ||
-      "Group Chat";
-  };
 
   const roomPreview = (room) => {
     if (room.latestMessage) {
@@ -310,275 +336,232 @@ const startChat = async () => {
   if (!currentUserId) return <p>Not signed in.</p>;
 
 return (
-  <div className="msn-container">
-    {/* Sidebar */}
-    {showSidebar && (
-      <div className="msn-sidebar open">
-        <h3 className="msn-title">MSN Reborn</h3>
+ <div className={`msn-container ${isShaking ? "shake-screen" : ""}`}>
 
-        {/* Start New Chat */}
-        <div className="friends-list start-chat-section">
-          <h4 style={{ margin: "10px 0 5px 10px", fontSize: "0.95rem" }}>
-            Start New Chat
-          </h4>
+    {/* HEADER — Classic Blue MSN Bar */}
+    <div className="msn-header">
+      MSN Reborn
+    </div>
 
-          {friendsLoading ? (
-            <p style={{ margin: 10 }}>Loading friends…</p>
-          ) : (
-            friends.map((friend) => (
-              <div
-                key={friend.public_user_id}
-                className={`friend-item ${
-                  selectedFriends.includes(friend.username) ? "active" : ""
-                }`}
-                onClick={() => toggleFriendSelection(friend.username)}
+    <div style={{ display: "flex", flex: 1 }}>
+      {/* SIDEBAR */}
+{/* SIDEBAR */}
+<div className="msn-sidebar">
+  {/* CONTACT LIST */}
+  <div className="msn-section-title">Contacts</div>
+
+  {friends.map((f) => (
+    <div
+      key={f.public_user_id}
+      className="friend-item"
+      onClick={() => {
+        setSelectedFriends([f.username]);
+        startChat();
+      }}
+    >
+      <FaUserCircle className="friend-avatar" />
+      <span>{f.username}</span>
+    </div>
+  ))}
+
+  {/* SEPARATOR LINE */}
+  <div className="msn-separator"></div>
+
+  {/* ACTIVE CHAT ROOMS */}
+  <div className="msn-section-title">Your Chats</div>
+
+  {chatRooms.map((room) => (
+    <div
+      key={room.id}
+      className={`chatroom-item ${
+        activeChatId === room.id ? "active-chatroom" : ""
+      }`}
+      onClick={() => setActiveChatId(room.id)}
+    >
+      {/* Room name */}
+      <div className="chatroom-name">
+        {room.type === "private"
+          ? room.participants
+              .filter((p) => p.id !== currentUserId)
+              .map((p) => p.username)
+              .join(", ")
+          : room.name}
+      </div>
+
+      {/* Preview (latest message or created date) */}
+      <div className="chatroom-preview">
+        {roomPreview(room)}
+      </div>
+    </div>
+  ))}
+</div>
+
+
+      {/* MAIN CHAT SECTION */}
+      <div className="chat-section">
+        {/* TAB BAR */}
+        <div className="chat-tabs">
+          {activeRoom && (
+            <div className="chat-tab active">
+              {displayRoomName}
+              <span
+                className="close-tab"
+                onClick={() => setActiveChatId(null)}
               >
-                <FaUserCircle className="friend-avatar" />
-                <span>{friend.username}</span>
-              </div>
-            ))
+                ×
+              </span>
+            </div>
           )}
         </div>
 
-        <button
-          className="start-chat-btn"
-          onClick={startChat}
-          style={{
-            margin: "10px",
-            padding: "8px",
-            background: "#005a9e",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
-        >
-          Start Chat
-        </button>
+        {/* CHAT HEADER BAR */}
+        <div className="chat-header">
+          <button className="menu-btn" onClick={() => setShowSidebar(!showSidebar)}>
+            <FiMenu />
+          </button>
+<button className="msn-btn" onClick={sendNudge}>
+  🫨 Nudge
+</button>
 
-<div className="sidebar-gap"></div>
 
-        <div className="friends-list chats-section">
-          <h4 style={{ margin: "10px 0 5px 10px", fontSize: "0.95rem" }}>
-            Your Chats
-          </h4>
-          {chatRooms.map((room) => (
-            <div
-              key={room.id}
-              className={`friend-item ${
-                room.id === activeChatId ? "active" : ""
-              }`}
-              onClick={() => setActiveChatId(room.id)}
+          <h4>{displayRoomName}</h4>
+
+          {/* Name Color Picker Button */}
+          <button
+            className="msn-btn color-button"
+            title="Change your chat name color"
+            onClick={() => setShowSettingsModal(true)}
+          >
+            <IoColorPalette />
+          </button>
+
+          {/* Add people button */}
+          {activeRoom && activeRoom.type === "group" && (
+            <button
+              className="msn-btn"
+              onClick={() => setShowAddModal(true)}
             >
-              <FaUserCircle className="friend-avatar" />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  width: "100%",
-                }}
-              >
-                <span style={{ fontWeight: 600 }}>{roomLabel(room)}</span>
+              Add People
+            </button>
+          )}
+
+          {/* Leave chat */}
+          {activeRoom && (
+            <button
+              className="msn-btn"
+              onClick={() => setShowLeaveModal(true)}
+            >
+              Leave
+            </button>
+          )}
+        </div>
+
+        {/* MESSAGES */}
+        <div className="chat-body">
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`chat-message-wrapper ${
+                msg.sender_id === currentUserId ? "sent" : "received"
+              }`}
+            >
+              <div className="chat-bubble">
+                {/* sender name */}
                 <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: "0.85rem",
-                    opacity: 0.9,
-                  }}
+                  className="sender-name"
+                  style={{ color: msg.name_color }}
                 >
-                  <span>{roomPreview(room)}</span>
-                  <span>{fmtRelTime(room.lastActivity)}</span>
+                  {msg.senderName}
                 </div>
+
+                {/* message content (supports emojis) */}
+                <div>{renderMessageContent(msg.content)}</div>
+
+                <div className="timestamp">
+                  {fmtRelTime(msg.created_at)}
+                </div>
+                {someoneTyping && (
+  <div className="typing-indicator">
+    {someoneTyping} is typing…
+  </div>
+)}
               </div>
             </div>
           ))}
         </div>
-      </div>
-    )}
 
-    {/* Chat Section */}
-    {activeRoom ? (
-      <div className="chat-section">
-        {/* Tabs bar */}
-        {chatRooms.length > 0 && (
-          <div className="chat-tabs">
-            {chatRooms.map((room) => (
-              <div
-                key={room.id}
-                className={`chat-tab ${
-                  room.id === activeChatId ? "active" : ""
-                }`}
-                onClick={() => setActiveChatId(room.id)}
-              >
-                {roomLabel(room)}
-                <span
-                  className="close-tab"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveChatId(
-                      activeChatId === room.id
-                        ? chatRooms[0]?.id || null
-                        : activeChatId
-                    );
-                  }}
-                >
-                  ×
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Header */}
-        <div className="chat-header">
-          <button
-            className="menu-btn"
-            onClick={() => setShowSidebar(!showSidebar)}
-          >
-            <FiMenu />
-          </button>
-          <h4 style={{ flex: 1 }}>{displayRoomName}</h4>
-          <button
-            className="msn-btn xp-secondary"
-            onClick={() => setShowAddModal(true)}
-          >
-            Add People
-          </button>
-          <button
-            className="msn-btn xp-secondary"
-            onClick={() => setShowLeaveModal(true)}
-          >
-            Leave Chat
-          </button>
-            <button
-    className="color-btn"
-    onClick={() => setShowSettingsModal(true)}
-    title="Settings"
-  >
-    <FaPalette />
-  </button>
-        </div>
-
-        {/* Messages */}
-        <div className="chat-body">
-          {messagesLoading ? (
-            <p style={{ color: "#555" }}>Loading messages…</p>
-          ) : (
-            messages.map((msg) => {
-              const sender = activeRoom.participants.find(
-                (p) => p.id === msg.sender_id
-              );
-              const senderName = sender?.username || "Unknown";
-
-              return (
-                <div
-                  key={msg.id}
-                  className={`chat-message-wrapper ${
-                    msg.sender_id === currentUserId ? "sent" : "received"
-                  }`}
-                >
-                  {activeRoom.type === "group" &&
-                    msg.sender_id !== currentUserId && (
-                      <div className="sender-name" style={{ color: sender?.name_color || "#0078d4" }}>{senderName}</div>
-                    )}
-<div
-  className={`chat-bubble ${
-    msg.sender_id === currentUserId ? "sent" : "received"
-  }`}
->
-  <div
-    style={{
-color:
-  msg.sender_id === currentUserId
-    ? userColor || "#003366"
-    : sender?.name_color || "#003366",
-
-    }}
-  >
-    {renderMessageContent(msg.content)}
-  </div>
-  <div className="timestamp">{fmtRelTime(msg.created_at)}</div>
-</div>
-                </div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Emoji Picker */}
-        {showEmojiPicker && (
-          <div className="emoji-picker">
-            {Object.entries(emojiMap).map(([code, src]) => (
-              <img
-                key={code}
-                src={src}
-                alt={code}
-                title={code}
-                className="emoji-option"
-                onClick={() => {
-                  setNewMessage((prev) => prev + " " + code + " ");
-                  setShowEmojiPicker(false);
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Chat Input */}
+        {/* INPUT BAR */}
         <div className="chat-input">
+          {/* Emoji button */}
+          <button
+            className="emoji-btn"
+            onClick={() => setShowEmojiPicker((x) => !x)}
+          >
+            🙂
+          </button>
+
+          {/* typing input */}
           <input
             type="text"
-            placeholder="Type a message…"
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onChange={(e) => handleTyping(e.target.value)}
+            className="msn-input"
+            placeholder="Type a message…"
           />
+
+          {/* send */}
           <button
-            type="button"
-            className="emoji-btn"
-            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className="msn-send-btn"
+            onClick={handleSend}
           >
-            😊
-          </button>
-          <button onClick={handleSend}>
             <IoSend />
           </button>
-        </div>
-      </div>
-    ) : (
-      <div
-        className="chat-section"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+
+          {/* Emoji picker */}
+{showEmojiPicker && (
+  <div className="emoji-picker">
+    {Object.entries(emojiMap).map(([key, emoji]) => (
+      <button
+        key={key}
+        className="emoji-btn-item"
+        onClick={() => {
+          setNewMessage((prev) => prev + " " + key + " ");
+          setShowEmojiPicker(false);
         }}
       >
-        <p style={{ color: "#555" }}>Select friends and start a chat!</p>
+        <img src={emoji} alt={key} className="emoji-inline" />
+      </button>
+    ))}
+  </div>
+)}
+        </div>
       </div>
-    )}
+    </div>
 
-    {/* Modals */}
-    <LeaveChatModal
-      open={showLeaveModal}
-      chatName={activeRoomLabel}
-      onCancel={() => setShowLeaveModal(false)}
-      onConfirm={leaveChat}
-    />
-    <AddPeopleModal
-      open={showAddModal}
-      friends={availableToAdd}
-      existing={activeRoom?.participants}
-      onCancel={() => setShowAddModal(false)}
-      onConfirm={handleAddPeople}
-    />
+    {/* POPUP MODALS */}
     <SettingsModal
       open={showSettingsModal}
       onClose={() => setShowSettingsModal(false)}
       userId={currentUserId}
-      onColorChange={(color) => setUserColor(color)}
+      onColorChange={setUserColor}
     />
+
+<AddPeopleModal
+  open={showAddModal}
+  friends={availableToAdd}                
+  existing={activeRoom?.participants || []}
+  onCancel={() => setShowAddModal(false)} 
+  onConfirm={handleAddPeople}          
+  />
+
+<LeaveChatModal
+  open={showLeaveModal}
+  chatName={displayRoomName}
+  onCancel={() => setShowLeaveModal(false)}
+  onConfirm={leaveChat}
+/>
+
   </div>
 );
+
 }
