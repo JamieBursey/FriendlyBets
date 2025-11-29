@@ -346,7 +346,7 @@ return (
     <div style={{ display: "flex", flex: 1 }}>
       {/* SIDEBAR */}
 {/* SIDEBAR */}
-<div className="msn-sidebar">
+<div className={`msn-sidebar ${showSidebar ? "show" : ""}`}>
   {/* CONTACT LIST */}
   <div className="msn-section-title">Contacts</div>
 
