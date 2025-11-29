@@ -479,28 +479,35 @@
     border: none;
   }
 
-  /* SIDEBAR becomes slide-out panel */
   .msn-sidebar {
     position: fixed;
-    top: 20%;
-color: black;
-    left: 60%;
-    width: 220px;
+    top: 48px;             /* right under header bar */
+    left: 0;               /* start at the left edge */
+    width: 240px;
     height: calc(100dvh - 48px);
     background: linear-gradient(to bottom, #f6fbff 0%, #d9e8fb 100%);
     border-right: 1px solid #95b9e6;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
-  
-    transform: translateX(-100%);
+    transform: translateX(-100%);   /* fully hidden */
     transition: transform 0.25s ease;
-    z-index: 2000;
+    z-index: 1500;          /* BELOW header buttons but above content */
   }
 
-  /* When sidebar is toggled from menu icon */
   .msn-sidebar.show {
     transform: translateX(0%);
   }
 
+  /* Make sure header always stays clickable */
+  .chat-header {
+    position: relative;
+    z-index: 3000;
+  }
+
+  .menu-btn {
+    position: relative;
+    z-index: 4000;
+  }
+}
   /* TAB BAR */
   .chat-tabs {
     padding: 2px 4px;
