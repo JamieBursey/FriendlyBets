@@ -482,6 +482,7 @@
   .msn-sidebar {
     position: fixed;
     top: 20%;
+color: black;
     left: 60%;
     width: 220px;
     height: calc(100dvh - 48px);
