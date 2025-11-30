@@ -349,19 +349,17 @@ return (
   {/* CONTACT LIST */}
   <div className="msn-section-title">Contacts</div>
 
-  {friends.map((f) => (
-    <div
-      key={f.public_user_id}
-      className="friend-item"
-      onClick={() => {
-        setSelectedFriends([f.username]);
-        startChat();
-      }}
-    >
-      <FaUserCircle className="friend-avatar" />
-      <span>{f.username}</span>
-    </div>
-  ))}
+{friends.map((f) => (
+  <div
+    key={f.public_user_id}
+    className="friend-item"
+    onClick={() => startChat([f.username])}
+  >
+    <FaUserCircle className="friend-avatar" />
+    <span>{f.username}</span>
+  </div>
+))}
+
 
   {/* SEPARATOR LINE */}
   <div className="msn-separator"></div>
