@@ -236,21 +236,20 @@ const leaveChat = async () => {
 };
 
 
-  const displayRoomName = useMemo(() => {
-    if (!activeRoom) return "";
-    if (activeRoom.type === "private") {
-      return activeRoom.participants
-        .filter((p) => p.id !== currentUserId)
-        .map((p) => p.username)
-        .join(", ");
-    }
-    // group: prefer room.name, else list others
-    const fallback = activeRoom.participants
-      .filter((p) => p.id !== currentUserId)
-      .map((p) => p.username)
-      .join(", ");
-    return activeRoom.name || fallback || "Group Chat";
-  }, [activeRoom, currentUserId]);
+const displayRoomName = useMemo(() => {
+  if (!activeRoom) return "";
+
+  const otherUsers = activeRoom.participants
+    .filter(p => p.id !== currentUserId)
+    .map(p => p.username);
+
+  // If only ONE other user → show ONLY their name
+  if (otherUsers.length === 1) return otherUsers[0];
+
+  // If multiple users → then use real group name
+  return activeRoom.name || otherUsers.join(", ");
+}, [activeRoom, currentUserId]);
+
 
   const toggleFriendSelection = (friendUsername) => {
     setSelectedFriends((prev) =>
@@ -263,16 +262,21 @@ const leaveChat = async () => {
 const startChat = async (usernames) => {
   if (!currentUserId || !usernames || usernames.length === 0) return;
 
+  // Convert usernames to IDs
   const selectedIds = usernames
     .map(username => friends.find(f => f.username === username)?.public_user_id)
     .filter(Boolean);
 
   const participantIds = Array.from(new Set([currentUserId, ...selectedIds]));
 
+  // Always create GROUP chats, but store room name as ALL participants
+  // Example stored name: "Jamie, Test"
+  const roomName = [publicUser.username, ...usernames].join(", ");
+
   const { data: newChat, error } = await supabase
     .from("chat_rooms")
-    .insert([{ 
-      name: `Chat with ${usernames.join(", ")}`,
+    .insert([{
+      name: roomName,
       type: "group"
     }])
     .select()
@@ -283,16 +287,17 @@ const startChat = async (usernames) => {
     return;
   }
 
-  const participantRows = participantIds.map(uid => ({
-    chat_id: newChat.id,
-    user_id: uid,
-  }));
-
-  await supabase.from("chat_participants").insert(participantRows);
+  await supabase.from("chat_participants").insert(
+    participantIds.map((uid) => ({
+      chat_id: newChat.id,
+      user_id: uid
+    }))
+  );
 
   await refresh();
   setActiveChatId(newChat.id);
 };
+
 
 
 
