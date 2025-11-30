@@ -345,7 +345,6 @@ return (
       {/* SIDEBAR */}
 {/* SIDEBAR */}
 <div className={`msn-sidebar ${showSidebar ? "show" : ""}`}>
-
   {/* CONTACT LIST */}
   <div className="msn-section-title">Contacts</div>
 

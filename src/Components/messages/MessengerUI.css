@@ -30,6 +30,7 @@
   border-right: 1px solid #95b9e6;
   padding: 6px 8px 8px;
   overflow: scroll;
+  z-index:9998;
 }
 
 .msn-title {
@@ -479,25 +480,37 @@
     border: none;
   }
 
-  /* SIDEBAR becomes slide-out panel */
+  /* Sidebar as hidden slide-out panel */
   .msn-sidebar {
     position: fixed;
-    top: 20%;
-    left: 60%;
-    width: 220px;
+    top: 48px;
+    left: 0;
+    width: 240px;
     height: calc(100dvh - 48px);
     background: linear-gradient(to bottom, #f6fbff 0%, #d9e8fb 100%);
     border-right: 1px solid #95b9e6;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
-  
+
     transform: translateX(-100%);
     transition: transform 0.25s ease;
-    z-index: 2000;
+    z-index: 1500;
   }
 
-  /* When sidebar is toggled from menu icon */
   .msn-sidebar.show {
     transform: translateX(110%);
+  }
+
+  /* Header always on top */
+  .chat-header {
+    position: relative;
+    z-index: 3000;
+    padding: 6px;
+  }
+
+  .menu-btn {
+    position: relative;
+    z-index: 4000;
+    font-size: 20px;
   }
 
   /* TAB BAR */
@@ -513,24 +526,19 @@
   }
 
   /* CHAT HEADER */
-  .chat-header {
-    padding: 6px;
-  }
-
   .chat-header h4 {
     font-size: 12px;
   }
 
   /* MESSAGES AREA */
-.chat-body {
-  flex: 1;
-  height:70%;
-  padding: 10px;
-  margin-bottom: 150px !important; /* space for input bar */
-  background: linear-gradient(to bottom, #ffffff 0%, #f1f6ff 100%);
-  overflow: scroll;
-}
-
+  .chat-body {
+    flex: 1;
+    height: 70%;
+    padding: 10px;
+    margin-bottom: 150px !important;
+    background: linear-gradient(to bottom, #ffffff 0%, #f1f6ff 100%);
+    overflow-y: scroll;
+  }
 
   .sender-name {
     font-size: 10px;
@@ -543,13 +551,13 @@
   /* INPUT BAR */
   .chat-input {
     position: fixed;
-    bottom:100px;
+    bottom: 100px;
     left: 0;
     right: 0;
     padding: 8px;
     background: #f2f7ff;
     border-top: 1px solid #95b9e6;
-    z-index: 3000; /* stays above messages */
+    z-index: 3000;
   }
 
   .chat-input input[type="text"] {
@@ -564,9 +572,7 @@
     height: 120px;
   }
 
-  /* Nudge shakes full page visually on mobile */
   .shake-screen {
     animation: msnshake 0.25s linear 0s 6;
   }
 }
-
