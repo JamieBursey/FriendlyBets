@@ -132,6 +132,7 @@
 .chat-tab {
   padding: 3px 8px;
   border-radius: 4px 4px 0 0;
+  color: black;
   font-size: 11px;
   background: linear-gradient(to bottom, #fbfdff, #d3e3ff);
   border: 1px solid #95b9e6;
