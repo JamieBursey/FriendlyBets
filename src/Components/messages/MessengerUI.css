@@ -493,6 +493,7 @@
     position: fixed;
     top: 20%;
     left: 0;
+    color:black;
     width: 240px;
     height: calc(100dvh - 48px);
     background: linear-gradient(to bottom, #f6fbff 0%, #d9e8fb 100%);
