@@ -8,7 +8,15 @@
 .msn-container * {
   font-family: "Tahoma", "Segoe UI", sans-serif;
 }
-
+.msn-header{
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 8px 12px;
+  background: linear-gradient(to bottom, #5fb0ff, #1b64c5);
+  border-bottom: 1px solid #1b4f94;
+}
 /* Outer window */
 .msn-container {
   display: flex;
