@@ -4,7 +4,6 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { FiMenu } from "react-icons/fi";
 import { IoColorPalette } from "react-icons/io5";
-import { FaPalette } from "react-icons/fa";
 import { emojiMap } from "./assets/EmoticonMap";
 import renderMessageContent from "./Emoji-img";
 import { usePublicUser } from "./data/usePublicUserID";
@@ -56,7 +55,6 @@ export const MessagesUI = () => {
   const { publicUser, loading: userLoading, error: userError } = usePublicUser();
   const currentUserId = publicUser?.public_user_id || null;
 const [showLeaveModal, setShowLeaveModal] = useState(false);
-  // friends from users.friends JSON (expects [{username,email,public_user_id}, ...])
   const { friends = [], loading: friendsLoading } = useFriends(currentUserId);
 
   // rooms the user is in (participants resolved to {id, username}), sorted by last activity
@@ -346,7 +344,8 @@ return (
     <div style={{ display: "flex", flex: 1 }}>
       {/* SIDEBAR */}
 {/* SIDEBAR */}
-<div className="msn-sidebar">
+<div className={`msn-sidebar ${showSidebar ? "show" : ""}`}>
+
   {/* CONTACT LIST */}
   <div className="msn-section-title">Contacts</div>
 

@@ -176,6 +176,7 @@
   color: #ffffff;
   font-size: 18px;
   cursor: pointer;
+  z-index: 9999;
 }
 
 /* XP style header buttons */
@@ -496,7 +497,7 @@
 
   /* When sidebar is toggled from menu icon */
   .msn-sidebar.show {
-    transform: translateX(0%);
+    transform: translateX(110%);
   }
 
   /* TAB BAR */
