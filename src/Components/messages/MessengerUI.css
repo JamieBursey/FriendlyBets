@@ -210,7 +210,6 @@
 
 .chat-body {
   flex: 1;
-
   padding: 10px;
   background: linear-gradient(to bottom, #ffffff 0%, #f1f6ff 100%);
   overflow-y: scroll;
@@ -254,6 +253,13 @@
   margin-top: 1px;
 }
 
+/* Emoji size in chat messages */
+.message-content .emoji-text {
+  font-size: 1.2em;
+  vertical-align: middle;
+  display: inline;
+}
+
 /* ============================================
    INPUT BAR
    ============================================ */
@@ -262,7 +268,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background-color: red;
   padding: 6px 8px;
   background: #f2f7ff;
   border-top: 1px solid #95b9e6;
@@ -305,14 +310,47 @@
 /* Emoji palette popup */
 .emoji-picker {
   position: absolute;
-  bottom: 56px;
-  right: 16px;
-  padding: 6px;
+  bottom: 60px;
+  left: 10px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.emoji-picker button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 5px;
   border-radius: 4px;
-  background: #ffffff;
-  border: 1px solid #95b9e6;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
-  max-width: 260px;
+  transition: background 0.2s;
+}
+
+.emoji-picker button:hover {
+  background: #f0f0f0;
+}
+
+.emoji-btn-item {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  margin: 3px;
+  padding: 2px;
+}
+
+.emoji-inline {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
 }
 
 /* ============================================
@@ -390,35 +428,7 @@
   font-size: 11px;
   color: #555;
 }
-.emoji-picker {
-  position: absolute;
-  bottom: 55px;
-  right: 10px;
-  background: #ffffff;
-  border: 1px solid #c4c4c4;
-  padding: 6px;
-  display: flex;
-  flex-wrap: wrap;
-  width: 180px;
-  height: 140px;
-  overflow-y: auto;
-  border-radius: 6px;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-}
 
-.emoji-btn-item {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  margin: 3px;
-  padding: 2px;
-}
-
-.emoji-inline {
-  width: 24px;
-  height: 24px;
-  image-rendering: pixelated;
-}
 .shake-screen {
   animation: msnshake 0.15s linear 0s 5;
 }
@@ -437,7 +447,6 @@
   margin: 6px 12px;
   font-style: italic;
 }
-
 
 /* ============================================
    MOBILE RESPONSIVE BREAKPOINTS
@@ -470,7 +479,6 @@
 
 /* -------- MOBILE (≤ 599px) -------- */
 @media (max-width: 599px) {
-
   /* Main container fills screen */
   .msn-container {
     flex-direction: column;
@@ -483,33 +491,33 @@
   /* Sidebar as hidden slide-out panel */
   .msn-sidebar {
     position: fixed;
-    top: 48px;
+    top: 20%;
     left: 0;
     width: 240px;
     height: calc(100dvh - 48px);
     background: linear-gradient(to bottom, #f6fbff 0%, #d9e8fb 100%);
     border-right: 1px solid #95b9e6;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
-
+    overflow-y: auto;
     transform: translateX(-100%);
     transition: transform 0.25s ease;
-    z-index: 1500;
+    z-index: 3000;
   }
 
   .msn-sidebar.show {
-    transform: translateX(110%);
+    transform: translateX(0);
   }
 
   /* Header always on top */
   .chat-header {
     position: relative;
-    z-index: 3000;
+    z-index: 4000;
     padding: 6px;
   }
 
   .menu-btn {
     position: relative;
-    z-index: 4000;
+    z-index: 5000;
     font-size: 20px;
   }
 
