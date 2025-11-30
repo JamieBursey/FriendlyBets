@@ -260,25 +260,21 @@ const leaveChat = async () => {
     );
   };
 
-const startChat = async () => {
-  if (!currentUserId || selectedFriends.length === 0) return;
+const startChat = async (usernames) => {
+  if (!currentUserId || !usernames || usernames.length === 0) return;
 
-  // convert selected usernames → IDs
-  const selectedIds = selectedFriends
+  const selectedIds = usernames
     .map(username => friends.find(f => f.username === username)?.public_user_id)
     .filter(Boolean);
 
-  // include self
   const participantIds = Array.from(new Set([currentUserId, ...selectedIds]));
-
-  // ALWAYS TREAT NEW CHATS AS GROUPS
-  const chatType = "group";
-
-  const chatName = `Chat with ${selectedFriends.join(", ")}`;
 
   const { data: newChat, error } = await supabase
     .from("chat_rooms")
-    .insert([{ name: chatName, type: chatType }])
+    .insert([{ 
+      name: `Chat with ${usernames.join(", ")}`,
+      type: "group"
+    }])
     .select()
     .single();
 
@@ -296,8 +292,8 @@ const startChat = async () => {
 
   await refresh();
   setActiveChatId(newChat.id);
-  setSelectedFriends([]);
 };
+
 
 
 
