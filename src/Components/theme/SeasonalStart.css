@@ -99,19 +99,28 @@
 .santa {
   position: absolute;
   width: 300px;
-  animation: flyAcrossUp 8s linear infinite;
+  animation: flyAcrossUp 4s linear infinite;
 }
 
 
 @keyframes flyAcrossUp {
   0% {
-    transform: translateX(70vw) translateY(70vh);
+    transform: translateX(100vw) translateY(70vh);  /* Start off-screen right */
+  }
+  25% {
+    transform: translateX(70vw) translateY(55vh);   /* Quarter way */
   }
   50% {
-    transform: translateX(0vw) translateY(30vh);   /* Middle of screen */
+    transform: translateX(40vw) translateY(40vh);   /* Middle */
+  }
+  75% {
+    transform: translateX(10vw) translateY(25vh);   /* Three quarters */
+  }
+  85% {
+    transform: translateX(0vw) translateY(17vh);    /* Almost there */
   }
   100% {
-    transform: translateX(-120vw) translateY(-10vh); /* Exit top-left */
+    transform: translateX(-400px) translateY(10vh); /* Exit off-screen left */
   }
 }
 
