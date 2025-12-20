@@ -9,7 +9,7 @@ useEffect(() => {
   const interval = setInterval(() => {
     // restart GIF by forcing a new key
     setGifKey(Date.now());
-  }, 12000); // same as CSS animation duration
+  }, 6000); // same as CSS animation duration
 
   return () => clearInterval(interval);
 }, []);

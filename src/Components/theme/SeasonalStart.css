@@ -97,8 +97,9 @@
 }
 
 .santa {
+  position: absolute;
   width: 300px;
-  animation: flyAcrossUp 22s linear infinite
+  animation: flyAcrossUp 8s linear infinite;
 }
 
 
