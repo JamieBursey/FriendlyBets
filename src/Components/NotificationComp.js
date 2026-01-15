@@ -40,6 +40,7 @@ const FriendRequests = () => {
   }, []);
 
   const fetchFriendRequests = async (userId) => {
+    console.log("Fetching friend requests for userId:", userId);
 
     const { data: friendRequests, error } = await supabase
       .from("friend_requests")
@@ -58,7 +59,7 @@ const FriendRequests = () => {
     if (error) {
       console.error("Error fetching friend requests:", error);
     } else {
-
+      console.log("Friend requests fetched:", friendRequests);
       setRequests(friendRequests);
     }
   };

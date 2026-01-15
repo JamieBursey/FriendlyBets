@@ -256,99 +256,23 @@ const sendFriendRequest = async (toUserName) => {
 };
 
 const acceptFriendRequest = async (requestId, callBack) => {
-  // Fetch the friend request details
-  const { data: friendRequest, error: requestError } = await supabase
-    .from("friend_requests")
-    .select("*")
-    .eq("id", requestId)
-    .single();
+  try {
+    // Call the Postgres function to accept the friend request
+    const { error } = await supabase
+      .rpc('accept_friend_request', { request_id: requestId });
 
-  if (requestError) {
-    console.error("Error fetching friend request:", requestError);
-    return;
+    if (error) {
+      console.error("Error accepting friend request:", error);
+      alert("Error accepting friend request");
+      return;
+    }
+
+    callBack();
+    alert("Friend request accepted");
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    alert("Error accepting friend request");
   }
-
-  // Update the friend request status to 'accepted'
-  const { error: updateError } = await supabase
-    .from("friend_requests")
-    .update({ status: "accepted" })
-    .eq("id", requestId);
-
-  if (updateError) {
-    console.error("Error accepting friend request:", updateError);
-    return;
-  }
-
-  // Fetch user details
-  const { data: fromUserData, error: fromUserError } = await supabase
-    .from("users")
-    .select("id, public_user_id, username, email, friends")
-    .eq("id", friendRequest.from_user)
-    .single();
-
-  const { data: toUserData, error: toUserError } = await supabase
-    .from("users")
-    .select("id, public_user_id, username, email, friends")
-    .eq("id", friendRequest.to_user)
-    .single();
-
-  if (fromUserError || toUserError) {
-    console.error("Error fetching user data:", fromUserError || toUserError);
-    return;
-  }
-
-  // Update the friends arrays for both users
-  const updatedFromUserFriends = [
-    ...(fromUserData.friends || []),
-    {
-      public_user_id: toUserData.public_user_id,
-      username: toUserData.username,
-      email: toUserData.email,
-    },
-  ];
-
-  const updatedToUserFriends = [
-    ...(toUserData.friends || []),
-    {
-      public_user_id: fromUserData.public_user_id,
-      username: fromUserData.username,
-      email: fromUserData.email,
-    },
-  ];
-
-  // Update the from_user with the new friends list
-  const { error: updateFromUserError } = await supabase
-    .from("users")
-    .update({ friends: updatedFromUserFriends })
-    .eq("id", fromUserData.id);
-
-  // Update the to_user with the new friends list
-  const { error: updateToUserError } = await supabase
-    .from("users")
-    .update({ friends: updatedToUserFriends })
-    .eq("id", toUserData.id);
-
-  if (updateFromUserError || updateToUserError) {
-    console.error(
-      "Error updating user friends:",
-      updateFromUserError || updateToUserError
-    );
-    return;
-  }
-
-  // Remove the friend request from the database
-  const { error: deleteError } = await supabase
-    .from("friend_requests")
-    .delete()
-    .eq("id", requestId);
-
-  if (deleteError) {
-    console.error("Error deleting friend request:", deleteError);
-    return;
-  }
-
-  callBack();
-  alert("Friend request accepted");
 };
 
 const rejectFriendRequest = async (requestId) => {
