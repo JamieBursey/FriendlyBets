@@ -20,6 +20,17 @@ import {
 import { BettingOptions, findMLBPlayerName } from "./BetOptions";
 import { getAllBets, findPlayerIdByName, findMLBPlayerIdByName } from "./Bets";
 import { TodaysGames, LiveGames } from "./MatchData";
+import {
+  getTodayISODate,
+  fetchUserTokens,
+  generateDailyTrivia,
+  fetchTodayTriviaSet,
+  fetchTriviaAttempt,
+  submitTriviaAttempt,
+  fetchTodaySidebetQuestion,
+  fetchSidebetEntry,
+  enterSidebet,
+} from "./MiniGamesHelpers";
 // import {} from "./Matches"
 
 export {
@@ -45,4 +56,13 @@ export {
   findMLBPlayerName,
   updateBetTokens,
   ForgotPasswordPopup,
+  getTodayISODate,
+  fetchUserTokens,
+  generateDailyTrivia,
+  fetchTodayTriviaSet,
+  fetchTriviaAttempt,
+  submitTriviaAttempt,
+  fetchTodaySidebetQuestion,
+  fetchSidebetEntry,
+  enterSidebet,
 };

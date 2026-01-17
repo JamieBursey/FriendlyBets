@@ -1,16 +1,24 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
 function UseAuthListener() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const hasRedirected = useRef(false);
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        if (event === "SIGNED_IN" && session) {
-          navigate("/FriendlyBets");
+        // Only redirect to /FriendlyBets if we're on login/register pages
+        if (event === "SIGNED_IN" && session && !hasRedirected.current) {
+          const publicPages = ["/login", "/register", "/about", "/contact", "/PasswordReset"];
+          if (publicPages.includes(location.pathname)) {
+            navigate("/FriendlyBets");
+            hasRedirected.current = true;
+          }
         } else if (event === "SIGNED_OUT") {
+          hasRedirected.current = false;
           navigate("/login");
         }
       }
@@ -20,7 +28,7 @@ function UseAuthListener() {
     return () => {
       authListener?.subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, [navigate, location]);
 }
 
 export default UseAuthListener;
