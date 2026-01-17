@@ -24,12 +24,16 @@ import {
   getTodayISODate,
   fetchUserTokens,
   generateDailyTrivia,
+  generateDailySidebet,
   fetchTodayTriviaSet,
   fetchTriviaAttempt,
   submitTriviaAttempt,
   fetchTodaySidebetQuestion,
   fetchSidebetEntry,
   enterSidebet,
+  checkSidebetStatus,
+  checkGameResult,
+  updateSidebetResult,
 } from "./MiniGamesHelpers";
 // import {} from "./Matches"
 
@@ -59,10 +63,14 @@ export {
   getTodayISODate,
   fetchUserTokens,
   generateDailyTrivia,
+  generateDailySidebet,
   fetchTodayTriviaSet,
   fetchTriviaAttempt,
   submitTriviaAttempt,
   fetchTodaySidebetQuestion,
   fetchSidebetEntry,
   enterSidebet,
+  checkSidebetStatus,
+  checkGameResult,
+  updateSidebetResult,
 };
