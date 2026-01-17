@@ -1,6 +1,8 @@
 import React from "react";
 import { RenderContact } from "../Components";
 import { useTheme } from "../Components/theme/ThemeContext";
+import { Link } from "react-router-dom";
+
 function About() {
   const { theme } = useTheme();
 
@@ -109,6 +111,19 @@ function About() {
       <RenderContact />
 
       <footer className="text-center p-4" style={{ color: textColor }}>
+        <div className="mb-3">
+          <Link 
+            to="/mini-games" 
+            className="btn btn-outline-primary btn-lg"
+            style={{ 
+              textDecoration: 'none',
+              borderWidth: '2px',
+              fontWeight: 'bold'
+            }}
+          >
+            🎮 Play Mini Games
+          </Link>
+        </div>
         <p>&copy; 2024 Friendly Bets. All rights reserved.</p>
       </footer>
     </div>

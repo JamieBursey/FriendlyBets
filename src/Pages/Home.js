@@ -6,6 +6,8 @@ import { supabase } from "../supabaseClient.js";
 import { checkAndUpdateTokens } from "../Data/betdata/CheckAndUpdateTokens.js";
 import { useTheme } from "../Components/theme/ThemeContext.js";
 import SeasonalStart from "../Components/theme/SeasonalStart.js";
+import { Link } from "react-router-dom";
+
 function Home() {
   const [selectedMatchType, setSelectMatchesUI] = useState("Hockey");
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -83,6 +85,30 @@ function Home() {
     <Logo />
     <AddSportButtons setSelectMatchesType={setSelectMatchesUI} />
     {selectMatchesUI()}
+    
+    {/* Footer */}
+    <footer className="footer bg-dark text-center text-white p-4 mt-5">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12 mb-3">
+            <Link 
+              to="/mini-games" 
+              className="btn btn-outline-light btn-lg"
+              style={{ 
+                textDecoration: 'none',
+                borderWidth: '2px',
+                fontWeight: 'bold'
+              }}
+            >
+              🎮 Play Mini Games
+            </Link>
+          </div>
+          <div className="col-md-12">
+            <p className="mb-0">&copy; 2026 Friendly Bets. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
   </div>
 
   {showseasonTheme && <SeasonalStart onFinish={() => setShowSeasonTheme(false)} />}

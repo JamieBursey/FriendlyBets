@@ -4,6 +4,7 @@ import Logo from "../Components/Logo";
 import { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight, faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   const scrollContainerRef = useRef(null);
@@ -68,6 +69,19 @@ const LandingPage = () => {
       </div>
       <footer className="footer bg-dark text-center text-white p-4">
         <div className="container">
+          <div className="mb-3">
+            <Link 
+              to="/mini-games" 
+              className="btn btn-outline-light btn-lg"
+              style={{ 
+                textDecoration: 'none',
+                borderWidth: '2px',
+                fontWeight: 'bold'
+              }}
+            >
+              🎮 Play Mini Games
+            </Link>
+          </div>
           <p>&copy; 2024 Friendly Bets. All rights reserved.</p>
         </div>
       </footer>
