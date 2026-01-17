@@ -54,6 +54,21 @@ export const generateDailyTrivia = async () => {
 };
 
 /**
+ * Generate today's side bet by calling the edge function
+ * This will lazily create a side bet from NHL games if it doesn't exist yet
+ */
+export const generateDailySidebet = async () => {
+  const betDate = getTodayISODate(); // Get date from frontend
+  
+  const { data, error } = await supabase.functions.invoke('generate-daily-sidebet', {
+    body: { bet_date: betDate } // Pass the date to edge function
+  });
+
+  if (error) throw error;
+  return data;
+};
+
+/**
  * Fetch today's trivia question set
  * @param {string} playDate - Date in YYYY-MM-DD format
  */
@@ -132,7 +147,7 @@ export const submitTriviaAttempt = async (playDate, score, total, selectedAnswer
 export const fetchTodaySidebetQuestion = async (betDate) => {
   const { data, error } = await supabase
     .from('daily_sidebet_questions')
-    .select('bet_date, question, correct_answer, resolved_at')
+    .select('bet_date, game_id, home_team_abbrev, away_team_abbrev, home_team_name, away_team_name, question, correct_answer, resolved_at, game_state, home_score, away_score')
     .eq('bet_date', betDate)
     .single();
 
@@ -198,3 +213,73 @@ export const enterSidebet = async (betDate, answer) => {
     answer
   };
 };
+
+/**
+ * Check if a side bet needs resolution and return game ID if so
+ * @param {string} betDate - Date in YYYY-MM-DD format
+ * @returns {Promise<Object>} - {needsChecking, gameId, resolved, correctAnswer}
+ */
+export const checkSidebetStatus = async (betDate) => {
+  const { data, error } = await supabase
+    .rpc('check_and_resolve_sidebet', {
+      p_bet_date: betDate
+    });
+
+  if (error) throw error;
+  
+  // RPC returns an array with one row
+  return data && data.length > 0 ? data[0] : null;
+};
+
+/**
+ * Check game result from YOUR friendly-bets API
+ * @param {string} gameId - The game ID
+ * @returns {Promise<Object>} - Game result with scores and state
+ */
+export const checkGameResult = async (gameId) => {
+  const apiUrl = `https://friendly-bets-back-end.vercel.app/api/gamecenter/${gameId}/play-by-play`;
+  
+  const response = await fetch(apiUrl);
+  if (!response.ok) {
+    throw new Error('Failed to fetch game result');
+  }
+
+  const gameData = await response.json();
+
+  // Check if game is finished (same logic as your CheckBets.js)
+  const isGameFinished =
+    gameData.gameState === "OFF" ||
+    gameData.gameState === "FINAL" ||
+    (gameData.clock?.timeRemaining === "00:00" && gameData.period >= 3);
+
+  return {
+    isFinished: isGameFinished,
+    gameState: gameData.gameState,
+    homeScore: gameData.homeTeam?.score || 0,
+    awayScore: gameData.awayTeam?.score || 0
+  };
+};
+
+/**
+ * Update side bet result after checking game
+ * @param {string} betDate - Date in YYYY-MM-DD format
+ * @param {string} correctAnswer - Winning team abbrev
+ * @param {number} homeScore - Home team score
+ * @param {number} awayScore - Away team score
+ * @param {string} gameState - Game state from API
+ * @returns {Promise<number>} - Number of winners
+ */
+export const updateSidebetResult = async (betDate, correctAnswer, homeScore, awayScore, gameState) => {
+  const { data, error } = await supabase
+    .rpc('update_sidebet_result', {
+      p_bet_date: betDate,
+      p_correct_answer: correctAnswer,
+      p_home_score: homeScore,
+      p_away_score: awayScore,
+      p_game_state: gameState
+    });
+
+  if (error) throw error;
+  return data; // Returns winner count
+};
+

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
   getTodayISODate,
+  generateDailySidebet,
   fetchTodaySidebetQuestion,
   fetchSidebetEntry,
-  enterSidebet
+  enterSidebet,
+  checkSidebetStatus,
+  checkGameResult,
+  updateSidebetResult
 } from '../Data/MiniGamesHelpers';
 
 const DailySideBet = ({ userId, onComplete }) => {
@@ -15,6 +19,7 @@ const DailySideBet = ({ userId, onComplete }) => {
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [checkingResults, setCheckingResults] = useState(false);
 
   useEffect(() => {
     loadSideBet();
@@ -28,23 +33,72 @@ const DailySideBet = ({ userId, onComplete }) => {
 
       const betDate = getTodayISODate();
 
+      // First, try to generate today's side bet (lazy generation)
+      try {
+        await generateDailySidebet();
+      } catch (genError) {
+        console.warn('Edge function call failed (may not be deployed):', genError);
+        // Continue even if edge function fails
+      }
+
+      // Load today's side bet question
+      const questionData = await fetchTodaySidebetQuestion(betDate);
+      
+      // Auto-check and resolve bet if game is finished (like your CheckBets system)
+      if (questionData && !questionData.resolved_at && questionData.game_id) {
+        try {
+          console.log('Checking if game is finished:', questionData.game_id);
+          
+          // Check the game result from YOUR API
+          const gameResult = await checkGameResult(questionData.game_id);
+          
+          if (gameResult.isFinished) {
+            console.log('Game is finished! Resolving bet...');
+            
+            // Determine winner
+            let winner;
+            if (gameResult.homeScore > gameResult.awayScore) {
+              winner = questionData.home_team_abbrev;
+            } else if (gameResult.awayScore > gameResult.homeScore) {
+              winner = questionData.away_team_abbrev;
+            } else {
+              winner = 'TIE';
+            }
+            
+            // Update the bet result in database (awards tokens to winners)
+            const winnersCount = await updateSidebetResult(
+              betDate,
+              winner,
+              gameResult.homeScore,
+              gameResult.awayScore,
+              gameResult.gameState
+            );
+            
+            console.log(`Bet resolved! Winner: ${winner}, ${winnersCount} users won tokens`);
+            
+            // Re-fetch question to get updated data
+            const updatedQuestion = await fetchTodaySidebetQuestion(betDate);
+            setSideBetQuestion(updatedQuestion);
+          } else {
+            console.log('Game not finished yet, showing as pending');
+            setSideBetQuestion(questionData);
+          }
+        } catch (checkError) {
+          console.warn('Failed to check game result:', checkError);
+          // Still show the question even if check fails
+          setSideBetQuestion(questionData);
+        }
+      } else {
+        setSideBetQuestion(questionData);
+      }
+
       // Check if user has already entered today
       const entryData = await fetchSidebetEntry(betDate);
 
       if (entryData) {
         setHasEnteredToday(true);
         setPreviousEntry(entryData);
-        
-        // Also fetch the question to show results
-        const questionData = await fetchTodaySidebetQuestion(betDate);
-        setSideBetQuestion(questionData);
-        setLoading(false);
-        return;
       }
-
-      // Load today's side bet question
-      const questionData = await fetchTodaySidebetQuestion(betDate);
-      setSideBetQuestion(questionData);
     } catch (err) {
       console.error('Error loading side bet:', err);
       setError(err.message || 'Failed to load side bet');
@@ -82,6 +136,63 @@ const DailySideBet = ({ userId, onComplete }) => {
   const handleFinish = () => {
     if (onComplete) {
       onComplete();
+    }
+  };
+
+  const handleCheckResults = async () => {
+    if (!sideBetQuestion || !sideBetQuestion.game_id) {
+      console.error('Missing question or game_id:', { sideBetQuestion });
+      setError('Cannot check results - missing game information');
+      return;
+    }
+    
+    try {
+      setCheckingResults(true);
+      setError(null);
+      
+      const betDate = getTodayISODate();
+      console.log('Checking results for:', { betDate, gameId: sideBetQuestion.game_id });
+      
+      // Check the game result
+      const gameResult = await checkGameResult(sideBetQuestion.game_id);
+      console.log('Game result:', gameResult);
+      
+      if (gameResult.isFinished) {
+        // Determine winner
+        let winner;
+        if (gameResult.homeScore > gameResult.awayScore) {
+          winner = sideBetQuestion.home_team_abbrev;
+        } else if (gameResult.awayScore > gameResult.homeScore) {
+          winner = sideBetQuestion.away_team_abbrev;
+        } else {
+          winner = 'TIE';
+        }
+        
+        console.log('Winner determined:', winner);
+        
+        // Update the bet result
+        const winnersCount = await updateSidebetResult(
+          betDate,
+          winner,
+          gameResult.homeScore,
+          gameResult.awayScore,
+          gameResult.gameState
+        );
+        
+        console.log('Bet resolved, winners:', winnersCount);
+        
+        // Re-fetch question to get updated data
+        const updatedQuestion = await fetchTodaySidebetQuestion(betDate);
+        setSideBetQuestion(updatedQuestion);
+      } else {
+        console.log('Game not finished yet:', gameResult.gameState);
+        setError('Game is not finished yet. Please check back later!');
+      }
+    } catch (err) {
+      console.error('Error checking results:', err);
+      setError(err.message || 'Failed to check results');
+    } finally {
+      setCheckingResults(false);
     }
   };
 
@@ -166,9 +277,29 @@ const DailySideBet = ({ userId, onComplete }) => {
             </div>
           ) : (
             <div className="alert alert-warning mt-4">
-              <p className="mb-0">
+              <p className="mb-2">
                 ⏳ This side bet has not been resolved yet. Check back later to see if you won!
               </p>
+              <button 
+                className="btn btn-outline-primary btn-sm mt-2"
+                onClick={handleCheckResults}
+                disabled={checkingResults}
+              >
+                {checkingResults ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" />
+                    Checking Game...
+                  </>
+                ) : (
+                  '🔄 Check Results Now'
+                )}
+              </button>
+            </div>
+          )}
+
+          {error && (
+            <div className="alert alert-danger mt-3">
+              {error}
             </div>
           )}
 

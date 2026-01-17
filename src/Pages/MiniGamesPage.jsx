@@ -138,14 +138,19 @@ const MiniGamesPage = () => {
                   <li>Costs 1 Mini Game Token to enter</li>
                   <li>Make your prediction</li>
                   <li>Correct answer earns 1 Bet Token</li>
+                  <li className="text-info">Free to check your results!</li>
                 </ul>
                 <button 
                   className="btn btn-success btn-lg mt-3"
                   onClick={() => setActiveGame('sidebet')}
-                  disabled={(currentUser.miniGameToken || 0) < 1}
                 >
-                  {(currentUser.miniGameToken || 0) < 1 ? 'Need 1 Token' : 'Place Side Bet'}
+                  {(currentUser.miniGameToken || 0) < 1 ? 'View Side Bet' : 'Place Side Bet'}
                 </button>
+                {(currentUser.miniGameToken || 0) < 1 && (
+                  <small className="d-block mt-2 text-muted">
+                    (You can still check results!)
+                  </small>
+                )}
               </div>
             </div>
           </div>
