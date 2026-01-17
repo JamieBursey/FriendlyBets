@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getTodayISODate, submitBreakawayResult } from '../Data/MiniGamesHelpers';
 
 const BreakawayDodger = ({ userId, onComplete }) => {
@@ -7,21 +7,62 @@ const BreakawayDodger = ({ userId, onComplete }) => {
   const touchStartXRef = useRef(null);
   const playerPosRef = useRef({ x: 0, y: 0 });
   const defendersRef = useRef([]);
-  const [gameState, setGameState] = useState('idle'); // idle, playing, won, lost
+  const playerImagesRef = useRef({}); // Reference for all player images
+  const defenderImagesRef = useRef({}); // Reference for all defender images
+  const [gameState, setGameState] = useState('idle'); // idle, countdown, playing, won, lost
+  const [countdown, setCountdown] = useState(3);
   const [playerPos, setPlayerPos] = useState({ x: 0, y: 0 });
   const [defenders, setDefenders] = useState([]);
   const [resultMessage, setResultMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [playerIcon, setPlayerIcon] = useState('🏒'); // Default to hockey stick
+  const [defenderIcon, setDefenderIcon] = useState('D'); // Default to 'D' block
 
-  // Game constants
+  // Detect if mobile device
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+  // Game constants - slower on mobile
   const GAME_WIDTH = 300;
   const GAME_HEIGHT = 500;
   const PLAYER_SIZE = 30;
   const DEFENDER_WIDTH = 40;
   const DEFENDER_HEIGHT = 20;
-  const PLAYER_SPEED = 3;
-  const DEFENDER_SPEED = 2;
+  const PLAYER_SPEED = isMobile ? 1.5 : 3; // Half speed on mobile
+  const DEFENDER_SPEED = isMobile ? 1.5 : 2; // Half speed on mobile
   const GOALIE_Y = 50;
+
+  // Load all player images
+  useEffect(() => {
+    const imagesToLoad = {
+      skate: '/miniGamesImages/skates.png',
+      girlPlayer: '/miniGamesImages/girlPlayer.png',
+      manPlayer: '/miniGamesImages/manPlayer.png'
+    };
+
+    Object.keys(imagesToLoad).forEach(key => {
+      const img = new Image();
+      img.src = imagesToLoad[key];
+      img.onload = () => {
+        playerImagesRef.current[key] = img;
+      };
+    });
+  }, []);
+
+  // Load all defender images
+  useEffect(() => {
+    const defenderImagesToLoad = {
+      manDefender: '/miniGamesImages/manDefender.png',
+      girlDefender: '/miniGamesImages/girlDefender.png'
+    };
+
+    Object.keys(defenderImagesToLoad).forEach(key => {
+      const img = new Image();
+      img.src = defenderImagesToLoad[key];
+      img.onload = () => {
+        defenderImagesRef.current[key] = img;
+      };
+    });
+  }, []);
 
   // Initialize player position
   useEffect(() => {
@@ -59,17 +100,17 @@ const BreakawayDodger = ({ userId, onComplete }) => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameState]);
+  }, [gameState, PLAYER_SPEED]);
 
   // Touch controls for mobile
-  const handleTouchStart = (e) => {
+  const handleTouchStart = useCallback((e) => {
     if (gameState !== 'playing') return;
     e.preventDefault();
     const touch = e.touches[0];
     touchStartXRef.current = touch.clientX;
-  };
+  }, [gameState]);
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = useCallback((e) => {
     if (gameState !== 'playing' || touchStartXRef.current === null) return;
     e.preventDefault();
     
@@ -84,12 +125,43 @@ const BreakawayDodger = ({ userId, onComplete }) => {
       setPlayerPos({ ...playerPosRef.current });
       touchStartXRef.current = touchX;
     }
-  };
+  }, [gameState, GAME_WIDTH, PLAYER_SIZE]);
 
-  const handleTouchEnd = (e) => {
+  const handleTouchEnd = useCallback((e) => {
     e.preventDefault();
     touchStartXRef.current = null;
-  };
+  }, []);
+
+  // Attach touch listeners with passive: false
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    return () => {
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
+
+  // Countdown timer
+  useEffect(() => {
+    if (gameState !== 'countdown') return;
+
+    if (countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      // Countdown finished, start game
+      setGameState('playing');
+    }
+  }, [gameState, countdown]);
 
   // Game loop
   useEffect(() => {
@@ -210,8 +282,9 @@ const BreakawayDodger = ({ userId, onComplete }) => {
     defendersRef.current = newDefenders;
     setDefenders(newDefenders);
 
-    setGameState('playing');
     setResultMessage('');
+    setCountdown(3);
+    setGameState('countdown'); // Start with countdown
   };
 
   const resetGame = () => {
@@ -262,10 +335,27 @@ const BreakawayDodger = ({ userId, onComplete }) => {
     if (gameState === 'playing') {
       // Draw defenders
       defenders.forEach(defender => {
-        ctx.fillStyle = '#333';
-        ctx.fillRect(defender.x, defender.y, DEFENDER_WIDTH, DEFENDER_HEIGHT);
-        ctx.fillStyle = '#fff';
-        ctx.fillText('D', defender.x + DEFENDER_WIDTH / 2, defender.y + 14);
+        const imageDefenders = ['manDefender', 'girlDefender'];
+        if (imageDefenders.includes(defenderIcon) && defenderImagesRef.current[defenderIcon]) {
+          // Draw defender image
+          const defenderImgSize = 30;
+          ctx.drawImage(
+            defenderImagesRef.current[defenderIcon],
+            defender.x + DEFENDER_WIDTH / 2 - defenderImgSize / 2,
+            defender.y + DEFENDER_HEIGHT / 2 - defenderImgSize / 2,
+            defenderImgSize,
+            defenderImgSize
+          );
+        } else {
+          // Draw default 'D' block
+          ctx.fillStyle = '#333';
+          ctx.fillRect(defender.x, defender.y, DEFENDER_WIDTH, DEFENDER_HEIGHT);
+          ctx.fillStyle = '#fff';
+          ctx.font = '12px Arial';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('D', defender.x + DEFENDER_WIDTH / 2, defender.y + DEFENDER_HEIGHT / 2);
+        }
       });
 
       // Draw player
@@ -279,13 +369,37 @@ const BreakawayDodger = ({ userId, onComplete }) => {
         Math.PI * 2
       );
       ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.fillText('⛸️', playerPos.x + PLAYER_SIZE / 2, playerPos.y + PLAYER_SIZE / 2 + 4);
+      
+      // Draw player icon
+      const imageIcons = ['skate', 'girlPlayer', 'manPlayer'];
+      if (imageIcons.includes(playerIcon) && playerImagesRef.current[playerIcon]) {
+        // Draw the actual image
+        const imgSize = 24;
+        ctx.drawImage(
+          playerImagesRef.current[playerIcon],
+          playerPos.x + PLAYER_SIZE / 2 - imgSize / 2,
+          playerPos.y + PLAYER_SIZE / 2 - imgSize / 2,
+          imgSize,
+          imgSize
+        );
+      } else {
+        // Draw emoji icon
+        ctx.fillStyle = '#fff';
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(playerIcon, playerPos.x + PLAYER_SIZE / 2, playerPos.y + PLAYER_SIZE / 2 + 2);
+      }
     }
-  }, [gameState, playerPos, defenders]);
+  }, [gameState, playerPos, defenders, playerIcon, defenderIcon]);
 
   return (
     <div style={styles.container}>
+      <style>{`
+        .icon-scroll-container::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
       <div style={styles.header}>
         <h2 style={styles.title}>🏒 Breakaway Dodger</h2>
         <p style={styles.subtitle}>Dodge defenders and reach the goalie!</p>
@@ -297,19 +411,148 @@ const BreakawayDodger = ({ userId, onComplete }) => {
           width={GAME_WIDTH}
           height={GAME_HEIGHT}
           style={styles.canvas}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
         />
 
         {gameState === 'idle' && (
           <div style={styles.overlay}>
+            <div style={styles.iconSelector}>
+              <p style={styles.iconLabel}>Choose Your Icon:</p>
+              <div className="icon-scroll-container" style={styles.iconScrollContainer}>
+                <div style={styles.iconOptions}>
+                  <button
+                    style={{
+                      ...styles.iconButton,
+                      ...(playerIcon === '🏒' ? styles.iconButtonActive : {})
+                    }}
+                    onClick={() => setPlayerIcon('🏒')}
+                    title="Hockey Stick"
+                  >
+                    🏒
+                  </button>
+                  <button
+                    style={{
+                      ...styles.iconButton,
+                      ...(playerIcon === '⛸️' ? styles.iconButtonActive : {})
+                    }}
+                    onClick={() => setPlayerIcon('⛸️')}
+                    title="Figure Skate"
+                  >
+                    ⛸️
+                  </button>
+                  <button
+                    style={{
+                      ...styles.iconButton,
+                      ...(playerIcon === 'skate' ? styles.iconButtonActive : {})
+                    }}
+                    onClick={() => setPlayerIcon('skate')}
+                    title="Hockey Skate"
+                  >
+                    <img 
+                      src="/miniGamesImages/skates.png" 
+                      alt="Hockey Skate"
+                      style={{width: '32px', height: '32px', display: 'block'}}
+                    />
+                  </button>
+                  <button
+                    style={{
+                      ...styles.iconButton,
+                      ...(playerIcon === 'girlPlayer' ? styles.iconButtonActive : {})
+                    }}
+                    onClick={() => setPlayerIcon('girlPlayer')}
+                    title="Girl Player"
+                  >
+                    <img 
+                      src="/miniGamesImages/girlPlayer.png" 
+                      alt="Girl Player"
+                      style={{width: '32px', height: '32px', display: 'block'}}
+                    />
+                  </button>
+                  <button
+                    style={{
+                      ...styles.iconButton,
+                      ...(playerIcon === 'manPlayer' ? styles.iconButtonActive : {})
+                    }}
+                    onClick={() => setPlayerIcon('manPlayer')}
+                    title="Man Player"
+                  >
+                    <img 
+                      src="/miniGamesImages/manPlayer.png" 
+                      alt="Man Player"
+                      style={{width: '32px', height: '32px', display: 'block'}}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div style={styles.iconSelector}>
+              <p style={styles.iconLabel}>Choose Defender Style:</p>
+              <div className="icon-scroll-container" style={styles.iconScrollContainer}>
+                <div style={styles.iconOptions}>
+                  <button
+                    style={{
+                      ...styles.iconButton,
+                      ...(defenderIcon === 'D' ? styles.iconButtonActive : {})
+                    }}
+                    onClick={() => setDefenderIcon('D')}
+                    title="Default Block"
+                  >
+                    <div style={{fontSize: '20px', fontWeight: 'bold'}}>D</div>
+                  </button>
+                  <button
+                    style={{
+                      ...styles.iconButton,
+                      ...(defenderIcon === 'manDefender' ? styles.iconButtonActive : {})
+                    }}
+                    onClick={() => setDefenderIcon('manDefender')}
+                    title="Man Defender"
+                  >
+                    <img 
+                      src="/miniGamesImages/manDefender.png" 
+                      alt="Man Defender"
+                      style={{width: '32px', height: '32px', display: 'block'}}
+                    />
+                  </button>
+                  <button
+                    style={{
+                      ...styles.iconButton,
+                      ...(defenderIcon === 'girlDefender' ? styles.iconButtonActive : {})
+                    }}
+                    onClick={() => setDefenderIcon('girlDefender')}
+                    title="Girl Defender"
+                  >
+                    <img 
+                      src="/miniGamesImages/girlDefender.png" 
+                      alt="Girl Defender"
+                      style={{width: '32px', height: '32px', display: 'block'}}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+            
             <button style={styles.startButton} onClick={startGame}>
               Start Game
             </button>
             <div style={styles.instructions}>
               <p><strong>Desktop:</strong> Arrow keys or WASD</p>
               <p><strong>Mobile:</strong> Swipe left/right</p>
+              {isMobile && (
+                <p style={styles.mobileNotice}>
+                  ⚡ Mobile speed: Slower for easier control
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {gameState === 'countdown' && (
+          <div style={styles.overlay}>
+            <div style={styles.countdownBox}>
+              <div style={styles.countdownNumber}>
+                {countdown === 0 ? 'GO!' : countdown}
+              </div>
+              <p style={styles.countdownText}>Get Ready!</p>
             </div>
           </div>
         )}
@@ -418,6 +661,32 @@ const styles = {
     fontSize: '14px',
     lineHeight: 1.6,
   },
+  mobileNotice: {
+    color: '#ffd700',
+    fontWeight: 'bold',
+    marginTop: '10px',
+  },
+  countdownBox: {
+    backgroundColor: 'rgba(0, 102, 204, 0.95)',
+    borderRadius: '20px',
+    padding: '40px',
+    textAlign: 'center',
+    minWidth: '200px',
+    boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
+  },
+  countdownNumber: {
+    fontSize: '80px',
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: '10px',
+    textShadow: '0 4px 8px rgba(0,0,0,0.5)',
+  },
+  countdownText: {
+    fontSize: '20px',
+    color: '#fff',
+    margin: 0,
+    fontWeight: '500',
+  },
   winBox: {
     backgroundColor: '#d4edda',
     border: '2px solid #28a745',
@@ -477,6 +746,52 @@ const styles = {
     marginTop: '16px',
     color: '#666',
     fontSize: '14px',
+  },
+  iconSelector: {
+    marginBottom: '24px',
+    textAlign: 'center',
+  },
+  iconLabel: {
+    color: '#fff',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    marginBottom: '12px',
+  },
+  iconScrollContainer: {
+    width: '240px', // Show 3 icons at a time (60px * 3 + gaps)
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    margin: '0 auto',
+    padding: '8px 0',
+    WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+    scrollbarWidth: 'none', // Firefox - hide scrollbar
+    msOverflowStyle: 'none', // IE and Edge - hide scrollbar
+  },
+  iconOptions: {
+    display: 'flex',
+    gap: '12px',
+    justifyContent: 'flex-start',
+    paddingLeft: '8px',
+    paddingRight: '8px',
+  },
+  iconButton: {
+    backgroundColor: '#333',
+    borderWidth: '2px',
+    borderStyle: 'solid',
+    borderColor: '#555',
+    borderRadius: '8px',
+    padding: '12px 16px',
+    fontSize: '32px',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    minWidth: '60px',
+    flexShrink: 0, // Prevent buttons from shrinking
+  },
+  iconButtonActive: {
+    backgroundColor: '#0066cc',
+    borderColor: '#0099ff',
+    transform: 'scale(1.1)',
+    boxShadow: '0 4px 12px rgba(0, 102, 204, 0.5)',
   },
 };
 
