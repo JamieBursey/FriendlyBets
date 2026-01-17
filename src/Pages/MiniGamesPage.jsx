@@ -11,22 +11,18 @@ const MiniGamesPage = () => {
   const [activeGame, setActiveGame] = useState(null); // 'trivia' | 'sidebet' | 'leaderboard' | null
 
   useEffect(() => {
-    console.log('MiniGamesPage mounted');
     fetchCurrentUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchCurrentUser = async () => {
     try {
-      console.log('Fetching current user...');
       setLoading(true);
       setError(null);
 
       const userData = await fetchUserTokens();
-      console.log('User data:', userData);
 
       setCurrentUser(userData);
-      console.log('User set successfully');
     } catch (err) {
       console.error('Error fetching user:', err);
       setError(err.message || 'Failed to load user data');

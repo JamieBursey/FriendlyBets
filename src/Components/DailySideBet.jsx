@@ -47,13 +47,11 @@ const DailySideBet = ({ userId, onComplete }) => {
       // Auto-check and resolve bet if game is finished (like your CheckBets system)
       if (questionData && !questionData.resolved_at && questionData.game_id) {
         try {
-          console.log('Checking if game is finished:', questionData.game_id);
           
           // Check the game result from YOUR API
           const gameResult = await checkGameResult(questionData.game_id);
           
           if (gameResult.isFinished) {
-            console.log('Game is finished! Resolving bet...');
             
             // Determine winner
             let winner;
@@ -74,13 +72,10 @@ const DailySideBet = ({ userId, onComplete }) => {
               gameResult.gameState
             );
             
-            console.log(`Bet resolved! Winner: ${winner}, ${winnersCount} users won tokens`);
-            
             // Re-fetch question to get updated data
             const updatedQuestion = await fetchTodaySidebetQuestion(betDate);
             setSideBetQuestion(updatedQuestion);
           } else {
-            console.log('Game not finished yet, showing as pending');
             setSideBetQuestion(questionData);
           }
         } catch (checkError) {
@@ -151,11 +146,9 @@ const DailySideBet = ({ userId, onComplete }) => {
       setError(null);
       
       const betDate = getTodayISODate();
-      console.log('Checking results for:', { betDate, gameId: sideBetQuestion.game_id });
       
       // Check the game result
       const gameResult = await checkGameResult(sideBetQuestion.game_id);
-      console.log('Game result:', gameResult);
       
       if (gameResult.isFinished) {
         // Determine winner
@@ -168,8 +161,6 @@ const DailySideBet = ({ userId, onComplete }) => {
           winner = 'TIE';
         }
         
-        console.log('Winner determined:', winner);
-        
         // Update the bet result
         const winnersCount = await updateSidebetResult(
           betDate,
@@ -179,13 +170,10 @@ const DailySideBet = ({ userId, onComplete }) => {
           gameResult.gameState
         );
         
-        console.log('Bet resolved, winners:', winnersCount);
-        
         // Re-fetch question to get updated data
         const updatedQuestion = await fetchTodaySidebetQuestion(betDate);
         setSideBetQuestion(updatedQuestion);
       } else {
-        console.log('Game not finished yet:', gameResult.gameState);
         setError('Game is not finished yet. Please check back later!');
       }
     } catch (err) {

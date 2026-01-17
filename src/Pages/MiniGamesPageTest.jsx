@@ -1,7 +1,6 @@
 import React from 'react';
 
 const MiniGamesPageTest = () => {
-  console.log('TEST PAGE MOUNTED');
   
   return (
     <div className="container mt-5">
