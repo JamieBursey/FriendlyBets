@@ -16,6 +16,7 @@ import { UserManagement } from "./UserManagement";
 import { EditUserAsAdmin } from "./AdminUpdate";
 import { NflWeeklySchedulePage } from "./NflWeeklySchedulePage";
 import { LandingPage } from "./LandingPage";
+import MiniGamesPage from "./MiniGamesPage";
 
 export {
   Home,
@@ -37,5 +38,6 @@ export {
   handleSendFriendRequest,
   LandingPage,
   Loader,
-  Messages
+  Messages,
+  MiniGamesPage
 };

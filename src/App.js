@@ -19,6 +19,7 @@ import {
   EditUserAsAdmin,
   NflWeeklySchedulePage,
   Messages,
+  MiniGamesPage,
 } from "./Pages";
 import { NavBar } from "./Components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -142,6 +143,14 @@ function App() {
             element={
               <RedirectBasedOnLogin>
                 <NflWeeklySchedulePage />
+              </RedirectBasedOnLogin>
+            }
+          />
+          <Route
+            path="/mini-games"
+            element={
+              <RedirectBasedOnLogin>
+                <MiniGamesPage />
               </RedirectBasedOnLogin>
             }
           />
