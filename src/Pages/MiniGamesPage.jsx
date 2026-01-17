@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { DailyTriviaGame } from '../Components/DailyTriviaGame';
 import { DailySideBet } from '../Components/DailySideBet';
+import TriviaLeaderboard from '../Components/TriviaLeaderboard';
 import { fetchUserTokens } from '../Data/MiniGamesHelpers';
 
 const MiniGamesPage = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeGame, setActiveGame] = useState(null); // 'trivia' | 'sidebet' | null
+  const [activeGame, setActiveGame] = useState(null); // 'trivia' | 'sidebet' | 'leaderboard' | null
 
   useEffect(() => {
     console.log('MiniGamesPage mounted');
@@ -154,6 +155,29 @@ const MiniGamesPage = () => {
               </div>
             </div>
           </div>
+
+          {/* Leaderboard Card */}
+          <div className="col-md-4 mb-4">
+            <div className="card h-100 shadow-sm border-warning">
+              <div className="card-body text-center">
+                <h3 className="card-title text-warning">🏆 Leaderboard</h3>
+                <p className="card-text">
+                  See who's dominating daily trivia!
+                </p>
+                <ul className="text-left">
+                  <li>Top 3 this month</li>
+                  <li>Top 3 all-time champions</li>
+                  <li>Track your ranking</li>
+                </ul>
+                <button 
+                  className="btn btn-warning btn-lg mt-3"
+                  onClick={() => setActiveGame('leaderboard')}
+                >
+                  View Leaderboard
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="row">
@@ -183,6 +207,10 @@ const MiniGamesPage = () => {
                   setActiveGame(null);
                 }}
               />
+            )}
+
+            {activeGame === 'leaderboard' && (
+              <TriviaLeaderboard />
             )}
           </div>
         </div>
