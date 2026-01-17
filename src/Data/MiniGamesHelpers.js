@@ -283,3 +283,26 @@ export const updateSidebetResult = async (betDate, correctAnswer, homeScore, awa
   return data; // Returns winner count
 };
 
+/**
+ * Fetch monthly trivia leaderboard (top 3)
+ * @returns {Promise<Array>} - Array of top 3 users with username, total_correct, total_attempts, rank
+ */
+export const fetchTriviaLeaderboardMonthly = async () => {
+  const { data, error } = await supabase
+    .rpc('get_trivia_leaderboard_monthly');
+
+  if (error) throw error;
+  return data || [];
+};
+
+/**
+ * Fetch all-time trivia leaderboard (top 3)
+ * @returns {Promise<Array>} - Array of top 3 users with username, total_correct, total_attempts, rank
+ */
+export const fetchTriviaLeaderboardAllTime = async () => {
+  const { data, error } = await supabase
+    .rpc('get_trivia_leaderboard_alltime');
+
+  if (error) throw error;
+  return data || [];
+};
