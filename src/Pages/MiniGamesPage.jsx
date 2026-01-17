@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { DailyTriviaGame } from '../Components/DailyTriviaGame';
 import { DailySideBet } from '../Components/DailySideBet';
-import TriviaLeaderboard from '../Components/TriviaLeaderboard';
+import MiniGamesLeaderboard from '../Components/MiniGamesLeaderboard';
+import BreakawayDodger from '../Components/BreakawayDodger';
 import { fetchUserTokens } from '../Data/MiniGamesHelpers';
 
 const MiniGamesPage = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeGame, setActiveGame] = useState(null); // 'trivia' | 'sidebet' | 'leaderboard' | null
+  const [activeGame, setActiveGame] = useState(null); // 'trivia' | 'sidebet' | 'leaderboard' | 'breakaway' | null
 
   useEffect(() => {
     fetchCurrentUser();
@@ -158,18 +159,41 @@ const MiniGamesPage = () => {
               <div className="card-body text-center">
                 <h3 className="card-title text-warning">🏆 Leaderboard</h3>
                 <p className="card-text">
-                  See who's dominating daily trivia!
+                  See who's dominating mini games!
                 </p>
                 <ul className="text-left">
+                  <li>Trivia & Breakaway stats</li>
                   <li>Top 3 this month</li>
                   <li>Top 3 all-time champions</li>
-                  <li>Track your ranking</li>
                 </ul>
                 <button 
                   className="btn btn-warning btn-lg mt-3"
                   onClick={() => setActiveGame('leaderboard')}
                 >
                   View Leaderboard
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Breakaway Dodger Card */}
+          <div className="col-md-4 mb-4">
+            <div className="card h-100 shadow-sm border-info">
+              <div className="card-body text-center">
+                <h3 className="card-title text-info">🏒 Breakaway Dodger</h3>
+                <p className="card-text">
+                  Dodge defenders and score!
+                </p>
+                <ul className="text-left">
+                  <li>FREE unlimited plays</li>
+                  <li>First win each day: +1 token</li>
+                  <li>Swipe or arrow keys</li>
+                </ul>
+                <button 
+                  className="btn btn-info btn-lg mt-3"
+                  onClick={() => setActiveGame('breakaway')}
+                >
+                  Play Now
                 </button>
               </div>
             </div>
@@ -206,7 +230,17 @@ const MiniGamesPage = () => {
             )}
 
             {activeGame === 'leaderboard' && (
-              <TriviaLeaderboard />
+              <MiniGamesLeaderboard />
+            )}
+
+            {activeGame === 'breakaway' && (
+              <BreakawayDodger 
+                userId={currentUser.public_user_id}
+                onComplete={() => {
+                  refreshUserTokens();
+                  setActiveGame(null);
+                }}
+              />
             )}
           </div>
         </div>

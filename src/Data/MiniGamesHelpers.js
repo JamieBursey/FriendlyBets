@@ -306,3 +306,43 @@ export const fetchTriviaLeaderboardAllTime = async () => {
   if (error) throw error;
   return data || [];
 };
+
+/**
+ * Submit breakaway game result
+ * @param {string} playDate - Date in YYYY-MM-DD format
+ * @param {boolean} won - Whether the player won
+ * @returns {Promise<object>} - Result object with won, rewarded, message
+ */
+export const submitBreakawayResult = async (playDate, won) => {
+  const { data, error } = await supabase.rpc('submit_breakaway_result', {
+    p_play_date: playDate,
+    p_won: won
+  });
+
+  if (error) throw error;
+  return data;
+};
+
+/**
+ * Fetch monthly breakaway leaderboard (top 3)
+ * @returns {Promise<Array>} - Array of top 3 users with username, total_wins, total_attempts, win_rate, rank
+ */
+export const fetchBreakawayLeaderboardMonthly = async () => {
+  const { data, error } = await supabase
+    .rpc('get_breakaway_leaderboard_monthly');
+
+  if (error) throw error;
+  return data || [];
+};
+
+/**
+ * Fetch all-time breakaway leaderboard (top 3)
+ * @returns {Promise<Array>} - Array of top 3 users with username, total_wins, total_attempts, win_rate, rank
+ */
+export const fetchBreakawayLeaderboardAllTime = async () => {
+  const { data, error } = await supabase
+    .rpc('get_breakaway_leaderboard_alltime');
+
+  if (error) throw error;
+  return data || [];
+};
