@@ -9,6 +9,7 @@ import {
   checkGameResult,
   updateSidebetResult
 } from '../Data/MiniGamesHelpers';
+import { fetchMostRecentSidebetEntry, fetchSidebetQuestionByDate } from '../Data/SideBetHelpers';
 
 const DailySideBet = ({ userId, onComplete }) => {
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,8 @@ const DailySideBet = ({ userId, onComplete }) => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [checkingResults, setCheckingResults] = useState(false);
+  const [recentEntry, setRecentEntry] = useState(null);
+  const [recentQuestion, setRecentQuestion] = useState(null);
 
   useEffect(() => {
     loadSideBet();
@@ -93,6 +96,18 @@ const DailySideBet = ({ userId, onComplete }) => {
       if (entryData) {
         setHasEnteredToday(true);
         setPreviousEntry(entryData);
+      } else {
+        // If user hasn't entered today, fetch their most recent entry
+        const mostRecent = await fetchMostRecentSidebetEntry();
+        if (mostRecent) {
+          setRecentEntry(mostRecent);
+          // Fetch the question for that date
+          const q = await fetchSidebetQuestionByDate(mostRecent.bet_date);
+          setRecentQuestion(q);
+        } else {
+          setRecentEntry(null);
+          setRecentQuestion(null);
+        }
       }
     } catch (err) {
       console.error('Error loading side bet:', err);
@@ -178,6 +193,48 @@ const DailySideBet = ({ userId, onComplete }) => {
       }
     } catch (err) {
       console.error('Error checking results:', err);
+      setError(err.message || 'Failed to check results');
+    } finally {
+      setCheckingResults(false);
+    }
+  };
+
+  // Handler to check results for previous bet
+  const handleCheckPreviousResults = async () => {
+    if (!recentQuestion || !recentQuestion.game_id) {
+      setError('Cannot check results - missing game information');
+      return;
+    }
+    try {
+      setCheckingResults(true);
+      setError(null);
+      // Use the previous bet's game_id
+      const gameResult = await checkGameResult(recentQuestion.game_id);
+      if (gameResult.isFinished) {
+        // Determine winner
+        let winner;
+        if (gameResult.homeScore > gameResult.awayScore) {
+          winner = recentQuestion.home_team_abbrev;
+        } else if (gameResult.awayScore > gameResult.homeScore) {
+          winner = recentQuestion.away_team_abbrev;
+        } else {
+          winner = 'TIE';
+        }
+        // Update the bet result for the previous date
+        await updateSidebetResult(
+          recentQuestion.bet_date,
+          winner,
+          gameResult.homeScore,
+          gameResult.awayScore,
+          gameResult.gameState
+        );
+        // Re-fetch the question to get updated data
+        const updatedQ = await fetchSidebetQuestionByDate(recentQuestion.bet_date);
+        setRecentQuestion(updatedQ);
+      } else {
+        setError('Game is not finished yet. Please check back later!');
+      }
+    } catch (err) {
       setError(err.message || 'Failed to check results');
     } finally {
       setCheckingResults(false);
@@ -372,6 +429,41 @@ const DailySideBet = ({ userId, onComplete }) => {
             you'll earn 1 Bet Token that can be used for regular bets!
           </small>
         </div>
+
+        {recentEntry && recentQuestion && (
+          <div className="alert alert-secondary mb-4">
+            <h5 className="mb-2">Your Previous Side Bet</h5>
+            <div><strong>Date:</strong> {recentEntry.bet_date}</div>
+            <div><strong>Question:</strong> {recentQuestion.question}</div>
+            <div><strong>Your Answer:</strong> {recentEntry.answer}</div>
+            {recentQuestion.resolved_at ? (
+              <div className={`mt-2 ${recentEntry.answer.toLowerCase() === recentQuestion.correct_answer?.toLowerCase() ? 'text-success' : 'text-danger'}`}>
+                <strong>Result:</strong> {recentEntry.answer.toLowerCase() === recentQuestion.correct_answer?.toLowerCase() ? 'Correct! 🎉' : 'Incorrect'}
+                <br/>
+                <span>Correct Answer: <strong>{recentQuestion.correct_answer}</strong></span>
+              </div>
+            ) : (
+              <div className="mt-2 text-warning">
+                <strong>Result:</strong> Pending (game not finished)
+                <br/>
+                <button 
+                  className="btn btn-outline-primary btn-sm mt-2"
+                  onClick={handleCheckPreviousResults}
+                  disabled={checkingResults}
+                >
+                  {checkingResults ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" />
+                      Checking Game...
+                    </>
+                  ) : (
+                    '🔄 Check Results Now'
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
