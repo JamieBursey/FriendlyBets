@@ -5,9 +5,11 @@ import {
   fetchBreakawayLeaderboardMonthly,
   fetchBreakawayLeaderboardAllTime
 } from '../Data/MiniGamesHelpers';
+import { fetchSideBetLeaderboardMonthly, fetchSideBetLeaderboardAllTime } from '../Data/SideBetHelpers';
+import SideBetLeaderboard from './SideBetLeaderboard';
 
 const MiniGamesLeaderboard = () => {
-  const [activeTab, setActiveTab] = useState('trivia'); // 'trivia' | 'breakaway'
+  const [activeTab, setActiveTab] = useState('trivia'); // 'trivia' | 'breakaway' | 'sidebet'
   const [monthlyLeaders, setMonthlyLeaders] = useState([]);
   const [allTimeLeaders, setAllTimeLeaders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,10 +32,17 @@ const MiniGamesLeaderboard = () => {
         ]);
         setMonthlyLeaders(monthly);
         setAllTimeLeaders(allTime);
-      } else {
+      } else if (activeTab === 'breakaway') {
         const [monthly, allTime] = await Promise.all([
           fetchBreakawayLeaderboardMonthly(),
           fetchBreakawayLeaderboardAllTime()
+        ]);
+        setMonthlyLeaders(monthly);
+        setAllTimeLeaders(allTime);
+      } else if (activeTab === 'sidebet') {
+        const [monthly, allTime] = await Promise.all([
+          fetchSideBetLeaderboardMonthly(),
+          fetchSideBetLeaderboardAllTime()
         ]);
         setMonthlyLeaders(monthly);
         setAllTimeLeaders(allTime);
@@ -81,6 +90,14 @@ const MiniGamesLeaderboard = () => {
                       <span style={styles.statDivider}>•</span>
                       {leader.total_attempts} {leader.total_attempts === 1 ? 'game' : 'games'}
                     </>
+                  ) : activeTab === 'sidebet' ? (
+                    <>
+                      {leader.total_correct} {leader.total_correct === 1 ? 'win' : 'wins'}
+                      <span style={styles.statDivider}>•</span>
+                      {leader.total_attempts} {leader.total_attempts === 1 ? 'attempt' : 'attempts'}
+                      <span style={styles.statDivider}>•</span>
+                      {leader.win_rate}% win rate
+                    </>
                   ) : (
                     <>
                       {leader.total_wins} {leader.total_wins === 1 ? 'win' : 'wins'}
@@ -94,10 +111,10 @@ const MiniGamesLeaderboard = () => {
               </div>
               <div style={styles.scoreBox}>
                 <div style={styles.scoreNumber}>
-                  {activeTab === 'trivia' ? leader.total_correct : leader.total_wins}
+                  {activeTab === 'trivia' ? leader.total_correct : activeTab === 'sidebet' ? leader.total_correct : leader.total_wins}
                 </div>
                 <div style={styles.scoreLabel}>
-                  {activeTab === 'trivia' ? 'points' : 'wins'}
+                  {activeTab === 'trivia' ? 'points' : activeTab === 'sidebet' ? 'wins' : 'wins'}
                 </div>
               </div>
             </div>
@@ -152,17 +169,53 @@ const MiniGamesLeaderboard = () => {
         >
           🏒 Breakaway Dodger
         </button>
+        <button
+          style={{
+            ...styles.tab,
+            ...(activeTab === 'sidebet' ? styles.activeTab : {})
+          }}
+          onClick={() => setActiveTab('sidebet')}
+        >
+          🎯 Side Bet
+        </button>
       </div>
 
-      <LeaderboardSection 
-        title="📅 This Month"
-        leaders={monthlyLeaders}
-      />
-
-      <LeaderboardSection 
-        title="⭐ All Time"
-        leaders={allTimeLeaders}
-      />
+      {activeTab === 'trivia' && (
+        <>
+          <LeaderboardSection 
+            title="📅 This Month"
+            leaders={monthlyLeaders}
+          />
+          <LeaderboardSection 
+            title="⭐ All Time"
+            leaders={allTimeLeaders}
+          />
+        </>
+      )}
+      {activeTab === 'breakaway' && (
+        <>
+          <LeaderboardSection 
+            title="📅 This Month"
+            leaders={monthlyLeaders}
+          />
+          <LeaderboardSection 
+            title="⭐ All Time"
+            leaders={allTimeLeaders}
+          />
+        </>
+      )}
+      {activeTab === 'sidebet' && (
+        <>
+          <LeaderboardSection 
+            title="📅 This Month"
+            leaders={monthlyLeaders}
+          />
+          <LeaderboardSection 
+            title="⭐ All Time"
+            leaders={allTimeLeaders}
+          />
+        </>
+      )}
     </div>
   );
 };

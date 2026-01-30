@@ -10,6 +10,7 @@ import {
   updateSidebetResult
 } from '../Data/MiniGamesHelpers';
 import { fetchMostRecentSidebetEntry, fetchSidebetQuestionByDate } from '../Data/SideBetHelpers';
+import SideBetLeaderboard from './SideBetLeaderboard';
 
 const DailySideBet = ({ userId, onComplete }) => {
   const [loading, setLoading] = useState(true);
@@ -381,103 +382,106 @@ const DailySideBet = ({ userId, onComplete }) => {
   }
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <h3 className="text-center text-success mb-4">🎯 Daily Side Bet</h3>
-
-        <div className="alert alert-warning">
-          <strong>⚠️ Entry Cost:</strong> 1 Mini Game Token
-        </div>
-
-        <div className="alert alert-info mb-4">
-          <h5 className="mb-3">Today's Question:</h5>
-          <p className="lead mb-0">{sideBetQuestion.question}</p>
-        </div>
-
-        {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
+    <>
+      <div className="card">
+        <div className="card-body">
+          <h3 className="text-center text-success mb-4">🎯 Daily Side Bet</h3>
+          <div className="alert alert-warning">
+            <strong>⚠️ Entry Cost:</strong> 1 Mini Game Token
           </div>
-        )}
-
-        <div className="form-group">
-          <label htmlFor="answer-input">
-            <strong>Your Answer:</strong>
-          </label>
-          <input
-            id="answer-input"
-            type="text"
-            className="form-control form-control-lg"
-            value={selectedAnswer}
-            onChange={(e) => setSelectedAnswer(e.target.value)}
-            placeholder="Enter your answer here..."
-            disabled={submitting}
-          />
-          <small className="form-text text-muted">
-            Be specific! Your answer will be compared to the correct answer.
-          </small>
-        </div>
-
-        <div className="d-flex justify-content-between mt-4">
-          <button
-            className="btn btn-secondary"
-            onClick={onComplete}
-            disabled={submitting}
-          >
-            Cancel
-          </button>
-          <button
-            className="btn btn-success btn-lg"
-            onClick={handleSubmit}
-            disabled={submitting || !selectedAnswer.trim()}
-          >
-            {submitting ? 'Submitting...' : 'Submit Entry (1 Token)'}
-          </button>
-        </div>
-
-        <div className="alert alert-info mt-4 mb-0">
-          <small>
-            <strong>How it works:</strong> Submit your answer to enter. If correct when resolved, 
-            you'll earn 1 Bet Token that can be used for regular bets!
-          </small>
-        </div>
-
-        {recentEntry && recentQuestion && (
-          <div className="alert alert-secondary mb-4">
-            <h5 className="mb-2">Your Previous Side Bet</h5>
-            <div><strong>Date:</strong> {recentEntry.bet_date}</div>
-            <div><strong>Question:</strong> {recentQuestion.question}</div>
-            <div><strong>Your Answer:</strong> {recentEntry.answer}</div>
-            {recentQuestion.resolved_at ? (
-              <div className={`mt-2 ${recentEntry.answer.toLowerCase() === recentQuestion.correct_answer?.toLowerCase() ? 'text-success' : 'text-danger'}`}>
-                <strong>Result:</strong> {recentEntry.answer.toLowerCase() === recentQuestion.correct_answer?.toLowerCase() ? 'Correct! 🎉' : 'Incorrect'}
-                <br/>
-                <span>Correct Answer: <strong>{recentQuestion.correct_answer}</strong></span>
-              </div>
-            ) : (
-              <div className="mt-2 text-warning">
-                <strong>Result:</strong> Pending (game not finished)
-                <br/>
-                <button 
-                  className="btn btn-outline-primary btn-sm mt-2"
-                  onClick={handleCheckPreviousResults}
-                  disabled={checkingResults}
-                >
-                  {checkingResults ? (
-                    <>
-                      <span className="spinner-border spinner-border-sm me-2" />
-                      Checking Game...
-                    </>
-                  ) : (
-                    '🔄 Check Results Now'
-                  )}
-                </button>
-              </div>
-            )}
+          <div className="alert alert-info mb-4">
+            <h5 className="mb-3">Today's Question:</h5>
+            <p className="lead mb-0">{sideBetQuestion.question}</p>
           </div>
-        )}
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+          <div className="form-group">
+            <label>
+              <strong>Your Answer:</strong>
+            </label>
+            <div className="d-flex gap-3 mt-2 mb-2">
+              <div
+                className={`btn btn-lg btn-outline-primary flex-fill${selectedAnswer === sideBetQuestion.home_team_abbrev ? ' active' : ''}`}
+                style={{ cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.6 : 1 }}
+                onClick={() => !submitting && setSelectedAnswer(sideBetQuestion.home_team_abbrev)}
+              >
+                {sideBetQuestion.home_team_abbrev}
+              </div>
+              <div
+                className={`btn btn-lg btn-outline-primary flex-fill${selectedAnswer === sideBetQuestion.away_team_abbrev ? ' active' : ''}`}
+                style={{ cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.6 : 1 }}
+                onClick={() => !submitting && setSelectedAnswer(sideBetQuestion.away_team_abbrev)}
+              >
+                {sideBetQuestion.away_team_abbrev}
+              </div>
+            </div>
+            <small className="form-text text-muted">
+              Click a team to select your answer.
+            </small>
+          </div>
+          <div className="d-flex justify-content-between mt-4">
+            <button
+              className="btn btn-secondary"
+              onClick={onComplete}
+              disabled={submitting}
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn-success btn-lg"
+              onClick={handleSubmit}
+              disabled={submitting || !selectedAnswer}
+            >
+              {submitting ? 'Submitting...' : 'Submit Entry (1 Token)'}
+            </button>
+          </div>
+          <div className="alert alert-info mt-4 mb-0">
+            <small>
+              <strong>How it works:</strong> Submit your answer to enter. If correct when resolved, 
+              you'll earn 1 Bet Token that can be used for regular bets!
+            </small>
+          </div>
+          {recentEntry && recentQuestion && (
+            <div className="alert alert-secondary mb-4">
+              <h5 className="mb-2">Your Previous Side Bet</h5>
+              <div><strong>Date:</strong> {recentEntry.bet_date}</div>
+              <div><strong>Question:</strong> {recentQuestion.question}</div>
+              <div><strong>Your Answer:</strong> {recentEntry.answer}</div>
+              {recentQuestion.resolved_at ? (
+                <div className={`mt-2 ${recentEntry.answer.toLowerCase() === recentQuestion.correct_answer?.toLowerCase() ? 'text-success' : 'text-danger'}`}>
+                  <strong>Result:</strong> {recentEntry.answer.toLowerCase() === recentQuestion.correct_answer?.toLowerCase() ? 'Correct! 🎉' : 'Incorrect'}
+                  <br/>
+                  <span>Correct Answer: <strong>{recentQuestion.correct_answer}</strong></span>
+                </div>
+              ) : (
+                <div className="mt-2 text-warning">
+                  <strong>Result:</strong> Pending (game not finished)
+                  <br/>
+                  <button 
+                    className="btn btn-outline-primary btn-sm mt-2"
+                    onClick={handleCheckPreviousResults}
+                    disabled={checkingResults}
+                  >
+                    {checkingResults ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" />
+                        Checking Game...
+                      </>
+                    ) : (
+                      '🔄 Check Results Now'
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <SideBetLeaderboard />
+    </>
   );
 };
 
