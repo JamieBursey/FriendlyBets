@@ -252,9 +252,6 @@ export const checkGameResult = async (gameId) => {
     gameData.gameState === "FINAL" ||
     (gameData.clock?.timeRemaining === "00:00" && gameData.period >= 3);
 
-  // DEBUG: Log the full gameData for troubleshooting
-  console.log('checkGameResult: gameData for', gameId, gameData);
-
   return {
     isFinished: isGameFinished,
     gameState: gameData.gameState,

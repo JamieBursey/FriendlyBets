@@ -3,13 +3,14 @@ import { DailyTriviaGame } from '../Components/DailyTriviaGame';
 import { DailySideBet } from '../Components/DailySideBet';
 import MiniGamesLeaderboard from '../Components/MiniGamesLeaderboard';
 import BreakawayDodger from '../Components/BreakawayDodger';
+import GuessWhoGame from '../Components/GuessWhoGame';
 import { fetchUserTokens } from '../Data/MiniGamesHelpers';
 
 const MiniGamesPage = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeGame, setActiveGame] = useState(null); // 'trivia' | 'sidebet' | 'leaderboard' | 'breakaway' | null
+  const [activeGame, setActiveGame] = useState(null); // 'trivia' | 'sidebet' | 'leaderboard' | 'breakaway' | 'guesswho' | null
 
   useEffect(() => {
     fetchCurrentUser();
@@ -198,6 +199,30 @@ const MiniGamesPage = () => {
               </div>
             </div>
           </div>
+
+          {/* Guess Who Card */}
+          <div className="col-md-4 mb-4">
+            <div className="card h-100 shadow-sm border-pink">
+              <div className="card-body text-center">
+                <h3 className="card-title" style={{color:'#e75480'}}>🕵️‍♂️ Guess Who?</h3>
+                <p className="card-text">
+                  Can you guess the athlete or celebrity from 5 fun hints?
+                </p>
+                <ul className="text-left">
+                  <li>5 hints per round</li>
+                  <li>Includes NHL stars & actors</li>
+                  <li>New challenge every play</li>
+                </ul>
+                <button 
+                  className="btn btn-pink btn-lg mt-3"
+                  style={{background:'#e75480',color:'#fff'}} 
+                  onClick={() => setActiveGame('guesswho')}
+                >
+                  Play Guess Who
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="row">
@@ -241,6 +266,10 @@ const MiniGamesPage = () => {
                   setActiveGame(null);
                 }}
               />
+            )}
+
+            {activeGame === 'guesswho' && (
+              <GuessWhoGame />
             )}
           </div>
         </div>
