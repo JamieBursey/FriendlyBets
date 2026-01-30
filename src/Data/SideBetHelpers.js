@@ -1,5 +1,27 @@
 import { supabase } from '../supabaseClient';
 
+export const fetchSideBetLeaderboardMonthly = async () => {
+  const { data, error } = await supabase.rpc('get_daily_sidebet_leaderboard_monthly');
+  if (error) throw error;
+  return data;
+};
+
+/**
+ * Fetch all-time leaderboard for daily side bet
+ */
+export const fetchSideBetLeaderboardAllTime = async () => {
+  const { data, error } = await supabase.rpc('get_daily_sidebet_leaderboard_alltime');
+  if (error) throw error;
+  return data;
+};
+
+
+export const fetchSideBetLeaderboard = async () => {
+  const { data, error } = await supabase.rpc('sidebet_leaderboard');
+  if (error) throw error;
+  return data;
+};
+
 /**
  * Fetch the user's most recent daily side bet entry (not just today)
  * Returns the most recent entry and its bet_date, or null if none found
