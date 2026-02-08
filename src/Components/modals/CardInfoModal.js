@@ -85,7 +85,6 @@ const CardInfoModal = ({ show, onClose, onDonationSuccess }) => {
       <div className="modal-dialog" style={{ maxWidth: 400, width: "90vw" }}>
         <div className="modal-content" style={modalStyles[theme]}>
           <div className="modal-header">
-            <h5 className="modal-title">Enter Payment Information</h5>
             <h4>No payment system yet. just click complete purchase and enjoy the free VIP</h4>
             <button type="button" className="btn-close" onClick={onClose}></button>
           </div>
@@ -97,24 +96,32 @@ const CardInfoModal = ({ show, onClose, onDonationSuccess }) => {
                 <input type="hidden" name="hosted_button_id" value="TUXDREB2TUYJG" />
                 <input type="hidden" name="currency_code" value="CAD" />
                 <input type="hidden" name="return" value="https://www.friendlybets.ca/" />
-                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" style={{ margin: '0 auto', display: 'block' }} />
+                <button
+                  type="submit"
+                  style={{
+                    background: '#0070ba',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 4,
+                    padding: '8px 24px',
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    margin: '0 auto',
+                    display: 'block',
+                  }}
+                  name="submit"
+                  title="Donate with PayPal"
+                >
+                  Donate
+                </button>
               </form>
               <div style={{ fontSize: 12, marginTop: 8, color: modalStyles[theme].color }}>Powered by PayPal</div>
             </div>
             {/* ...existing card form... */}
             <form>
               <div className="mb-3">
-                <label htmlFor="cardNumber" className="form-label">Card Number</label>
-                <input type="text" className="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" style={inputStyle} />
               </div>
-              <div className="mb-3">
-                  <label htmlFor="expiryDate" className="form-label">Expiry Date</label>
-                  <input type="text" className="form-control" id="expiryDate" placeholder="MM/YY" />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="cvv" className="form-label">CVV</label>
-                  <input type="text" className="form-control" id="cvv" placeholder="123" />
-                </div>
                 <button type="button" className="btn btn-primary" onClick={handlePurchase}>
                   Confirm Purchase
                 </button>
