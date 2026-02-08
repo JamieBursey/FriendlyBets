@@ -26,7 +26,7 @@ export const fetchUserTokens = async () => {
 
   const { data, error } = await supabase
     .from('users')
-    .select('public_user_id, username, bettoken, minigametoken')
+    .select('public_user_id, username, betToken, minigametoken')
     .eq('public_user_id', authUserId)
     .single();
 
@@ -35,7 +35,7 @@ export const fetchUserTokens = async () => {
   // Map lowercase column names to camelCase for consistency
   return {
     ...data,
-    betToken: data.bettoken,
+    betToken: data.betToken,
     miniGameToken: data.minigametoken
   };
 };

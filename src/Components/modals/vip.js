@@ -56,8 +56,10 @@ const VIPModal = ({ show, onClose, onDonationSuccess }) => {
               <button type="button" className="btn-close" onClick={onClose}></button>
             </div>
             <div className="modal-body">
-              <p>You do not have enough bet tokens to place a bet. Please wait 24 hours or purchase VIP for unlimited bets.</p>
-              <p>VIP Status: $9.99/month</p>
+              <p>You do not have enough bet tokens to place a bet. Please wait 24 hours or purchase VIP for unlimited bets.
+                or play out minigames to earn tokens.
+              </p>
+              <p>VIP Status: Donation</p>
             </div>
             <div className="modal-footer">
               <button className="btn btn-primary" onClick={handlePurchaseClick}>
