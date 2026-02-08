@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { LOCALSTORAGE } from "../../Config";
 
 const NflTodaySchedule = () => {
   const navigate = useNavigate();
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const actionBtnOne = (
     game_ID,
     gameTitle,
@@ -20,6 +22,7 @@ const NflTodaySchedule = () => {
       gameDay,
       homeLogo,
       awayLogo,
+      sportType: "NFL",
     };
     localStorage.setItem(
       LOCALSTORAGE.SELECTEDGAME,
@@ -27,214 +30,206 @@ const NflTodaySchedule = () => {
     );
     navigate("/betPage");
   };
-  const actionBtnTwo = () => {
-    navigate("/fullSchedule");
-  };
-  //create Game Cards
-  const createGameCard = (
-    game_ID,
-    gameTitle,
-    gameTime,
-    gameDay,
-    homeLogo,
-    awayLogo
-  ) => {
-    return (
-      <div key={game_ID} className="col-3 card m-1" style={{ width: "20rem" }}>
-        <div className="card-body">
-          <h5 className="card-title">{gameTitle}</h5>
-          <div className="row">
-            <div className="col">
-              <img src={awayLogo} alt=""></img>
-            </div>
-            <div className="col">
-              <img src={homeLogo} alt="" />
-            </div>
-          </div>
-          <p>
-            {gameDay} at {new Date(gameTime).toLocaleTimeString()}
-          </p>
 
-          <div className="row">
-            <div className="col">
-              <button
-                onClick={() => actionBtnTwo(game_ID, gameTitle)}
-                className="btn btn-primary w-100"
-              >
-                Weekly Schedule
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
-  const [todaysGameArr, setTodaysGameArr] = useState([]);
-
-  const fetchData = async () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-    const day = String(currentDate.getDate()).padStart(2, "0");
-    const now = year + month + day;
-    const url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLGamesForDate?gameDate=${now}`;
-
-    const options = {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": "4d936fd439mshf521f0eb6a8ffacp1036efjsnd9795207ffaa",
-        "X-RapidAPI-Host":
-          "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com",
-      },
-    };
-
-    try {
-      const response = await fetch(url, options);
-      const result = await response.json();
-      if (result && result.body) {
-        let gamesHTMLObj = result.body.map((game) => {
-          return createGameCard(
-            game.gameID,
-            `${game.away} vs ${game.home}`,
-            game.gameTime,
-            game.gameDate
-            // homeLogo,
-            // awayLogo
-          );
-        });
-
-        setTodaysGameArr(gamesHTMLObj);
-      } else {
-
-      }
-    } catch (error) {
-      console.error("Fetch Data Error:", error);
-      alert("Fetch Data Error: " + error.message);
-    }
-  };
   useEffect(() => {
-    // Whenever the page loads, then this is executed
-    fetchData();
+    const fetchGames = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
+        );
+        const data = await response.json();
+        const todayGames = (data.events || []).map((event) => {
+          const competition = event.competitions[0];
+          const home = competition.competitors.find((c) => c.homeAway === "home");
+          const away = competition.competitors.find((c) => c.homeAway === "away");
+          return {
+            game_ID: event.id,
+            gameTitle: `${away.team.abbreviation} vs ${home.team.abbreviation}`,
+            gameTime: competition.date,
+            gameDay: new Date(competition.date).toLocaleDateString(),
+            homeLogo: home.team.logo,
+            awayLogo: away.team.logo,
+            homeTeam: home.team.displayName,
+            awayTeam: away.team.displayName,
+            status: competition.status.type.name,
+          };
+        });
+        setGames(todayGames);
+      } catch (error) {
+        setGames([]);
+      }
+      setLoading(false);
+    };
+    fetchGames();
   }, []);
+
+  // Live games: status is IN or not FINAL/OFF
+  const liveGames = games.filter(g => g.status === "IN");
+  const todayGames = games;
+
   return (
     <div className="text-white text-center">
-      <h1>Todays Games</h1>
-      <div className="row justify-content-center">{todaysGameArr}</div>
+      <h1>Live NFL Games</h1>
+      <div className="row justify-content-center">
+        {liveGames.length === 0 && <p>No live games right now.</p>}
+        {liveGames.map((game) => (
+          <div key={game.game_ID} className="col-3 card m-1" style={{ width: "20rem" }}>
+            <div className="card-body">
+              <h5 className="card-title">{game.gameTitle}</h5>
+              <div className="row align-items-center">
+                <div className="col">
+                  <img src={game.awayLogo} alt={game.awayTeam} style={{ width: 60, height: 60 }} />
+                  <div style={{ fontSize: 12 }}>{game.awayTeam}</div>
+                </div>
+                <div className="col">
+                  <img src={game.homeLogo} alt={game.homeTeam} style={{ width: 60, height: 60 }} />
+                  <div style={{ fontSize: 12 }}>{game.homeTeam}</div>
+                </div>
+              </div>
+              <p>
+                {game.gameDay} at {new Date(game.gameTime).toLocaleTimeString()}
+              </p>
+              <div className="row">
+                <div className="col">
+                  <button
+                    onClick={() =>
+                      actionBtnOne(
+                        game.game_ID,
+                        game.gameTitle,
+                        game.gameTime,
+                        game.gameDay,
+                        game.homeLogo,
+                        game.awayLogo
+                      )
+                    }
+                    className="btn btn-primary w-100"
+                  >
+                    Bet Friends
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <h1 className="mt-4">Today's NFL Games (ESPN)</h1>
+      <div className="row justify-content-center">
+        {todayGames.length === 0 && <p>No games today.</p>}
+        {todayGames.map((game) => (
+          <div key={game.game_ID} className="col-3 card m-1" style={{ width: "20rem" }}>
+            <div className="card-body">
+              <h5 className="card-title">{game.gameTitle}</h5>
+              <div className="row align-items-center">
+                <div className="col">
+                  <img src={game.awayLogo} alt={game.awayTeam} style={{ width: 60, height: 60 }} />
+                  <div style={{ fontSize: 12 }}>{game.awayTeam}</div>
+                </div>
+                <div className="col">
+                  <img src={game.homeLogo} alt={game.homeTeam} style={{ width: 60, height: 60 }} />
+                  <div style={{ fontSize: 12 }}>{game.homeTeam}</div>
+                </div>
+              </div>
+              <p>
+                {game.gameDay} at {new Date(game.gameTime).toLocaleTimeString()}
+              </p>
+              <div className="row">
+                <div className="col">
+                  <button
+                    onClick={() =>
+                      actionBtnOne(
+                        game.game_ID,
+                        game.gameTitle,
+                        game.gameTime,
+                        game.gameDay,
+                        game.homeLogo,
+                        game.awayLogo
+                      )
+                    }
+                    className="btn btn-primary w-100"
+                  >
+                    Bet Friends
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
-// weekly schedule
+
+// Weekly schedule (simple version, can be improved)
 const NflWeeklySchedule = () => {
-  const createGameCard = (
-    game_ID,
-    gameTitle,
-    gameTime,
-    gameDay,
-    homeLogo,
-    awayLogo
-  ) => {
-    const gameDate = new Date(
-      gameDay.slice(0, 4),
-      gameDay.slice(4, 6) - 1,
-      gameDay.slice(6, 8)
-    );
-    const dayOfWeek = gameDate.toLocaleDateString("en-US", {
-      weekday: "short",
-    });
-    const match = gameTime.match(/(\d+):(\d+)([ap]m)/);
-    const date = new Date(gameDate);
-    if (match) {
-      let [_, hour, minute, ampm] = match;
-      hour =
-        ampm.toLowerCase() === "p"
-          ? (parseInt(hour) % 12) + 12
-          : parseInt(hour);
-      date.setHours(hour, minute);
-    }
-    const timeString = date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-    });
-    return (
-      <div key={game_ID} className="col-3 card m-1" style={{ width: "20rem" }}>
-        <div className="card-body">
-          <h5 className="card-title">{gameTitle}</h5>
-          <div className="row">
-            <div className="col">
-              <img src={awayLogo} alt=""></img>
-            </div>
-            <div className="col">
-              <img src={homeLogo} alt="" />
-            </div>
-          </div>
-          <p>
-            {dayOfWeek} at {timeString}
-          </p>
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-          <div className="row"></div>
-        </div>
-      </div>
-    );
-  };
-
-  const [todaysGameArr, setTodaysGameArr] = useState([]);
-
-  const fetchData = async () => {
-    const nflSeasonStartDate = new Date("2024-01-13");
-    const currentDate = new Date();
-    const currentWeek = Math.floor(
-      (currentDate - nflSeasonStartDate) / (7 * 24 * 60 * 60 * 1000) + 1
-    );
-    console.log(currentWeek);
-    // const year = currentDate.getFullYear();
-    // const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-    // const day = String(currentDate.getDate()).padStart(2, "0");
-    // const currentDateString = `${year}${month}${day}`;
-
-    const url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLGamesForWeek?week=all&seasonType=all`;
-
-    const options = {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": "4d936fd439mshf521f0eb6a8ffacp1036efjsnd9795207ffaa",
-        "X-RapidAPI-Host":
-          "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com",
-      },
-    };
-
-    try {
-      const response = await fetch(url, options);
-      const result = await response.json();
-      if (result && result.body) {
-        let gamesHTMLObj = result.body.map((game) => {
-          return createGameCard(
-            game.gameID,
-            `${game.away} vs ${game.home}`,
-            game.gameTime,
-            game.gameDate
-            // homeLogo,
-            // awayLogo
-          );
-        });
-
-        setTodaysGameArr(gamesHTMLObj);
-      } else {
-        return
-      }
-    } catch (error) {
-      console.error("Fetch Data Error:", error);
-      alert("Fetch Data Error: " + error.message);
-    }
-  };
   useEffect(() => {
-    // Whenever the page loads, then this is executed
-    fetchData();
+    const fetchGames = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
+        );
+        const data = await response.json();
+        // For demo, just use all games in the response
+        const weekGames = (data.events || []).map((event) => {
+          const competition = event.competitions[0];
+          const home = competition.competitors.find((c) => c.homeAway === "home");
+          const away = competition.competitors.find((c) => c.homeAway === "away");
+          return {
+            game_ID: event.id,
+            gameTitle: `${away.team.abbreviation} vs ${home.team.abbreviation}`,
+            gameTime: competition.date,
+            gameDay: new Date(competition.date).toLocaleDateString(),
+            homeLogo: home.team.logo,
+            awayLogo: away.team.logo,
+            homeTeam: home.team.displayName,
+            awayTeam: away.team.displayName,
+            status: competition.status.type.name,
+          };
+        });
+        setGames(weekGames);
+      } catch (error) {
+        setGames([]);
+      }
+      setLoading(false);
+    };
+    fetchGames();
   }, []);
+
   return (
-    <div className="text-white text-center">
-      <h1>Weekly Games</h1>
-      <div className="row justify-content-center">{todaysGameArr}</div>
+    <div className="text-white text-center mt-4">
+      <h1>This Week's NFL Games</h1>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="row justify-content-center">
+          {games.length === 0 && <p>No games this week.</p>}
+          {games.map((game) => (
+            <div key={game.game_ID} className="col-3 card m-1" style={{ width: "20rem" }}>
+              <div className="card-body">
+                <h5 className="card-title">{game.gameTitle}</h5>
+                <div className="row align-items-center">
+                  <div className="col">
+                    <img src={game.awayLogo} alt={game.awayTeam} style={{ width: 60, height: 60 }} />
+                    <div style={{ fontSize: 12 }}>{game.awayTeam}</div>
+                  </div>
+                  <div className="col">
+                    <img src={game.homeLogo} alt={game.homeTeam} style={{ width: 60, height: 60 }} />
+                    <div style={{ fontSize: 12 }}>{game.homeTeam}</div>
+                  </div>
+                </div>
+                <p>
+                  {game.gameDay} at {new Date(game.gameTime).toLocaleTimeString()}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
